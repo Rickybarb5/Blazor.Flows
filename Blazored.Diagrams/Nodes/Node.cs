@@ -1,7 +1,5 @@
-﻿using Blazored.Diagrams.Components.Models;
-using Blazored.Diagrams.Helpers;
+﻿using Blazored.Diagrams.Helpers;
 using Blazored.Diagrams.Ports;
-using Blazored.Diagrams.Services.Registry;
 
 namespace Blazored.Diagrams.Nodes;
 

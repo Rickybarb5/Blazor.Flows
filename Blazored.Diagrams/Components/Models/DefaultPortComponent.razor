@@ -1,7 +1,7 @@
 ﻿@using Blazored.Diagrams.Events
 @using System.Text
 @implements IDisposable
-<div class="@_class"
+<div class="@Class"
      style="@(Style)"
      @onpointerleave="HandlePointerLeave"
      @onpointerdown="HandlePointerDown"
@@ -9,15 +9,31 @@
      @onpointermove="HandlePointerMove"
      @onpointerup="HandlePointerUp"
      @onpointerdown:stopPropagation>
+    @if (Content is not null)
+    {
+        @Content
+    }
 </div>
 
 @code {
     [CascadingParameter] public required IDiagramService DiagramService { get; set; }
     [Parameter] public required Port Port { get; set; }
+    
+    /// <summary>
+    /// Optional content if people want to use the default component.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Content { get; set; }
+    
+    /// <summary>
+    /// CSS class that styles the component.
+    /// Uses "default-port" css class available on <see cref="DefaultPortComponent.razor.css"/> as default.
+    /// </summary>
+    [Parameter] public string Class { get; set; } = DefaultCssClass;
+    
     private List<IDisposable> _subscriptions = [];
 
-    private const string PortCssClass = "default-port";
-    private string _class = PortCssClass;
+    private const string DefaultCssClass = "default-port";
     private readonly StringBuilder _builder = new();
     private bool _pointerIsDown = false;
     private readonly StringBuilder _sb = new();
@@ -75,17 +91,13 @@
     private void SetNodeCssClass()
     {
         _builder.Clear();
-        _builder.Append(PortCssClass);
+        _builder.Append(Class);
         if (Port.HasLinks)
         {
             _builder.Append(" linked");
         }
-        else
-        {
-            _class = PortCssClass;
-        }
 
-        _class = _builder.ToString();
+        Class = _builder.ToString();
     }
 
     private Task HandlePointerDown(PointerEventArgs e)

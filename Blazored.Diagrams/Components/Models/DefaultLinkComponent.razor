@@ -1,6 +1,5 @@
 @using Blazored.Diagrams.Events
-@using Blazored.Diagrams.Options.Behaviours
-
+@implements IDisposable
 @if (Link is not null)
 {
     <svg style="width: 100%; height: 100%;overflow:visible;">
@@ -15,12 +14,12 @@
                 </feMerge>
             </filter>
         </defs>
-        <path d="@LinkPath"
+        <path d="@GetPath()"
               style="pointer-events: auto"
               id="@(PathId)"
               fill="none"
-              stroke="@StrokeColor"
-              stroke-width="@(DiagramService.Diagram.Options.Get<DrawLinkOptions>()!.StrokeWidth)"
+              stroke="@_strokeColor"
+              stroke-width="@(StrokeWidth)"
               @onpointerleave="HandlePointerLeave"
               @onpointerdown="HandlePointerDown"
               @onpointerenter="HandlePointerEnter"
@@ -34,6 +33,8 @@
 }
 
 @code {
+
+    private string _strokeColor = null!;
 
     /// <summary>
     ///     Link to be rendered.
@@ -54,26 +55,60 @@
     /// </summary>
     [CascadingParameter]
     public required LinkContainer Container { get; set; }
+    
+    /// <summary>
+    ///     Wave height when <see cref="DefaultLinkComponentPathType"/> is <see cref="DefaultLinkComponentPathType.Curved"/>.
+    /// </summary>
+    [Parameter] public int WaveHeight { get; set; } = 20;
+    
+    /// <summary>
+    ///     Color of the link path. Default is black.
+    /// </summary>
+    [Parameter] public string StrokeColor { get; set; } = "black";
 
-    private LinkPath _lt;
-    private string StrokeColor => Link.IsSelected ? DiagramService.Diagram.Options.Get<DrawLinkOptions>()!.SelectedStrokeColor : DiagramService.Diagram.Options.Get<DrawLinkOptions>()!.StrokeColor;
+    /// <summary>
+    /// Color of the link path when it's selected. Default is lightyellow.
+    /// </summary>
+    [Parameter] public string SelectedStrokeColor { get; set; } = "lightyellow";
+
+    /// <summary>
+    ///     Width of the path. Default is 4.
+    /// </summary>
+    [Parameter] public int StrokeWidth { get; set; } = 4;
+
+    /// <summary>
+    ///     Default link type when using the <see cref="DefaultLinkComponent"/>.
+    ///     Will only be applied to newly created links.
+    /// </summary>
+    [Parameter] public DefaultLinkComponentPathType DefaultLinkComponentPathType { get; set; }
+
+    
+    /// <summary>
+    ///     Function that generates a path when <see cref="DefaultLinkComponentPathType"/> is <see cref="Models.DefaultLinkComponentPathType.Custom"/>.
+    /// </summary>
+    [Parameter] public Func<string> CustomLinkPath  { get; set; } = null!;
 
     /// <summary>
     ///     ID of the element.
     /// </summary>
     public string PathId => $"link-path-{Link.Id}";
 
-    private string LinkPath => GetPath();
+    private List<IDisposable> _subcriptions = [];
 
     /// <inheritdoc />
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            _lt = DiagramService.Diagram.Options.Get<DrawLinkOptions>()!.DefaultLinkPath;
+            _subcriptions = [DiagramService.Events.SubscribeTo<LinkSelectionChangedEvent>(OnLinkSelectionChanged)];
+            _strokeColor = Link.IsSelected ? SelectedStrokeColor : StrokeColor; 
         }
-
         return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void OnLinkSelectionChanged(LinkSelectionChangedEvent obj)
+    {
+        _strokeColor = obj.Model.IsSelected ? SelectedStrokeColor : StrokeColor; 
     }
 
     private async Task HandleClick(MouseEventArgs e)
@@ -136,26 +171,24 @@
     private int RelativeY1 => Link.SourcePort.GetCenterCoordinates().CenterY - Container.PositionY;
     private int RelativeX2 => Container.TargetX - Container.PositionX;
     private int RelativeY2 => Container.TargetY - Container.PositionY;
-
-
+    
     private string GetPath()
     {
-        switch (_lt)
+        switch (DefaultLinkComponentPathType)
         {
-            case Options.Behaviours.LinkPath.Curved:
-                const int waveHeight = 20; // Height of the wave, adjust as needed
+            case DefaultLinkComponentPathType.Curved:
 
                 // Calculate control points for a single sine wave
                 var control1X = (RelativeX1 + RelativeX2) / 2;
-                var control1Y = RelativeY1 - waveHeight; // control point above the line
+                var control1Y = RelativeY1 - WaveHeight; // control point above the line
                 var control2X = (RelativeX1 + RelativeX2) / 2;
-                var control2Y = RelativeY2 + waveHeight; // control point below the line
+                var control2Y = RelativeY2 + WaveHeight; // control point below the line
 
                 // Using a simple cubic Bézier curve to draw a single wave
                 return $"M {RelativeX1} {RelativeY1} C {control1X} {control1Y}, {control2X} {control2Y}, {RelativeX2} {RelativeY2}";
-            case Options.Behaviours.LinkPath.Line:
+            case DefaultLinkComponentPathType.Line:
                 return $"M {RelativeX1} {RelativeY1} L {RelativeX2} {RelativeY2}";
-            case Options.Behaviours.LinkPath.Orthogonal:
+            case DefaultLinkComponentPathType.Orthogonal:
                 var sourceX = RelativeX1;
                 var sourceY = RelativeY1;
                 var targetX = RelativeX2;
@@ -166,9 +199,18 @@
                        $"H {midX} " +
                        $"V {targetY} " +
                        $"H {targetX}";
+                case DefaultLinkComponentPathType.Custom:
+                    ArgumentNullException.ThrowIfNull(CustomLinkPath);
+                    return CustomLinkPath.Invoke();
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+       _subcriptions.DisposeAll();
     }
 
 }

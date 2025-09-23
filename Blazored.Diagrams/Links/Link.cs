@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using Blazored.Diagrams.Components.Models;
 using Blazored.Diagrams.Ports;
 
 namespace Blazored.Diagrams.Links;
