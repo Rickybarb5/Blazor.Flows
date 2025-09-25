@@ -99,13 +99,12 @@ public class DefaultLayerBehaviour : IBehaviour
     {
         // Use the new layer.
         obj.NewCurrentLayer.IsCurrentLayer = true;
-        _service.Diagram.Layers.ForEach(x =>
-        {
-            if (x.Id != obj.NewCurrentLayer.Id)
+        _service.Diagram.Layers
+            .Where(x => x.Id != obj.NewCurrentLayer.Id)
+            .ForEach(x =>
             {
-                x.IsCurrentLayer = false;
-            }
-        });
+                    x.IsCurrentLayer = false;
+            });
     }
 
     /// <summary>
@@ -117,13 +116,9 @@ public class DefaultLayerBehaviour : IBehaviour
     {
         if (obj.Model.IsCurrentLayer)
         {
-            _service.Diagram.Layers.ForEach(x =>
-            {
-                if (x.Id != obj.Model.Id)
-                {
-                    x.IsCurrentLayer = false;
-                }
-            });
+            _service.Diagram.Layers
+                .Where(x => x.Id != obj.Model.Id)
+                .ForEach(x => { x.IsCurrentLayer = false; });
         }
         else
         {

@@ -47,8 +47,7 @@ public partial class Port
             Parent.Id != port.Parent.Id;
         return canConnect;
     }
-
-
+    
     /// <inheritdoc />
     void IPort.SetPositionInternal(int x, int y)
     {

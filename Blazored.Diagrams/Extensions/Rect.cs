@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Blazored.Diagrams.Helpers;
+namespace Blazored.Diagrams.Extensions;
 
 /// <summary>
 ///     Helper class for GetBoundClientRect

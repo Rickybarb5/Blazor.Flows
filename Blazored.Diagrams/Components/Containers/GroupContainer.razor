@@ -16,20 +16,6 @@
          id="@(ContainerId)">
         <DynamicComponent Type="@(ComponentRegistry.GetComponentType(Group.GetType()))" Parameters="Parameters"></DynamicComponent>
     </div>
-    @foreach (var node in _group.Nodes)
-    {
-        <NodeContainer Node="node"></NodeContainer>
-    }
-
-    @foreach (var port in _group.Ports)
-    {
-        <PortContainer Port="port"></PortContainer>
-    }
-
-    @foreach (var group in _group.Groups)
-    {
-        <GroupContainer Group="group"></GroupContainer>
-    }
 }
 
 @code {

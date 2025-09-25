@@ -1,0 +1,14 @@
+@foreach (var port in Ports)
+{
+    <PortContainer Port="port"></PortContainer>
+}
+
+@code {
+
+    /// <summary>
+    /// Ports to be rendered
+    /// </summary>
+    [Parameter]
+    [EditorRequired]
+    public required IEnumerable<IPort> Ports { get; set; }
+}

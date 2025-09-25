@@ -17,10 +17,6 @@
          @ref="_componentRef" id="@(ContainerId)">
         <DynamicComponent Type=@(ComponentRegistry.GetComponentType(Node.GetType())) Parameters="@(Parameters)"></DynamicComponent>
     </div>
-    @foreach (var port in _node.Ports)
-    {
-        <PortContainer Port="port"></PortContainer>
-    }
 }
 
 @code {

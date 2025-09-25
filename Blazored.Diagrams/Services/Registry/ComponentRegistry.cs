@@ -67,12 +67,12 @@ public class ComponentRegistry : IComponentRegistry
     }
 
     /// <inheritdoc />
-    public void RegisterComponent(Type componentType, Type dataType)
+    public void RegisterComponent(Type componentType, Type modelType)
     {
         if (!typeof(IComponent).IsAssignableFrom(componentType))
             throw new ArgumentException($"Type {componentType.Name} must be a component");
 
-        _componentTypes[dataType] = componentType;
+        _componentTypes[modelType] = componentType;
     }
 
     /// <inheritdoc />

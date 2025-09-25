@@ -6,6 +6,4 @@ namespace Blazored.Diagrams.Services.Registry;
 /// Marker interface for data models linked to a component.
 /// </summary>
 /// <typeparam name="TComponent">Component type.</typeparam>
-public interface IHasComponent<TComponent> where TComponent : IComponent
-{
-}
+public interface IHasComponent<TComponent> where TComponent : IComponent;

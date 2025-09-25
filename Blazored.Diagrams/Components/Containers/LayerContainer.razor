@@ -5,7 +5,13 @@
 @if (_layer is not null)
 {
     <div>
-        @* Rendering order matters *@
+        @* Rendering order matters right now, consider using z-index in the future. *@
+        @*Here only the top-level components are rendered. The componenets themselves should use
+            <NodeRenderer>
+            <GroupRenderer>
+            <PortRenderer>
+            to render the nested components. This allows for user customization of what is rendered or not(besides using IsVisible).
+        *@
         @if (_layer.IsVisible)
         {
             @foreach (var node in VirtualizationService.Virtualize(DiagramService.Diagram, _layer.Nodes))
