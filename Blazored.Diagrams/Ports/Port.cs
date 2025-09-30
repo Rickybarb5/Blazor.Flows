@@ -21,17 +21,14 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     private IPortContainer _parent;
     private PortAlignment _alignment = PortAlignment.Left;
     private int _width;
+    private int _positionX;
+    private int _positionY;
 
     /// <summary>
     ///     Instantiates a new <see cref="Port" />
     /// </summary>
     public Port()
     {
-        Anchor = new PortAnchor
-        {
-            Port = this,
-        };
-        
         _incomingLinks.OnItemAdded += HandleIncomingLinkAdded;
         _incomingLinks.OnItemRemoved += HandleIncomingLinkRemoved;
         _outgoingLinks.OnItemAdded += HandleOutgoingLinkAdded;
@@ -40,9 +37,6 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
 
     /// <inheritdoc />
     public virtual Guid Id { get; init; } = Guid.NewGuid();
-
-    public IPortAnchor Anchor { get; set; }
-
     /// <inheritdoc />
     [JsonIgnore]
     public virtual bool HasLinks => HasOutGoingLinks || HasIncomingLinks;
@@ -89,14 +83,14 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     /// <inheritdoc />
     public virtual int PositionX
     {
-        get => Anchor.PositionX + Anchor.OffsetX - Width/2 ;
+        get => _positionX;
         set
         {
-            if (Anchor.PositionX != value)
+            if (value!= _positionX)
             {
-                var oldX = Anchor.PositionX;
-                Anchor.PositionX = value;
-                OnPositionChanged?.Invoke(this, oldX, Anchor.PositionY, Anchor.PositionX, Anchor.PositionY);
+                var oldX = _positionX;
+                _positionX = value;
+                OnPositionChanged?.Invoke(this, oldX, _positionY, _positionX, _positionY);
             }
         }
     }
@@ -104,14 +98,14 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     /// <inheritdoc />
     public virtual int PositionY
     {
-        get => Anchor.PositionY + Anchor.OffsetY - Height/2;
+        get => _positionY;
         set
         {
-            if (Anchor.PositionY != value)
+            if (value!= _positionY)
             {
-                var oldY = Anchor.PositionY;
-                Anchor.PositionY = value;
-                OnPositionChanged?.Invoke(this, Anchor.PositionX, oldY, Anchor.PositionX, Anchor.PositionY);
+                var OldY = _positionY;
+                _positionY = value;
+                OnPositionChanged?.Invoke(this, _positionX, OldY, _positionX, _positionY);
             }
         }
     }

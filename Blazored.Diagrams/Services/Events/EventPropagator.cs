@@ -46,11 +46,11 @@ internal partial class EventPropagator : IEventPropagator
     {
         _service.Diagram.Layers.OnItemAdded -= SubscribeToEvents;
         _service.Diagram.Layers.OnItemRemoved -= UnsubscribeFromEvents;
-        _service.Diagram.Layers.ForEach(UnsubscribeFromEvents);
+        _service.Diagram.AllLinks.ForEach(UnsubscribeFromEvents);
+        _service.Diagram.AllPorts.ForEach(UnsubscribeFromEvents);
         _service.Diagram.AllNodes.ForEach(UnsubscribeFromEvents);
         _service.Diagram.AllGroups.ForEach(UnsubscribeFromEvents);
-        _service.Diagram.AllPorts.ForEach(UnsubscribeFromEvents);
-        _service.Diagram.AllLinks.ForEach(UnsubscribeFromEvents);
+        _service.Diagram.Layers.ForEach(UnsubscribeFromEvents);
         _subscriptions.DisposeAll();
     }
 }

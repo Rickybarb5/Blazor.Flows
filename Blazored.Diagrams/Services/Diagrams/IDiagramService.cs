@@ -1,6 +1,7 @@
 using Blazored.Diagrams.Diagrams;
 using Blazored.Diagrams.Services.Behaviours;
 using Blazored.Diagrams.Services.Events;
+using Blazored.Diagrams.Services.Serialization;
 
 namespace Blazored.Diagrams.Services.Diagrams;
 
@@ -17,20 +18,31 @@ public interface IDiagramService : IDisposable
     /// <summary>
     /// Allows access to event subscription and publish.
     /// </summary>
-    IEventAggregator Events { get; init; }
+    IEventAggregator Events { get; set; }
     
     /// <summary>
     /// Allows behaviour customization.
     /// </summary>
-    IBehaviourContainer Behaviours { get; init; }
+    IBehaviourContainer Behaviours { get; set; }
+    
+    /// <summary>
+    /// Allows diagram serialization/deserialization.
+    /// </summary>
+    ISerializationContainer Serialize { get; set; }
     
     /// <summary>
     /// Allows adding models to the diagram.
     /// </summary>
-    public IAddContainer Add { get; init; }
+    public IAddContainer Add { get; set; }
     
     /// <summary>
     /// Allows deleting models from the diagram.
     /// </summary>
-    public IDeleteContainer Remove { get; init; }
+    public IDeleteContainer Remove { get; set; }
+
+    /// <summary>
+    /// Replaces the diagram instance with another.
+    /// </summary>
+    /// <param name="diagram">A diagram instance</param>
+    void SwitchDiagram(IDiagram diagram);
 }

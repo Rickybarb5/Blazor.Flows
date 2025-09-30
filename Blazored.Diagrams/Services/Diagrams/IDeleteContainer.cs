@@ -16,33 +16,33 @@ public interface IDeleteContainer
     /// </summary>
     /// <param name="nodeToRemove"></param>
     /// <returns></returns>
-    bool Node(INode nodeToRemove);
+    IDeleteContainer Node(INode nodeToRemove);
 
     /// <summary>
     /// Removes a group from the diagram.
     /// </summary>
     /// <param name="groupToRemove"></param>
     /// <returns></returns>
-    bool Group(IGroup groupToRemove);
+    IDeleteContainer Group(IGroup groupToRemove);
 
     /// <summary>
     /// Removes a layer from the diagram.
     /// </summary>
     /// <param name="layer"></param>
     /// <returns></returns>
-    bool Layer(ILayer layer);
+    IDeleteContainer Layer(ILayer layer);
 
     /// <summary>
     /// Removes a port.
     /// </summary>
     /// <param name="port"></param>
     /// <returns></returns>
-    bool Remove(IPort port);
+    IDeleteContainer Remove(IPort port);
 
     /// <summary>
     /// Removes a link
     /// </summary>
     /// <param name="linkToRemove"></param>
     /// <returns></returns>
-    bool Link(ILink linkToRemove);
+    IDeleteContainer Link(ILink linkToRemove);
 }

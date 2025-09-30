@@ -78,4 +78,10 @@ public class BehaviourContainer : IBehaviourContainer
         _service.Diagram.Options._behaviourOptions.Add(options);
         return this;
     }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _behaviours.ForEach(b=> b.Dispose());
+    }
 }

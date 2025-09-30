@@ -100,14 +100,8 @@ public class EventAggregator : IEventAggregator
     }
 
     /// <inheritdoc />
-    public void Clear()
-    {
-        _subscriptions.Clear();
-    }
-
-    /// <inheritdoc />
     public void Dispose()
     {
-        Clear();
+        _subscriptions.Clear();
     }
 }

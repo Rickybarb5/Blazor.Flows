@@ -31,9 +31,4 @@ public interface IEventAggregator : IDisposable
     /// <typeparam name="TEvent">Event Type</typeparam>
     void Publish<TEvent>(TEvent @event)
         where TEvent : IEvent;
-
-    /// <summary>
-    /// Clears all subscriptions.
-    /// </summary>
-    void Clear();
 }

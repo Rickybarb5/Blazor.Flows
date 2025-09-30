@@ -3,6 +3,7 @@ using Blazored.Diagrams.Diagrams;
 using Blazored.Diagrams.Services.Behaviours;
 using Blazored.Diagrams.Services.Events;
 using Blazored.Diagrams.Services.Providers;
+using Blazored.Diagrams.Services.Serialization;
 
 namespace Blazored.Diagrams.Services.Diagrams;
 
@@ -12,22 +13,25 @@ public partial class DiagramService : IDiagramService
     /// <summary>
     /// Propagates model events to the event aggregator.
     /// </summary>
-    protected IEventPropagator? EventPropagator;
+    protected IEventPropagator EventPropagator;
 
     /// <inheritdoc />
-    public IEventAggregator Events { get; init; }
+    public IEventAggregator Events { get; set; }
 
     /// <inheritdoc />
-    public IBehaviourContainer Behaviours { get; init; }
+    public IBehaviourContainer Behaviours { get; set; }
+
+    /// <inheritdoc />
+    public ISerializationContainer Serialize { get; set; }
+
+    /// <inheritdoc />
+    public IAddContainer Add { get; set; }
     
     /// <inheritdoc />
-    public IAddContainer Add { get; init; }
-    
-    /// <inheritdoc />
-    public IDeleteContainer Remove { get; init; }
+    public IDeleteContainer Remove { get; set; }
 
     /// <inheritdoc />
-    public IDiagram Diagram { get; }
+    public IDiagram Diagram { get; set; }
 
     /// <summary>
     /// 
@@ -37,13 +41,22 @@ public partial class DiagramService : IDiagramService
     public DiagramService(IDiagram diagram, IDiagramServiceProvider diagramServiceProvider)
     {
         Diagram = diagram;
+        InitializeServices();
+        InitializeBehaviours();
+    }
+
+    private void InitializeServices()
+    {
         Behaviours = new BehaviourContainer(this);
         Add = new AddContainer(Diagram);
         Remove = new DeleteContainer(Diagram);
-        Events = diagramServiceProvider.GetDiagramEventAggregator(diagram);
+        Events = new EventAggregator();
+        Serialize = new SerializationContainer(this);
         EventPropagator = new EventPropagator(this);
-        
-        //Register behaviors
+    }
+
+    private void InitializeBehaviours()
+    {
         Behaviours.RegisterBehaviour(new DefaultGroupBehaviour(this));
         Behaviours.RegisterBehaviour(new DefaultLayerBehaviour(this));
         Behaviours.RegisterBehaviour(new DefaultLinkBehaviour(this));
@@ -55,14 +68,23 @@ public partial class DiagramService : IDiagramService
         Behaviours.RegisterBehaviour(new RedrawBehaviour(this));
         Behaviours.RegisterBehaviour(new MoveBehaviour(this));
         Behaviours.RegisterBehaviour(new ZoomBehavior(this));
-        Behaviours.RegisterBehaviour(new EventLoggingBehavior(this));
         Behaviours.RegisterBehaviour(new SelectBehaviour(this));
-        
+        Behaviours.RegisterBehaviour(new EventLoggingBehavior(this));
     }
+
+    void IDiagramService.SwitchDiagram(IDiagram diagram)
+    {
+        Dispose();
+        InitializeServices();
+        InitializeBehaviours();
+       
+    }
+
     /// <inheritdoc />
     public void Dispose()
     {
-        EventPropagator?.Dispose();
+        Behaviours.Dispose();
+        EventPropagator.Dispose();
         Events.Dispose();
     }
 }

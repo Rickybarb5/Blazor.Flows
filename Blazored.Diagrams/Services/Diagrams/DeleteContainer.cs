@@ -16,42 +16,48 @@ public class DeleteContainer : IDeleteContainer
         Diagram = diagram;
     }
     /// <inheritdoc />
-    public virtual bool Node(INode nodeToRemove)
+    public virtual IDeleteContainer Node(INode nodeToRemove)
     {
         if (Diagram.Layers.Select(layer => layer.Nodes.Remove(nodeToRemove)).Any(removed => removed))
         {
-            return true;
+            return this;
         }
 
-        return Diagram.Layers
+        Diagram.Layers
             .SelectMany(x => x.AllGroups)
             .Select(group => group.Nodes.Remove(nodeToRemove))
             .Any(removed => removed);
+
+        return this;
     }
 
     /// <inheritdoc />
-    public virtual bool Group(IGroup groupToRemove)
+    public virtual IDeleteContainer Group(IGroup groupToRemove)
     {
         foreach (var layer in Diagram.Layers)
         {
             var removed = layer.Groups.Remove(groupToRemove);
-            if (removed) return true;
+            if (removed) 
+                return this;
         }
 
-        return Diagram.Layers
+        Diagram.Layers
             .SelectMany(x => x.AllGroups)
             .Select(group => group.Groups.Remove(groupToRemove))
             .Any(removed => removed);
+        
+        return this;
     }
 
     /// <inheritdoc />
-    public virtual bool Layer(ILayer layer)
+    public virtual IDeleteContainer Layer(ILayer layer)
     {
-        return Diagram.Layers.Remove(layer);
+        Diagram.Layers.Remove(layer);
+        return this;
     }
 
     /// <inheritdoc />
-    public bool Remove(IPort port)
+    public IDeleteContainer Remove(IPort port)
     {
         var success = Diagram.Layers
             .SelectMany(x => x.AllNodes)
@@ -59,19 +65,21 @@ public class DeleteContainer : IDeleteContainer
             .Any(removed => removed);
         if (!success)
         {
-            success = Diagram.Layers
+            Diagram.Layers
                 .SelectMany(x => x.AllGroups)
                 .Select(group => group.Ports.Remove(port))
                 .Any(removed => removed);
         }
 
-        return success;
+        return this;
     }
 
     /// <inheritdoc />
-    public virtual bool Link(ILink linkToRemove)
+    public virtual IDeleteContainer Link(ILink linkToRemove)
     {
-        return linkToRemove.SourcePort.OutgoingLinks.Remove(linkToRemove) || linkToRemove.TargetPort is null ||
-               linkToRemove.TargetPort.IncomingLinks.Remove(linkToRemove);
+        linkToRemove.SourcePort.OutgoingLinks.Remove(linkToRemove);
+        linkToRemove?.TargetPort?.IncomingLinks.Remove(linkToRemove);
+        
+        return this;
     }
 }

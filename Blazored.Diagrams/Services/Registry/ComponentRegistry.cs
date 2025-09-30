@@ -24,16 +24,7 @@ public class ComponentRegistry : IComponentRegistry
 
             foreach (var type in types)
             {
-                // Get the first directly implemented IHasComponent<> interface
-                var componentInterface = type.GetInterfaces()
-                    .FirstOrDefault(i => i.IsGenericType &&
-                                         i.GetGenericTypeDefinition() == typeof(IHasComponent<>) &&
-                                         IsDirectlyImplementedInterface(type, i));
-
-                // If no direct interface is found, use the first inherited one
-                componentInterface ??= type.GetInterfaces()
-                    .FirstOrDefault(i => i.IsGenericType &&
-                                         i.GetGenericTypeDefinition() == typeof(IHasComponent<>));
+                var componentInterface = GetClosestHasComponentInterface(type);
 
                 if (componentInterface != null)
                 {
@@ -42,6 +33,27 @@ public class ComponentRegistry : IComponentRegistry
                 }
             }
         }
+    }
+    
+    private static Type? GetClosestHasComponentInterface(Type type)
+    {
+        while (type != null && type != typeof(object))
+        {
+            // Only interfaces introduced on this type, not inherited
+            var declaredInterfaces = type.GetInterfaces()
+                .Except(type.BaseType?.GetInterfaces() ?? Array.Empty<Type>());
+
+            var match = declaredInterfaces
+                .FirstOrDefault(i => i.IsGenericType &&
+                                     i.GetGenericTypeDefinition() == typeof(IHasComponent<>));
+
+            if (match != null)
+                return match;
+
+            type = type.BaseType;
+        }
+
+        return null;
     }
 
     /// <summary>

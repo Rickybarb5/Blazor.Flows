@@ -3,7 +3,7 @@ using Blazored.Diagrams.Interfaces;
 
 namespace Blazored.Diagrams.Services.Behaviours;
 
-public interface IBehaviourContainer
+public interface IBehaviourContainer : IDisposable
 {
     IBehaviourContainer RegisterBehaviour<TBehaviour>(TBehaviour behaviour)
         where TBehaviour : IBehaviour;

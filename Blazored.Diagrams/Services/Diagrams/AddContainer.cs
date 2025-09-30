@@ -23,10 +23,11 @@ public class AddContainer : IAddContainer
     /// <param name="group">Group to be added.</param>
     /// <typeparam name="TGroup">Group Type</typeparam>
     /// <returns></returns>
-    public void AddGroupTo<TGroup>(IGroupContainer parent, TGroup group)
+    public IAddContainer AddGroupTo<TGroup>(IGroupContainer parent, TGroup group)
         where TGroup : IGroup
     {
         parent.Groups.Add(group);
+        return this;
     }
 
     /// <summary>
@@ -36,10 +37,11 @@ public class AddContainer : IAddContainer
     /// <param name="node">Node to be added to the container.</param>
     /// <typeparam name="TNode">Node Type</typeparam>
     /// <returns></returns>
-    public void AddNodeTo<TNode>(INodeContainer parentGroup, TNode node)
+    public IAddContainer AddNodeTo<TNode>(INodeContainer parentGroup, TNode node)
         where TNode : INode
     {
         parentGroup.Nodes.Add(node);
+        return this;
     }
 
     /// <summary>
@@ -49,10 +51,11 @@ public class AddContainer : IAddContainer
     /// <param name="port">Port that will be added.</param>
     /// <typeparam name="TPort">Port Type</typeparam>
     /// <returns></returns> 
-    public void AddPortTo<TPort>(IPortContainer parent, TPort port)
+    public IAddContainer AddPortTo<TPort>(IPortContainer parent, TPort port)
         where TPort : IPort
     {
         parent.Ports.Add(port);
+        return this;
     }
 
     /// <summary>
@@ -63,11 +66,12 @@ public class AddContainer : IAddContainer
     /// <param name="link">Link that will be added to the container</param>
     /// <typeparam name="TLink">Link Type</typeparam>
     /// <returns></returns>
-    public void AddLinkTo<TLink>(ILinkContainer sourcePort, ILinkContainer? targetPort, TLink link)
+    public IAddContainer AddLinkTo<TLink>(ILinkContainer sourcePort, ILinkContainer? targetPort, TLink link)
         where TLink : ILink
     {
         sourcePort.OutgoingLinks.Add(link);
         targetPort?.IncomingLinks.Add(link);
+        return this;
     }
 
     /// <summary>
@@ -76,27 +80,31 @@ public class AddContainer : IAddContainer
     /// <param name="layer">Layer to be added.</param>
     /// <typeparam name="TLayer">Link Type</typeparam>
     /// <returns></returns>
-    public void Layer<TLayer>(TLayer layer)
+    public IAddContainer Layer<TLayer>(TLayer layer)
         where TLayer : ILayer
     {
         _diagram.Layers.Add(layer);
+        return this;
     }
 
     /// <inheritdoc />
-    public virtual void Node(INode node)
+    public virtual IAddContainer Node(INode node)
     {
         _diagram.CurrentLayer.Nodes.Add(node);
+        return this;
     }
 
     /// <inheritdoc />
-    public virtual void Group(IGroup group)
+    public virtual IAddContainer Group(IGroup group)
     {
         _diagram.CurrentLayer.Groups.Add(group);
+        return this;
     }
 
     /// <inheritdoc />
-    public virtual void AddLayer(ILayer layer)
+    public virtual IAddContainer AddLayer(ILayer layer)
     {
         _diagram.Layers.Add(layer);
+        return this;
     }
 }

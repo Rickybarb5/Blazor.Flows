@@ -13,7 +13,6 @@ public class PositionTests
         [
             new Node(),
             new Group(),
-            new Port()
         ];
     }
 
