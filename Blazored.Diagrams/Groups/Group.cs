@@ -1,10 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿
 using Blazored.Diagrams.Components.Models;
 using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Helpers;
 using Blazored.Diagrams.Nodes;
 using Blazored.Diagrams.Ports;
 using Blazored.Diagrams.Services.Registry;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Groups;
 
@@ -89,7 +90,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
     }
 
     /// <inheritdoc />
-    public virtual Guid Id { get; init; } = Guid.NewGuid();
+    public virtual string Id { get; init; } = Guid.NewGuid().ToString();
 
     /// <inheritdoc />
     public virtual int Width
@@ -202,7 +203,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
     public virtual ObservableList<IPort> Ports
     {
         get => _ports;
-        init
+        set
         {
             _ports.Clear();
             value.ForEach(p=>_ports.Add(p));
@@ -213,7 +214,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
     public virtual ObservableList<INode> Nodes
     {
         get => _nodes;
-        init
+        set
         {
             _nodes.Clear();
             value.ForEach(n=>_nodes.Add(n));
@@ -224,7 +225,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
     public virtual ObservableList<IGroup> Groups
     {
         get => _groups;
-        init
+        set
         {
             _groups.Clear();
             value.ForEach(g=>_groups.Add(g));

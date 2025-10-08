@@ -92,7 +92,7 @@ public class BehaviourContainer : IBehaviourContainer
                 $"Behaviour options of type {nameof(TBehaviourOptions)} is already registered.");
         }
 
-        _service.Diagram.Options._behaviourOptions.Add(options);
+        _service.Diagram.Options.BehaviourOptions.Add(options);
         return this;
     }
 

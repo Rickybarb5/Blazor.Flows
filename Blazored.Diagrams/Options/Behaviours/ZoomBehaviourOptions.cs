@@ -1,5 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿
 using Blazored.Diagrams.Behaviours;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Options.Behaviours;
 

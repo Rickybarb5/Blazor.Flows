@@ -1,11 +1,11 @@
-﻿using System.Text.Json.Serialization;
-using Blazored.Diagrams.Groups;
+﻿using Blazored.Diagrams.Groups;
 using Blazored.Diagrams.Interfaces;
 using Blazored.Diagrams.Layers;
 using Blazored.Diagrams.Links;
 using Blazored.Diagrams.Nodes;
 using Blazored.Diagrams.Options.Diagram;
 using Blazored.Diagrams.Ports;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Diagrams;
 
@@ -32,27 +32,31 @@ public interface IDiagram :
     /// <summary>
     ///     Gets all the nodes from all layers.
     /// </summary>
+    [JsonIgnore]
     IReadOnlyList<INode> AllNodes { get; }
 
     /// <summary>
     ///     Gets the links from all layers.
     /// </summary>
+    [JsonIgnore]
     IReadOnlyList<ILink> AllLinks { get; }
 
     /// <summary>
     ///     Gets the groups from all layers.
     /// </summary>
+    [JsonIgnore]
     IReadOnlyList<IGroup> AllGroups { get; }
 
     /// <summary>
     /// Gets all ports in the diagram.
     /// </summary>
+    [JsonIgnore]
     IReadOnlyList<IPort> AllPorts { get; }
-
+    
     /// <summary>
-    /// Gets the current active layer
+    /// Gets the current active layer.
     /// </summary>
-    ILayer CurrentLayer { get; }
+    ILayer CurrentLayer { get; set; }
 
     /// <summary>
     /// Top left position of the diagram.
@@ -67,7 +71,7 @@ public interface IDiagram :
     /// <summary>
     /// Virtualization options.
     /// </summary>
-    DiagramOptions Options { get; init; }
+    IDiagramOptions Options { get; init; }
 
     /// <summary>
     /// Sets the size of the diagram.
@@ -112,6 +116,11 @@ public interface IDiagram :
     /// Event triggered when the diagram position changes.
     /// </summary>
     event Action<IDiagram, int, int, int, int>? OnPositionChanged;
+    
+    /// <summary>
+    /// Event triggered when the layer starts/stops being used.
+    /// </summary>
+    event Action<ILayer, ILayer>? OnCurrentLayerChanged;
 
     /// <summary>
     /// Unselects all models in the diagram.
@@ -133,5 +142,5 @@ public interface IDiagram :
     void UseLayer(ILayer layer);
 
     /// <inheritdoc />
-    void UseLayer(Guid layerId);
+    void UseLayer(string layerId);
 }

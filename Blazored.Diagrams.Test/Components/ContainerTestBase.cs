@@ -1,7 +1,6 @@
 using Blazored.Diagrams.Diagrams;
 using Blazored.Diagrams.Services.Diagrams;
 using Blazored.Diagrams.Services.Events;
-using Blazored.Diagrams.Services.Providers;
 using Blazored.Diagrams.Services.Virtualization;
 using Bunit;
 using Microsoft.AspNetCore.Components;

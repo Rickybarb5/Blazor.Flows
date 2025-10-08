@@ -9,12 +9,19 @@ internal partial class EventPropagator
     {
         diagram.OnLayerAdded += PublishLayerAddedEvent;
         diagram.OnLayerRemoved += PublishLayerRemoved;
+        diagram.OnCurrentLayerChanged += PublishLayerChangeEvent;
         diagram.OnPanChanged += PublishPanChanged;
         diagram.OnZoomChanged += PublishZoomChanged;
         diagram.OnPositionChanged += PublishPositionChanged;
         diagram.OnSizeChanged += PublishSizeChanged;
     }
 
+
+    private void PublishLayerChangeEvent(ILayer oldLayer, ILayer newLayer)
+    {
+        _service.Events.Publish(new CurrentLayerChangedEvent(oldLayer, newLayer));
+    }
+    
     private void PublishSizeChanged(IDiagram diagram, int arg1, int arg2, int arg3, int arg4)
     {
         _service.Events.Publish(new DiagramSizeChangedEvent(diagram, arg1, arg2, arg3, arg4));
@@ -43,5 +50,16 @@ internal partial class EventPropagator
     private void PublishLayerAddedEvent(IDiagram arg1, ILayer arg2)
     {
         _service.Events.Publish(new LayerAddedEvent(arg2));
+    }
+    
+    private void UnsubscribeFromEvents(IDiagram diagram)
+    {
+        diagram.OnLayerAdded -= PublishLayerAddedEvent;
+        diagram.OnLayerRemoved -= PublishLayerRemoved;
+        diagram.OnCurrentLayerChanged -= PublishLayerChangeEvent;
+        diagram.OnPanChanged -= PublishPanChanged;
+        diagram.OnZoomChanged -= PublishZoomChanged;
+        diagram.OnPositionChanged -= PublishPositionChanged;
+        diagram.OnSizeChanged -= PublishSizeChanged;
     }
 }

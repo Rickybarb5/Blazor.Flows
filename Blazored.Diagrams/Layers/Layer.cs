@@ -1,10 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿
 using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Groups;
 using Blazored.Diagrams.Helpers;
 using Blazored.Diagrams.Links;
 using Blazored.Diagrams.Nodes;
 using Blazored.Diagrams.Ports;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Layers;
 
@@ -49,13 +50,13 @@ public partial class Layer : ILayer
     }
 
     /// <inheritdoc />
-    public virtual Guid Id { get; init; } = Guid.NewGuid();
+    public virtual string Id { get; init; } = Guid.NewGuid().ToString();
 
     /// <inheritdoc />
     public virtual ObservableList<INode> Nodes
     {
         get => _nodes;
-        init
+        set
         {
             _nodes.Clear();
             value.ForEach(val=>_nodes.Add(val));
@@ -66,7 +67,7 @@ public partial class Layer : ILayer
     public virtual ObservableList<IGroup> Groups
     {
         get => _groups;
-        init
+        set
         {
             _groups.Clear();
             
@@ -115,21 +116,6 @@ public partial class Layer : ILayer
         .DistinctBy(x => x.Id)
         .ToList()
         .AsReadOnly();
-
-
-    /// <inheritdoc />
-    public bool IsCurrentLayer
-    {
-        get => _currentLayer;
-        set
-        {
-            if (value != _currentLayer)
-            {
-                _currentLayer = value;
-                OnLayerUsageChanged?.Invoke(this);
-            }
-        }
-    }
 
     /// <inheritdoc />
     [JsonIgnore]

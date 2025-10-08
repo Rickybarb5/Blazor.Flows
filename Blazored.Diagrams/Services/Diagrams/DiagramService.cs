@@ -1,9 +1,9 @@
 using Blazored.Diagrams.Behaviours;
 using Blazored.Diagrams.Diagrams;
+using Blazored.Diagrams.Options.Behaviours;
 using Blazored.Diagrams.Services.Behaviours;
 using Blazored.Diagrams.Services.Events;
 using Blazored.Diagrams.Services.Providers;
-using Blazored.Diagrams.Services.Serialization;
 
 namespace Blazored.Diagrams.Services.Diagrams;
 
@@ -42,6 +42,7 @@ public partial class DiagramService : IDiagramService
     {
         Diagram = diagram;
         InitializeServices();
+        InitializeOptions();
         InitializeBehaviours();
     }
 
@@ -71,12 +72,35 @@ public partial class DiagramService : IDiagramService
         Behaviours.RegisterBehaviour(new SelectBehaviour(this));
         Behaviours.RegisterBehaviour(new EventLoggingBehavior(this));
     }
+    
+    private void InitializeOptions()
+    {
+        Diagram.Options.BehaviourOptions =
+        [
+
+            new DefaultGroupBehaviourOptions(),
+            new DefaultLayerBehaviourOptions(),
+            new DefaultLinkBehaviourOptions(),
+            new DefaultPortBehaviourOptions(),
+            new DeleteBehaviourOptions(),
+            new DeleteWithKeyBehaviourOptions(),
+            new DrawLinkBehaviourOptions(),
+            new MoveBehaviourOptions(),
+            new PanBehaviourOptions(),
+            new RedrawBehaviourOptions(),
+            new SelectBehaviourOptions(),
+            new ZoomBehaviourOptions(),
+            new LoggingBehaviourOptions(),
+        ];
+    }
 
     void IDiagramService.SwitchDiagram(IDiagram diagram)
     {
         Dispose();
+        Diagram = diagram;
         InitializeServices();
         InitializeBehaviours();
+        Events.Publish(new DiagramRedrawEvent(Diagram));
        
     }
 

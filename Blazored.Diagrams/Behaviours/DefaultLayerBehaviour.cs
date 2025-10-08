@@ -1,5 +1,3 @@
-using Blazored.Diagrams.Extensions;
-using Blazored.Diagrams.Layers;
 using Blazored.Diagrams.Options.Behaviours;
 using Blazored.Diagrams.Services.Diagrams;
 using Blazored.Diagrams.Services.Events;
@@ -48,70 +46,26 @@ public class DefaultLayerBehaviour : BaseBehaviour
     {
         Subscriptions =
         [
+            _service.Events.SubscribeTo<CurrentLayerChangedEvent>(HandleCurrentLayerChanged),
             _service.Events.SubscribeTo<LayerRemovedEvent>(HandleLayerRemoved),
-            _service.Events.SubscribeTo<LayerAddedEvent>(HandleLayerAdded),
-            _service.Events.SubscribeTo<IsCurrentLayerChangedEvent>(HandleLayerStateChange),
-            _service.Events.SubscribeTo<LayerSwitchEvent>(HandleLayerSwitch),
         ];
     }
 
     /// <summary>
-    /// Handles the <see cref="LayerAddedEvent"/>
-    /// </summary>
-    /// <param name="obj"></param>
-    protected virtual void HandleLayerAdded(LayerAddedEvent obj)
-    {
-        // If this is the first layer being added, it's the active layer.
-        if (_service.Diagram.Layers.Count == 1)
-        {
-            _service.Diagram.Layers.First().IsCurrentLayer = true;
-        }
-        else
-        {
-            // If a new layer is created with IsCurrentLayer = true, we have to trigger the event manually. 
-            if (obj.Model.IsCurrentLayer)
-            {
-                _service.Events.Publish(new IsCurrentLayerChangedEvent(obj.Model));
-            }
-        }
-    }
-
-    /// <summary>
-    /// Handles the <see cref="LayerSwitchEvent"/>.
-    /// </summary>
-    /// <param name="obj"></param>
-    protected virtual void HandleLayerSwitch(LayerSwitchEvent obj)
-    {
-        // Use the new layer.
-        obj.NewCurrentLayer.IsCurrentLayer = true;
-        _service.Diagram.Layers
-            .Where(x => x.Id != obj.NewCurrentLayer.Id)
-            .ForEach(x =>
-            {
-                    x.IsCurrentLayer = false;
-            });
-    }
-
-    /// <summary>
-    /// Handles the <see cref="IsCurrentLayerChangedEvent"/>
+    /// Handles the <see cref="CurrentLayerChangedEvent"/>
     /// </summary>
     /// <param name="obj"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    protected virtual void HandleLayerStateChange(IsCurrentLayerChangedEvent obj)
+    protected virtual void HandleCurrentLayerChanged(CurrentLayerChangedEvent obj)
     {
-        if (obj.Model.IsCurrentLayer)
+        if (obj.NewLayer is null)
         {
-            _service.Diagram.Layers
-                .Where(x => x.Id != obj.Model.Id)
-                .ForEach(x => { x.IsCurrentLayer = false; });
+            throw new InvalidOperationException("Current layer cannot be null.");
         }
-        else
+
+        if (!_service.Diagram.Layers.Contains(obj.NewLayer))
         {
-            if (_service.Diagram.Layers.Count(x => x.IsCurrentLayer) != 1)
-            {
-                throw new InvalidOperationException(
-                    $"There must be always be only one layer with {nameof(ILayer.IsCurrentLayer)} = true at all times.");
-            }
+            _service.Diagram.Layers.Add(obj.NewLayer);
         }
     }
 
@@ -128,9 +82,9 @@ public class DefaultLayerBehaviour : BaseBehaviour
         }
 
         // If the current layer is removed the first one will turn into the current one.
-        if (!_service.Diagram.Layers.Any(x => x.IsCurrentLayer))
+        if (_service.Diagram.CurrentLayer.Id == obj.Model.Id)
         {
-            _service.Diagram.UseLayer(_service.Diagram.Layers.First());
+            _service.Diagram.CurrentLayer = _service.Diagram.Layers[0];
         }
     }
 }

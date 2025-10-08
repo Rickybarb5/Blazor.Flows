@@ -1,9 +1,9 @@
-﻿using System.Text.Json.Serialization;
-using Blazored.Diagrams.Groups;
+﻿using Blazored.Diagrams.Groups;
 using Blazored.Diagrams.Interfaces;
 using Blazored.Diagrams.Links;
 using Blazored.Diagrams.Nodes;
 using Blazored.Diagrams.Ports;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Layers;
 
@@ -16,11 +16,6 @@ public interface ILayer : IId,
     IGroupContainer,
     IDisposable
 {
-    /// <summary>
-    /// Gets a value indicating if this layer is the one currently being used.
-    /// </summary>
-    public bool IsCurrentLayer { get; set; }
-
     /// <summary>
     ///     Ports that are container within the layer.
     /// </summary>
@@ -44,11 +39,6 @@ public interface ILayer : IId,
     /// </summary>
     [JsonIgnore]
     public IReadOnlyList<ILink> AllLinks { get; }
-
-    /// <summary>
-    /// Event triggered when the layer starts/stops being used.
-    /// </summary>
-    public event Action<ILayer>? OnLayerUsageChanged;
 
     /// <summary>
     /// Event triggered when the visibility state changes.

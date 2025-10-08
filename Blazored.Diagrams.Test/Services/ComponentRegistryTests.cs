@@ -88,7 +88,7 @@ public class ComponentRegistryTests
 
     private class UnregisteredTestNode : INode
     {
-        public Guid Id { get; init; }
+        public string Id { get; init; }
         public bool IsVisible { get; set; }
         public bool IsSelected { get; set; }
         public int PositionX { get; set; }
@@ -107,7 +107,7 @@ public class ComponentRegistryTests
             throw new NotImplementedException();
         }
 
-        public ObservableList<IPort> Ports { get; init; }
+        public ObservableList<IPort> Ports { get; set; }
 
         public void Dispose()
         {

@@ -1,7 +1,8 @@
 ﻿using System.Collections;
-using System.Text.Json.Serialization;
 using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Interfaces;
+using Blazored.Diagrams.Services.Serialization;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Helpers;
 
@@ -9,9 +10,11 @@ namespace Blazored.Diagrams.Helpers;
 /// Custom list implementation with add and remove events.
 /// </summary>
 /// <typeparam name="TModel"></typeparam>
+
+[JsonConverter(typeof(ObservableListConverter))]
 public class ObservableList<TModel> : IList<TModel> where TModel : IId
 {
-    private readonly Dictionary<Guid, TModel> _internalIDictionary = [];
+    private readonly Dictionary<string, TModel> _internalIDictionary = [];
 
     /// <summary>
     /// Event triggered when an item is added.
@@ -45,6 +48,12 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
             OnItemAdded?.Invoke(value);
         }
     }
+
+    /// <summary>
+    /// Internal property for serialization - gets/sets the dictionary directly
+    /// </summary>
+    [JsonProperty("Items")]
+    internal Dictionary<string, TModel> InternalDictionary => _internalIDictionary;
 
     /// <summary>
     /// Adds an item, if it doesn't already exist.

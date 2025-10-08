@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+
 using Blazored.Diagrams.Extensions;
 
 namespace Blazored.Diagrams.Behaviours;

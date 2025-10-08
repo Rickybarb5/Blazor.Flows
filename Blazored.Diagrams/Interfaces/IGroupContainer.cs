@@ -11,5 +11,5 @@ public interface IGroupContainer
     /// <summary>
     ///     List of groups.
     /// </summary>
-    ObservableList<IGroup> Groups { get; init; }
+    ObservableList<IGroup> Groups { get; set; }
 }

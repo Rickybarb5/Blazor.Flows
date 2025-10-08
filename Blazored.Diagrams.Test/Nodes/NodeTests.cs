@@ -15,7 +15,7 @@ public class NodeTests
         var obj = Instance;
 
         //Assert
-        Assert.NotEqual(Guid.Empty, obj.Id);
+        Assert.NotEmpty(obj.Id);
     }
 
     [Fact]

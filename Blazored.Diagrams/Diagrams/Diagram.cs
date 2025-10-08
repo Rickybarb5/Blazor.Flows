@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Blazored.Diagrams.Extensions;
+﻿using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Groups;
 using Blazored.Diagrams.Helpers;
 using Blazored.Diagrams.Layers;
@@ -7,6 +6,7 @@ using Blazored.Diagrams.Links;
 using Blazored.Diagrams.Nodes;
 using Blazored.Diagrams.Options.Diagram;
 using Blazored.Diagrams.Ports;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Diagrams;
 
@@ -16,13 +16,9 @@ namespace Blazored.Diagrams.Diagrams;
 public partial class Diagram : IDiagram
 {
     /// <inheritdoc />
-    public virtual Guid Id { get; init; } = Guid.NewGuid();
+    public virtual string Id { get; init; } = Guid.NewGuid().ToString();
 
-    private ObservableList<ILayer> _layers =
-    [
-        //Default Layer
-        new Layer { IsCurrentLayer = true },
-    ];
+    private ObservableList<ILayer> _layers = [];
 
     private int _panX;
     private int _panY;
@@ -31,6 +27,7 @@ public partial class Diagram : IDiagram
     private int _positionY;
     private int _width;
     private int _height;
+    private ILayer _currentLayer;
 
     /// <summary>
     /// Instantiates a new <see cref="Diagram"/>
@@ -39,6 +36,21 @@ public partial class Diagram : IDiagram
     {
         _layers.OnItemAdded += HandleLayerAdded;
         _layers.OnItemRemoved += HandleLayerRemoved;
+        // Always ensure a default layer exists
+        EnsureDefaultLayer();
+    }
+    
+    private void EnsureDefaultLayer()
+    {
+        if (_layers.All(l=>l.Id != Guid.Empty.ToString()))
+        {
+            var defaultLayer = new Layer()
+            {
+                Id = Guid.Empty.ToString(),
+            };
+            _layers.Add(defaultLayer);
+            _currentLayer = defaultLayer;
+        }
     }
 
     private void HandleLayerRemoved(ILayer obj)
@@ -125,10 +137,11 @@ public partial class Diagram : IDiagram
     public virtual ObservableList<ILayer> Layers
     {
         get => _layers;
-        init
+        set
         {
             _layers.Clear();
-            value.ForEach(l=>_layers.Add(l));
+            value.ForEach(l=> _layers.Add(l));
+            EnsureDefaultLayer();
         }
     }
     
@@ -148,10 +161,27 @@ public partial class Diagram : IDiagram
     /// <inheritdoc />
     [JsonIgnore]
     public virtual IReadOnlyList<IPort> AllPorts => _layers.SelectMany(layer => layer.AllPorts).ToList().AsReadOnly();
-
+    
     /// <inheritdoc />
-    public virtual ILayer CurrentLayer => Layers.First(l => l.IsCurrentLayer);
+    public virtual ILayer CurrentLayer
+    {
+        get => _currentLayer;
+        set
+        {
+            if (_currentLayer != value)
+            {
+                // add layer if it doesn't exist
+                if (_layers.FirstOrDefault(l => l.Id == value.Id) is null)
+                {
+                    _layers.Add(value);
+                }
 
+                var oldLayer = _currentLayer;
+                _currentLayer = value;
+                OnCurrentLayerChanged?.Invoke(oldLayer, _currentLayer);
+            }
+        }
+    }
 
     /// <inheritdoc />
     [JsonIgnore]
@@ -186,7 +216,7 @@ public partial class Diagram : IDiagram
     }
 
     /// <inheritdoc />
-    public virtual DiagramOptions Options { get; init; } = new();
+    public virtual IDiagramOptions Options { get; init; } = new DiagramOptions();
     
     /// <inheritdoc />
     public event Action<IDiagram, double, double>? OnZoomChanged;
@@ -202,6 +232,9 @@ public partial class Diagram : IDiagram
 
     /// <inheritdoc />
     public event Action<IDiagram, int, int, int, int>? OnPositionChanged;
+
+    /// <inheritdoc />
+    public event Action<ILayer, ILayer>? OnCurrentLayerChanged;
 
     /// <inheritdoc />
     public event Action<IDiagram, int, int, int, int>? OnSizeChanged;

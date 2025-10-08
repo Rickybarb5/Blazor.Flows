@@ -1,6 +1,7 @@
 ﻿using Blazored.Diagrams.Interfaces;
 using Blazored.Diagrams.Nodes;
 using Blazored.Diagrams.Ports;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Groups;
 
@@ -20,16 +21,21 @@ public interface IGroup :
     /// <summary>
     ///     Gets all nodes and nested Nodes.
     /// </summary>
+    [JsonIgnore]
     IReadOnlyList<INode> AllNodes { get; }
 
     /// <summary>
     ///     Gets all groups and nested groups.
     /// </summary>
+    
+    [JsonIgnore]
     IReadOnlyList<IGroup> AllGroups { get; }
 
     /// <summary>
     ///     Gets all ports and nested ports.
     /// </summary>
+    
+    [JsonIgnore]
     IReadOnlyList<IPort> AllPorts { get; }
 
     /// <summary>

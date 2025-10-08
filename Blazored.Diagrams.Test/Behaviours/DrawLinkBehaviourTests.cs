@@ -130,6 +130,7 @@ public class DrawLinkBehaviorTests
         using var service = CreateService();
         var sourceNode = new Node();
         var sourcePort = new Mock<IPort>();
+        sourcePort.Setup(x => x.Id).Returns(Guid.NewGuid().ToString());
         sourcePort.Setup(x => x.CanCreateLink()).Returns(false);
         sourcePort.Setup(x => x.Parent).Returns(sourceNode);
         sourcePort.Setup(x => x.IncomingLinks).Returns([]);

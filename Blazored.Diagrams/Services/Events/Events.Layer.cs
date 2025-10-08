@@ -9,14 +9,9 @@ namespace Blazored.Diagrams.Services.Events;
 /// <summary>
 ///     Event triggered when a new layer will start to be used.
 /// </summary>
-/// <param name="NewCurrentLayer">Layer that will become the current layer.</param>
-public record LayerSwitchEvent(ILayer NewCurrentLayer) : IEvent;
-
-/// <summary>
-///     Event triggered when the <see cref="ILayer.IsCurrentLayer"/>  flag is changed.
-/// </summary>
-/// <param name="Model">Layer whose <see cref="ILayer.IsCurrentLayer"/>. property changed value.</param>
-public record IsCurrentLayerChangedEvent(ILayer Model) : ModelEventBase<ILayer>(Model);
+/// <param name="OldLayer">Previous layer that was being used.</param>
+/// <param name="NewLayer">New layer that will be used.</param>
+public record CurrentLayerChangedEvent(ILayer OldLayer, ILayer NewLayer) : IEvent;
 
 /// <summary>
 ///     Base layer event.

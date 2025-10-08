@@ -18,9 +18,8 @@ public class DiagramTests
         var diagram = Instance;
 
         //Assert
-        Assert.Single(diagram.Layers);
         Assert.Same(diagram.CurrentLayer, diagram.Layers.First());
-        Assert.True(diagram.CurrentLayer.IsCurrentLayer);
+        Assert.NotNull(diagram.CurrentLayer);
     }
 
     [Fact]

@@ -16,65 +16,6 @@ public class DefaultLayerBehaviourTests
     }
 
     [Fact]
-    public void HandleLayerAdded_WhenFirstLayer_ShouldSetAsCurrentLayer()
-    {
-        // Arrange
-        using var service = CreateService();
-        var layer = new Layer();
-
-        // Act
-        service.Add.Layer(layer);
-
-        // Assert
-        Assert.True(service.Diagram.Layers.First().IsCurrentLayer);
-    }
-
-    [Fact]
-    public void HandleLayerAdded_WhenNewLayerIsCurrentLayer_ShouldPublishEvent()
-    {
-        // Arrange
-        using var service = CreateService();
-        var secondLayer = new Layer { IsCurrentLayer = true };
-
-        IsCurrentLayerChangedEvent? capturedEvent = null;
-        service.Events.SubscribeTo<IsCurrentLayerChangedEvent>(e => capturedEvent = e);
-
-
-        // Act
-        service.Add.Layer(secondLayer);
-
-        // Assert
-        Assert.NotNull(capturedEvent);
-        Assert.Equal(secondLayer, capturedEvent.Model);
-    }
-
-    [Fact]
-    public void HandleLayerSwitch_ShouldUpdateCurrentLayerStates()
-    {
-        // Arrange
-        using var service = CreateService();
-        var secondLayer = new Layer();
-
-        service.Add.Layer(secondLayer);
-
-        // Act
-        secondLayer.IsCurrentLayer = true;
-
-        // Assert
-        Assert.True(secondLayer.IsCurrentLayer);
-    }
-
-    [Fact]
-    public void HandleLayerStateChange_WhenMultipleCurrentLayers_ShouldThrowException()
-    {
-        // Arrange
-        using var service = CreateService();
-
-        // Act & Assert
-        Assert.Throws<InvalidOperationException>(() => service.Diagram.Layers.First().IsCurrentLayer = false);
-    }
-
-    [Fact]
     public void HandleLayerRemoved_WhenLastLayer_ShouldThrowException()
     {
         // Arrange
@@ -89,15 +30,15 @@ public class DefaultLayerBehaviourTests
     {
         // Arrange
         using var service = CreateService();
-        var secondLayer = new Layer { IsCurrentLayer = true };
+        var secondLayer = new Layer();
 
-        service.Add.Layer(secondLayer);
+        service.Diagram.CurrentLayer = secondLayer;
 
         // Act
         service.Remove.Layer(secondLayer);
 
         // Assert
-        Assert.True(service.Diagram.Layers.First().IsCurrentLayer);
+        Assert.Same(service.Diagram.Layers.First(), service.Diagram.CurrentLayer);
     }
 
     [Fact]
@@ -105,13 +46,12 @@ public class DefaultLayerBehaviourTests
     {
         // Arrange
         using var service = CreateService();
-        var layer = new Layer { IsCurrentLayer = true };
-
-        IsCurrentLayerChangedEvent? capturedEvent = null;
-        service.Events.SubscribeTo<IsCurrentLayerChangedEvent>(e => capturedEvent = e);
+        var layer = new Layer();
+        CurrentLayerChangedEvent? capturedEvent = null;
+        service.Events.SubscribeTo<CurrentLayerChangedEvent>(e => capturedEvent = e);
 
         // Verify initial behavior
-        service.Add.Layer(layer);
+        service.Diagram.UseLayer(layer);
         Assert.NotNull(capturedEvent);
 
         // Reset and dispose

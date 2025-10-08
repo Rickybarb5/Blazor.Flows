@@ -1,34 +1,16 @@
 using Blazored.Diagrams.Interfaces;
-using Blazored.Diagrams.Options.Behaviours;
 
 namespace Blazored.Diagrams.Options.Diagram;
 
-public class DiagramOptions
+/// <inheritdoc />
+public class DiagramOptions : IDiagramOptions
 {
     /// <inheritdoc />
-    public DiagramStyleOptions Style { get; set; } = new();
+    public IDiagramStyleOptions Style { get; set; } = new DiagramStyleOptions();
 
     /// <inheritdoc />
-    public VirtualizationOptions Virtualization { get; init; } = new();
+    public IVirtualizationOptions Virtualization { get; init; } = new VirtualizationOptions();
 
     /// <inheritdoc />
-    public IReadOnlyList<IBehaviourOptions> BehaviourOptions => _behaviourOptions.AsReadOnly();
-  
-    
-    internal List<IBehaviourOptions> _behaviourOptions=  
-    [
-        new DefaultGroupBehaviourOptions(),
-        new DefaultLayerBehaviourOptions(),
-        new DefaultLinkBehaviourOptions(),
-        new DefaultPortBehaviourOptions(),
-        new DeleteBehaviourOptions(),
-        new DeleteWithKeyBehaviourOptions(),
-        new DrawLinkBehaviourOptions(),
-        new MoveBehaviourOptions(),
-        new PanBehaviourOptions(),
-        new RedrawBehaviourOptions(),
-        new SelectBehaviourOptions(),
-        new ZoomBehaviourOptions(),
-        new LoggingBehaviourOptions(),
-    ];
+    public List<IBehaviourOptions> BehaviourOptions { get; set; } = [];
 }

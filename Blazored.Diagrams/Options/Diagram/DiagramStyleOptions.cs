@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Options.Diagram;
 /// <summary>
 /// Style options for the diagram.
 /// </summary>
-public partial class DiagramStyleOptions
+public partial class DiagramStyleOptions : IDiagramStyleOptions
 {
     readonly NumberFormatInfo _nfi = new();
     /// <summary>

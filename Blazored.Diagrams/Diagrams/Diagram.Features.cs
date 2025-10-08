@@ -86,19 +86,19 @@ public partial class Diagram
     /// <inheritdoc />
     public virtual void UseLayer(ILayer layer)
     {
-        UseLayer(layer.Id);
+        if (!Layers.Contains(layer))
+        {
+            Layers.Add(layer);
+        }
+
+        CurrentLayer = layer;
     }
 
     /// <inheritdoc />
-    public virtual void UseLayer(Guid layerId)
+    public virtual void UseLayer(string layerId)
     {
         var layer = Layers.FirstOrDefault(x => x.Id == layerId);
 
-        if (layer is null)
-        {
-            throw new InvalidOperationException($"Layer {layerId} is not a part of the diagram");
-        }
-
-        layer.IsCurrentLayer = true;
+        CurrentLayer = layer ?? throw new InvalidOperationException($"Layer {layerId} is not a part of the diagram");
     }
 }

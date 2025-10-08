@@ -5,7 +5,7 @@ namespace Blazored.Diagrams.Test.Components;
 using Moq;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
-using Blazored.Diagrams.Extensions;
+using Extensions;
 
 /// <summary>
 ///     Helper class for creating and working with Moq mocks of <see cref="IJSRuntime"/>.

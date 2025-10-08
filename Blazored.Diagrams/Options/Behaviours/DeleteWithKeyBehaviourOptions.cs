@@ -5,6 +5,7 @@ namespace Blazored.Diagrams.Options.Behaviours;
 /// <summary>
 /// Options for <see cref="DeleteWithKeyBehaviour"/>
 /// </summary>
+
 public class DeleteWithKeyBehaviourOptions : BaseBehaviourOptions
 {
     /// <summary>

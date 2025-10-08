@@ -1,5 +1,4 @@
 using Blazored.Diagrams.Behaviours;
-using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.OperatorNode;
 using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.ResultNode;
 using Blazored.Diagrams.Services.Diagrams;

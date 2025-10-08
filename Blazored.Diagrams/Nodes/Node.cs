@@ -42,7 +42,7 @@ public partial class Node : INode, IHasComponent<DefaultNodeComponent>
 
 
     /// <inheritdoc />
-    public virtual Guid Id { get; init; } = Guid.NewGuid();
+    public virtual string Id { get; init; } = Guid.NewGuid().ToString();
 
     /// <inheritdoc />
     public virtual int Width
@@ -142,7 +142,7 @@ public partial class Node : INode, IHasComponent<DefaultNodeComponent>
     public virtual ObservableList<IPort> Ports
     {
         get => _ports;
-        init
+        set
         {
             _ports.Clear();
             value.ForEach(val=>_ports.Add(val));

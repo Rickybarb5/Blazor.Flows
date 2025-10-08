@@ -1,7 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿
 using Blazored.Diagrams.Components.Models;
 using Blazored.Diagrams.Ports;
 using Blazored.Diagrams.Services.Registry;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Links;
 
@@ -20,7 +21,7 @@ public partial class Link : ILink, IHasComponent<DefaultLinkComponent>
     private int _height;
 
     /// <inheritdoc />
-    public virtual Guid Id { get; init; } = Guid.NewGuid();
+    public virtual string Id { get; init; } = Guid.NewGuid().ToString();
     
     /// <inheritdoc />
     /// TODO:Check if required feels good.

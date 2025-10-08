@@ -1,7 +1,6 @@
 using Blazored.Diagrams.Groups;
 using Blazored.Diagrams.Interfaces;
 using Blazored.Diagrams.Nodes;
-using Blazored.Diagrams.Ports;
 
 namespace Blazored.Diagrams.Test.Common;
 

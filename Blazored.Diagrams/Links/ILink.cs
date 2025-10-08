@@ -1,6 +1,7 @@
 ﻿using Blazored.Diagrams.Ports;
-using System.Text.Json.Serialization;
+
 using Blazored.Diagrams.Interfaces;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Links;
 

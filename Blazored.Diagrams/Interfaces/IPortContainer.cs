@@ -11,5 +11,5 @@ public interface IPortContainer : IPosition, ISize, IId
     /// <summary>
     ///     Ports associated with this model.
     /// </summary>
-    ObservableList<IPort> Ports { get; init; }
+    ObservableList<IPort> Ports { get; set; }
 }

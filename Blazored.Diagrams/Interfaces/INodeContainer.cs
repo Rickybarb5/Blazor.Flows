@@ -11,5 +11,5 @@ public interface INodeContainer
     /// <summary>
     ///     Nodes that belong to the model.
     /// </summary>
-    ObservableList<INode> Nodes { get; init; }
+    ObservableList<INode> Nodes { get; set; }
 }

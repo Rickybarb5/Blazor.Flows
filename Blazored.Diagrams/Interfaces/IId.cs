@@ -8,5 +8,5 @@ public interface IId
     /// <summary>
     ///     Id of the model.
     /// </summary>
-    public Guid Id { get; init; }
+    public string Id { get; init; }
 }

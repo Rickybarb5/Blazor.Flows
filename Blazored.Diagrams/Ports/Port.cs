@@ -1,10 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿
 using Blazored.Diagrams.Components.Models;
 using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Helpers;
 using Blazored.Diagrams.Interfaces;
 using Blazored.Diagrams.Links;
 using Blazored.Diagrams.Services.Registry;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Ports;
 
@@ -38,7 +39,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     }
 
     /// <inheritdoc />
-    public virtual Guid Id { get; init; } = Guid.NewGuid();
+    public virtual string Id { get; init; } = Guid.NewGuid().ToString();
     /// <inheritdoc />
     [JsonIgnore]
     public virtual bool HasLinks => HasOutGoingLinks || HasIncomingLinks;
@@ -194,7 +195,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     public virtual ObservableList<ILink> OutgoingLinks
     {
         get => _outgoingLinks;
-        init
+        set
         {
             _outgoingLinks.Clear();
             value.ForEach(val =>
@@ -209,7 +210,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     public virtual ObservableList<ILink> IncomingLinks
     {
         get => _incomingLinks;
-        init
+        set
         {
             _incomingLinks.Clear();
             value.ForEach(val =>

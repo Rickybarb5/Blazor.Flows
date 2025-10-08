@@ -5,9 +5,7 @@ namespace Blazored.Diagrams.Test.Components;
 using Bunit;
 using Moq;
 using Xunit;
-using Blazored.Diagrams.Services.Diagrams;
 using Blazored.Diagrams.Services.Events;
-using Microsoft.Extensions.DependencyInjection;
 
 public class NodeContainerTests : ContainerTestBase<NodeContainer>
 {

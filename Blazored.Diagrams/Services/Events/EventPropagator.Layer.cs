@@ -15,7 +15,6 @@ internal partial class EventPropagator
     private void SubscribeToEvents(ILayer layer)
     {
         layer.OnVisibilityChanged += PublishVisibilityEvent;
-        layer.OnLayerUsageChanged += PublishLayerChangeEvent;
 
         layer.OnNodeAdded += PublishNodeAdded;
         layer.OnNodeRemoved += PublishNodeRemoved;
@@ -27,11 +26,6 @@ internal partial class EventPropagator
         layer.Groups.ForEach(SubscribeToEvents);
         layer.Nodes.ForEach(n => PublishNodeAdded(layer, n));
         layer.Groups.ForEach(g => PublishGroupAdded(layer, g));
-    }
-
-    private void PublishLayerChangeEvent(ILayer obj)
-    {
-        _service.Events.Publish(new IsCurrentLayerChangedEvent(obj));
     }
 
     private void PublishGroupRemoved(ILayer parent, IGroup obj)
@@ -74,7 +68,6 @@ internal partial class EventPropagator
         layer.Nodes.ForEach(UnsubscribeFromEvents);
         layer.Groups.ForEach(UnsubscribeFromEvents);
         layer.OnVisibilityChanged -= PublishVisibilityEvent;
-        layer.OnLayerUsageChanged -= PublishLayerChangeEvent;
 
 
         layer.OnNodeAdded -= PublishNodeAdded;

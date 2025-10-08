@@ -3,6 +3,7 @@ using Blazored.Diagrams.Services.Diagrams;
 
 namespace Blazored.Diagrams.Services.Events;
 
+/// <inheritdoc />
 internal partial class EventPropagator : IEventPropagator
 {
     private readonly IDiagramService _service;
@@ -44,13 +45,12 @@ internal partial class EventPropagator : IEventPropagator
     
     public void Dispose()
     {
-        _service.Diagram.Layers.OnItemAdded -= SubscribeToEvents;
-        _service.Diagram.Layers.OnItemRemoved -= UnsubscribeFromEvents;
         _service.Diagram.AllLinks.ForEach(UnsubscribeFromEvents);
         _service.Diagram.AllPorts.ForEach(UnsubscribeFromEvents);
         _service.Diagram.AllNodes.ForEach(UnsubscribeFromEvents);
         _service.Diagram.AllGroups.ForEach(UnsubscribeFromEvents);
         _service.Diagram.Layers.ForEach(UnsubscribeFromEvents);
+        UnsubscribeFromEvents(_service.Diagram);
         _subscriptions.DisposeAll();
     }
 }

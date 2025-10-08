@@ -1,7 +1,6 @@
 using Blazored.Diagrams.Components.Containers;
 using Blazored.Diagrams.Layers;
 using Bunit;
-using Moq;
 
 namespace Blazored.Diagrams.Test.Components;
 

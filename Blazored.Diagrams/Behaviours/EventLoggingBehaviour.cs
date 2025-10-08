@@ -50,9 +50,9 @@ public class EventLoggingBehavior : BaseBehaviour
             _diagramService.Events.SubscribeTo<LayerVisibilityChangedEvent>(e =>
                 Console.WriteLine(
                     $"[{nameof(LayerVisibilityChangedEvent)}] Layer {e.Model.Id} visibility changed to {e.Model.IsVisible}")),
-            _diagramService.Events.SubscribeTo<IsCurrentLayerChangedEvent>(e =>
+            _diagramService.Events.SubscribeTo<CurrentLayerChangedEvent>(e =>
                 Console.WriteLine(
-                    $"[{nameof(IsCurrentLayerChangedEvent)}] Layer {e.Model.Id} is now {(e.Model.IsCurrentLayer ? "current" : "not current")}")),
+                    $"[{nameof(CurrentLayerChangedEvent)}] Layer {e.OldLayer.Id} was replaced with {e.NewLayer.Id}.")),
 
             // Node events
             _diagramService.Events.SubscribeTo<NodeAddedEvent>(e =>

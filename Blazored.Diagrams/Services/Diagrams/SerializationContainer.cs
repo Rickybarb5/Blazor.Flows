@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Blazored.Diagrams.Diagrams;
 using Blazored.Diagrams.Services.Serialization;
 

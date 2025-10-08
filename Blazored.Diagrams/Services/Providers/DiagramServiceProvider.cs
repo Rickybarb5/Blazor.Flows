@@ -7,9 +7,9 @@ namespace Blazored.Diagrams.Services.Providers;
 /// <inheritdoc />
 public class DiagramServiceProvider : IDiagramServiceProvider
 {
-    private readonly Dictionary<Guid, IDiagramService> _diagramServices = [];
-    private readonly Dictionary<Guid, IEventPropagator> _diagramEventPropagators = [];
-    private readonly Dictionary<Guid, IEventAggregator> _eventAggregators = [];
+    private readonly Dictionary<string, IDiagramService> _diagramServices = [];
+    private readonly Dictionary<string, IEventPropagator> _diagramEventPropagators = [];
+    private readonly Dictionary<string, IEventAggregator> _eventAggregators = [];
 
     /// <inheritdoc />
     public IDiagramService GetDiagramService(IDiagram diagram)
