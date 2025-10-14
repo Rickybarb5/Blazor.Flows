@@ -1,5 +1,4 @@
-﻿
-using Blazored.Diagrams.Components.Models;
+﻿using Blazored.Diagrams.Components.Models;
 using Blazored.Diagrams.Ports;
 using Blazored.Diagrams.Services.Events;
 using Blazored.Diagrams.Services.Registry;
@@ -23,7 +22,7 @@ public partial class Link : ILink, IHasComponent<DefaultLinkComponent>
 
     /// <inheritdoc />
     public virtual string Id { get; init; } = Guid.NewGuid().ToString();
-    
+
     /// <inheritdoc />
     /// TODO:Check if required feels good.
     [JsonIgnore]
@@ -92,26 +91,32 @@ public partial class Link : ILink, IHasComponent<DefaultLinkComponent>
 
     /// <inheritdoc />
     [JsonIgnore]
-public ITypedEvent<LinkSizeChangedEvent> OnSizeChanged { get; init; } = new TypedEvent<LinkSizeChangedEvent>();
-    
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<LinkTargetPortChangedEvent> OnTargetPortChanged { get; init; } = new TypedEvent<LinkTargetPortChangedEvent>();
-    
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<LinkSourcePortChangedEvent> OnSourcePortChanged { get; init; } = new TypedEvent<LinkSourcePortChangedEvent>();
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<LinkTargetPositionChangedEvent> OnTargetPositionChanged { get; init; } = new TypedEvent<LinkTargetPositionChangedEvent>();
+    public ITypedEvent<LinkSizeChangedEvent> OnSizeChanged { get; init; } = new TypedEvent<LinkSizeChangedEvent>();
 
     /// <inheritdoc />
     [JsonIgnore]
-public ITypedEvent<LinkSelectionChangedEvent> OnSelectionChanged { get; init; } =
-        new TypedEvent<LinkSelectionChangedEvent>();
+    public ITypedEvent<LinkTargetPortChangedEvent> OnTargetPortChanged { get; init; } =
+        new TypedEvent<LinkTargetPortChangedEvent>();
+
     /// <inheritdoc />
     [JsonIgnore]
-public ITypedEvent<LinkVisibilityChangedEvent> OnVisibilityChanged { get; init; } = new TypedEvent<LinkVisibilityChangedEvent>();
+    public ITypedEvent<LinkSourcePortChangedEvent> OnSourcePortChanged { get; init; } =
+        new TypedEvent<LinkSourcePortChangedEvent>();
+
+    /// <inheritdoc />
+    [JsonIgnore]
+    public ITypedEvent<LinkTargetPositionChangedEvent> OnTargetPositionChanged { get; init; } =
+        new TypedEvent<LinkTargetPositionChangedEvent>();
+
+    /// <inheritdoc />
+    [JsonIgnore]
+    public ITypedEvent<LinkSelectionChangedEvent> OnSelectionChanged { get; init; } =
+        new TypedEvent<LinkSelectionChangedEvent>();
+
+    /// <inheritdoc />
+    [JsonIgnore]
+    public ITypedEvent<LinkVisibilityChangedEvent> OnVisibilityChanged { get; init; } =
+        new TypedEvent<LinkVisibilityChangedEvent>();
 
     /// <inheritdoc />
     [JsonIgnore]
@@ -157,7 +162,7 @@ public ITypedEvent<LinkVisibilityChangedEvent> OnVisibilityChanged { get; init; 
             {
                 var oldWidth = _width;
                 _width = value;
-                OnSizeChanged.Publish(new (this, oldWidth, _height, _width, _height));
+                OnSizeChanged.Publish(new(this, oldWidth, _height, _width, _height));
             }
         }
     }
@@ -183,5 +188,4 @@ public ITypedEvent<LinkVisibilityChangedEvent> OnVisibilityChanged { get; init; 
         _sourcePort?.OutgoingLinks.Remove(this);
         _targetPort?.IncomingLinks.Remove(this);
     }
-
 }

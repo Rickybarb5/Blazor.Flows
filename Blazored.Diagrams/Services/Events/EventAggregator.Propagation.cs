@@ -53,6 +53,11 @@ public partial class EventAggregator
             _autoSubscriptions.Add(Propagate(e.Model));
             PropagateLinks(e.Model);
         }));
+        
+        _autoSubscriptions.Add(SubscribeTo<LinkAddedEvent>(e =>
+        {
+            _autoSubscriptions.Add(Propagate(e.Model));
+        }));
     }
 
     private void PropagateLinks(IPort port)

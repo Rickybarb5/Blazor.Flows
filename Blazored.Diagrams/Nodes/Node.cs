@@ -146,45 +146,50 @@ public partial class Node : INode, IHasComponent<DefaultNodeComponent>
         set
         {
             _ports.Clear();
-            value.ForEach(val=>_ports.Add(val));
+            value.ForEach(val => _ports.Add(val));
         }
     }
 
     /// <inheritdoc />
     public virtual void Dispose()
     {
-        _ports.OnItemAdded.Unsubscribe(HandlePortAdded);
-        _ports.OnItemRemoved.Unsubscribe(HandlePortRemoved);
         _ports.ForEach(x => x.Dispose());
         _ports.Clear();
+        _ports.OnItemAdded.Unsubscribe(HandlePortAdded);
+        _ports.OnItemRemoved.Unsubscribe(HandlePortRemoved);
     }
 
     /// <inheritdoc />
     [JsonIgnore]
-public ITypedEvent<NodePositionChangedEvent> OnPositionChanged { get; init; } = new TypedEvent<NodePositionChangedEvent>();
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<NodeSizeChangedEvent> OnSizeChanged { get; init; } = new TypedEvent<NodeSizeChangedEvent>();
+    public ITypedEvent<NodePositionChangedEvent> OnPositionChanged { get; init; } =
+        new TypedEvent<NodePositionChangedEvent>();
 
     /// <inheritdoc />
     [JsonIgnore]
-public ITypedEvent<NodeSelectionChangedEvent> OnSelectionChanged { get; init; }  = new TypedEvent<NodeSelectionChangedEvent>();
-
-    /// <inheritdoc />
-    public  ITypedEvent<NodeVisibilityChangedEvent> OnVisibilityChanged { get; init; } = new TypedEvent<NodeVisibilityChangedEvent>();
-
-    /// <inheritdoc />
-    public  ITypedEvent<PortAddedEvent> OnPortAdded { get; init; } = new TypedEvent<PortAddedEvent>();
+    public ITypedEvent<NodeSizeChangedEvent> OnSizeChanged { get; init; } = new TypedEvent<NodeSizeChangedEvent>();
 
     /// <inheritdoc />
     [JsonIgnore]
-public ITypedEvent<PortRemovedEvent> OnPortRemoved { get; init; } = new TypedEvent<PortRemovedEvent>();
+    public ITypedEvent<NodeSelectionChangedEvent> OnSelectionChanged { get; init; } =
+        new TypedEvent<NodeSelectionChangedEvent>();
+
+    /// <inheritdoc />
+    public ITypedEvent<NodeVisibilityChangedEvent> OnVisibilityChanged { get; init; } =
+        new TypedEvent<NodeVisibilityChangedEvent>();
+
+    /// <inheritdoc />
+    public ITypedEvent<PortAddedEvent> OnPortAdded { get; init; } = new TypedEvent<PortAddedEvent>();
 
     /// <inheritdoc />
     [JsonIgnore]
-public ITypedEvent<PortAddedToNodeEvent> OnPortAddedToNode { get; init; } = new TypedEvent<PortAddedToNodeEvent>();
+    public ITypedEvent<PortRemovedEvent> OnPortRemoved { get; init; } = new TypedEvent<PortRemovedEvent>();
 
     /// <inheritdoc />
     [JsonIgnore]
-public ITypedEvent<PortRemovedFromNodeEvent> OnPortRemovedFromNode { get; init; } = new TypedEvent<PortRemovedFromNodeEvent>();
+    public ITypedEvent<PortAddedToNodeEvent> OnPortAddedToNode { get; init; } = new TypedEvent<PortAddedToNodeEvent>();
+
+    /// <inheritdoc />
+    [JsonIgnore]
+    public ITypedEvent<PortRemovedFromNodeEvent> OnPortRemovedFromNode { get; init; } =
+        new TypedEvent<PortRemovedFromNodeEvent>();
 }

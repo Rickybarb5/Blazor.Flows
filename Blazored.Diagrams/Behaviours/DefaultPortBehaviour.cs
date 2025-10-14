@@ -21,13 +21,18 @@ public class DefaultPortBehaviour : BaseBehaviour
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<DefaultPortBehaviourOptions>()!;
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
-    private void OnEnabledChanged(bool enabled)
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
     {
-        if (enabled)
+        OnEnabledChanged(ev.IsEnabled);
+    }
+    
+    private void OnEnabledChanged(bool isEnabled)
+    {
+        if (isEnabled)
         {
             SubscribeToEvents();
         }
@@ -130,13 +135,5 @@ public class DefaultPortBehaviour : BaseBehaviour
     private void HandleIncomingLinkAdded(IncomingLinkAddedEvent obj)
     {
         obj.AddedLink.TargetPort = obj.Model;
-    }
-
-
-    /// <inheritdoc />
-    public new void Dispose()
-    {
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
-        DisposeSubscriptions();
     }
 }

@@ -7,7 +7,7 @@ namespace Blazored.Diagrams.Services.Behaviours;
 /// <inheritdoc />
 public class BehaviourContainer : IBehaviourContainer
 {
-    private readonly List<IBehaviour> _behaviours = [];
+    internal readonly List<IBehaviour> _behaviours = [];
     private readonly IDiagramService _service;
     
     /// <summary>
@@ -50,8 +50,8 @@ public class BehaviourContainer : IBehaviourContainer
         where TBehaviour : IBehaviour
         where TBehaviourOptions : IBehaviourOptions
     {
-        optionConfiguration();
-        behaviourConfiguration();
+        RegisterBehaviourOptions(optionConfiguration());
+        RegisterBehaviour(behaviourConfiguration());
         return this;
     }
 
@@ -76,7 +76,7 @@ public class BehaviourContainer : IBehaviourContainer
         var options = _service.Diagram.Options.BehaviourOptions.OfType<TBehaviourOptions>().FirstOrDefault();
         if (options is null)
         {
-            throw new ArgumentException($"No behaviour options of type {typeof(TBehaviourOptions)} exists.");
+            throw new InvalidOperationException($"No behaviour options of type {typeof(TBehaviourOptions)} exists.");
         }
 
         return options;

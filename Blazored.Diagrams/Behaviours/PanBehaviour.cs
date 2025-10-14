@@ -23,13 +23,18 @@ public class PanBehaviour : BaseBehaviour
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<PanBehaviourOptions>()!;
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
-    private void OnEnabledChanged(bool enabled)
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
     {
-        if (enabled)
+        OnEnabledChanged(ev.IsEnabled);
+    }
+    
+    private void OnEnabledChanged(bool isEnabled)
+    {
+        if (isEnabled)
         {
             SubscribeToEvents();
         }
@@ -37,13 +42,6 @@ public class PanBehaviour : BaseBehaviour
         {
             DisposeSubscriptions();
         }
-    }
-
-    /// <inheritdoc />
-    public new void Dispose()
-    {
-        DisposeSubscriptions();
-        _behaviourOptions.OnEnabledChanged -= OnEnabledChanged;
     }
 
     private void SubscribeToEvents()

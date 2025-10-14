@@ -1,46 +1,40 @@
 @page "/CalculatorExample"
+@using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.Behaviours
+@using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.Nodes
 
-<MudToolBar>
+<MudToolBar >
     <MudButton Icon="@Icons.Material.Filled.Numbers" Variant="Variant.Filled" OnClick="AddNumber">Add a Number Node</MudButton>
     <MudButton Icon="@Icons.Material.Filled.Calculate" Variant="Variant.Filled" OnClick="AddOperator">Add an Operator Node</MudButton>
-    <MudButton Icon="@Icons.Material.Filled.Receipt" Variant="Variant.Filled" OnClick="AddResult">Add a Result Node</MudButton>
 </MudToolBar>
 <div style="display:flex;flex-direction:row;width:100%; height:100%">
-    <DiagramContainer DiagramService="Service">
-        <SaveButton></SaveButton>
-        <LoadButton OnDiagramLoaded="OnDiagramLoaded"></LoadButton>
-    </DiagramContainer>
+    <DiagramContainer DiagramService="Service"></DiagramContainer>
 </div>
 
 @code {
     [Inject] public IDiagramService Service { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override Task OnAfterRenderAsync(bool firstRender)
     {
-        return base.OnInitializedAsync();
+        if (firstRender)
+        {
+            Service.Behaviours.RegisterBehaviour(new CalculatorBehaviour(Service));
+        }
+        return base.OnAfterRenderAsync(firstRender);
     }
-
     private void AddNumber(MouseEventArgs obj)
     {
-        var node = new NumberNode.NumberNode();
+        var node = new NumberNode();
         node.SetPosition(200, 200 * Service.Diagram.AllNodes.Count);
         Service.Add.Node(node);
     }
 
     private void AddOperator(MouseEventArgs obj)
     {
-        var node = new OperatorNode.OperatorNode();
+        var node = new Nodes.OperatorNode();
         node.SetPosition(400, 200 * Service.Diagram.AllNodes.Count);
         Service.Add.Node(node);
     }
-
-    private void AddResult(MouseEventArgs obj)
-    {
-        var node = new ResultNode.ResultNode();
-        node.SetPosition(600, 200 * Service.Diagram.AllNodes.Count);
-        Service.Add.Node(node);
-    }
-
+    
     private void OnDiagramLoaded(Diagram obj)
     {
         //Todo:Add diagram to service

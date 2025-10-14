@@ -5,10 +5,7 @@ using Blazored.Diagrams.Services.Events;
 namespace Blazored.Diagrams.Behaviours;
 
 /// <summary>
-/// Handles the default behaviour of a layer:
-/// <see cref="HandleLayerAdded"/>
-/// <see cref="HandleLayerSwitch"/>
-/// <see cref="HandleLayerAdded"/>
+/// Handles the default behaviour of a layer
 /// </summary>
 public class DefaultLayerBehaviour : BaseBehaviour
 {
@@ -23,13 +20,18 @@ public class DefaultLayerBehaviour : BaseBehaviour
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<DefaultLayerBehaviourOptions>()!;
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
-    private void OnEnabledChanged(bool enabled)
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
     {
-        if (enabled)
+        OnEnabledChanged(ev.IsEnabled);
+    }
+    
+    private void OnEnabledChanged(bool isEnabled)
+    {
+        if (isEnabled)
         {
             SubscribeToEvents();
         }

@@ -3,6 +3,9 @@ using Blazored.Diagrams.Extensions;
 
 namespace Blazored.Diagrams.Behaviours;
 
+/// <summary>
+/// Base implementation of a behaviour.
+/// </summary>
 public class BaseBehaviour : IBehaviour
 {
     /// <summary>

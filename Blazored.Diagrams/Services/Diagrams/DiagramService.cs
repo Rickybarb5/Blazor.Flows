@@ -10,25 +10,25 @@ namespace Blazored.Diagrams.Services.Diagrams;
 public partial class DiagramService : IDiagramService
 {
     /// <inheritdoc />
-    public IEventAggregator Events { get; set; }
+    public IEventAggregator Events { get; set; } = null!;
 
     /// <inheritdoc />
-    public IBehaviourContainer Behaviours { get; set; }
+    public IBehaviourContainer Behaviours { get; set; } = null!;
 
     /// <inheritdoc />
-    public ISerializationContainer Serialize { get; set; }
+    public ISerializationContainer Storage { get; set; } = null!;
 
     /// <inheritdoc />
-    public IAddContainer Add { get; set; }
-    
-    /// <inheritdoc />
-    public IDeleteContainer Remove { get; set; }
+    public IAddContainer Add { get; set; } = null!;
 
     /// <inheritdoc />
-    public IDiagram Diagram { get; set; }
+    public IDeleteContainer Remove { get; set; } = null!;
+
+    /// <inheritdoc />
+    public IDiagram Diagram { get; set; } = null!;
 
     /// <summary>
-    /// 
+    /// Initializes a new instance of <see cref="DiagramService"/>.
     /// </summary>
     public DiagramService()
     {
@@ -49,7 +49,7 @@ public partial class DiagramService : IDiagramService
         Add = new AddContainer(Diagram);
         Remove = new DeleteContainer(Diagram);
         Events = new EventAggregator(this);
-        Serialize = new SerializationContainer(this);
+        Storage = new SerializationContainer(this);
     }
 
     private void InitializeBehaviours()
@@ -90,7 +90,7 @@ public partial class DiagramService : IDiagramService
         ];
     }
 
-    void IDiagramService.SwitchDiagram(IDiagram diagram)
+    void IDiagramService.UseDiagram(IDiagram diagram)
     {
         Dispose();
         InitializeDiagram(diagram);

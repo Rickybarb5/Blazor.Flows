@@ -26,19 +26,19 @@ public class MoveBehaviour : BaseBehaviour
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<MoveBehaviourOptions>()!;
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
-    public new void Dispose()
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
     {
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
-        DisposeSubscriptions();
+        OnEnabledChanged(ev.IsEnabled);
     }
-
-    private void OnEnabledChanged(bool enabled)
+    
+    private void OnEnabledChanged(bool isEnabled)
     {
-        if (enabled)
+        if (isEnabled)
         {
             SubscribeToEvents();
         }

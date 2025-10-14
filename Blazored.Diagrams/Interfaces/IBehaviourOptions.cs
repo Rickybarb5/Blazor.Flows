@@ -1,3 +1,5 @@
+using Blazored.Diagrams.Services.Events;
+
 namespace Blazored.Diagrams.Interfaces;
 
 /// <summary>
@@ -13,5 +15,5 @@ public interface IBehaviourOptions
     /// <summary>
     /// Event triggered when IsEnabled changes.
     /// </summary>
-    public event Action<bool>? OnEnabledChanged;
+    public ITypedEvent<BehaviourEnabledEvent> OnEnabledChanged { get; init; }
 }

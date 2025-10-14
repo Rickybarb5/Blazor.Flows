@@ -23,13 +23,18 @@ public class ZoomBehavior : BaseBehaviour
     {
         _diagramService = diagramService;
         _behaviourOptions = _diagramService.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!;
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
-    private void OnEnabledChanged(bool enabled)
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
     {
-        if (enabled)
+        OnEnabledChanged(ev.IsEnabled);
+    }
+    
+    private void OnEnabledChanged(bool isEnabled)
+    {
+        if (isEnabled)
         {
             SubscribeToEvents();
         }
@@ -39,10 +44,6 @@ public class ZoomBehavior : BaseBehaviour
         }
     }
 
-    private new void DisposeSubscriptions()
-    {
-        Subscriptions.DisposeAll();
-    }
 
     private void SubscribeToEvents()
     {

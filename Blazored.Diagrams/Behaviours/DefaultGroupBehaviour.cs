@@ -21,13 +21,18 @@ public class DefaultGroupBehaviour : BaseBehaviour
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<DefaultGroupBehaviourOptions>()!;
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
-    private void OnEnabledChanged(bool enabled)
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
     {
-        if (enabled)
+        OnEnabledChanged(ev.IsEnabled);
+    }
+
+    private void OnEnabledChanged(bool isEnabled)
+    {
+        if (isEnabled)
         {
             SubscribeToEvents();
         }
@@ -59,8 +64,20 @@ public class DefaultGroupBehaviour : BaseBehaviour
         // Move child groups
         var xDiff = obj.Model.PositionX - obj.OldX;
         var yDiff = obj.Model.PositionY - obj.OldY;
-        obj.Model.AllGroups.ForEach(g => { g.SetPositionInternal(g.PositionX + xDiff, g.PositionY + yDiff); });
-        obj.Model.AllNodes.ForEach(n => { n.SetPositionInternal(n.PositionX + xDiff, n.PositionY + yDiff); });
-        obj.Model.AllPorts.ForEach(p => { p.SetPosition(p.PositionX + xDiff, p.PositionY + yDiff); });
+        obj.Model.AllGroups.ForEach(g =>
+        {
+            g.SetPositionInternal(g.PositionX + xDiff, g.PositionY + yDiff);
+            _service.Events.Publish(new GroupRedrawEvent(g));
+        });
+        obj.Model.AllNodes.ForEach(n =>
+        {
+            n.SetPositionInternal(n.PositionX + xDiff, n.PositionY + yDiff);
+            _service.Events.Publish(new NodeRedrawEvent(n));
+        });
+        obj.Model.AllPorts.ForEach(p =>
+        {
+            p.SetPosition(p.PositionX + xDiff, p.PositionY + yDiff);
+            _service.Events.Publish(new PortRedrawEvent(p));
+        });
     }
 }

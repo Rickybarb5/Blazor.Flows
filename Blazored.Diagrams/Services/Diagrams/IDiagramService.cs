@@ -27,7 +27,7 @@ public interface IDiagramService : IDisposable
     /// <summary>
     /// Allows diagram serialization/deserialization.
     /// </summary>
-    ISerializationContainer Serialize { get; set; }
+    ISerializationContainer Storage { get; set; }
     
     /// <summary>
     /// Allows adding models to the diagram.
@@ -43,5 +43,5 @@ public interface IDiagramService : IDisposable
     /// Replaces the diagram instance with another.
     /// </summary>
     /// <param name="diagram">A diagram instance</param>
-    void SwitchDiagram(IDiagram diagram);
+    void UseDiagram(IDiagram diagram);
 }

@@ -1,3 +1,5 @@
+@using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.Nodes
+@using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.OperatorNode
 @implements IDisposable
 <MudCard Style="min-width:250px;-webkit-user-select: none;-ms-user-select: none;user-select: none;-webkit-user-drag: none;">
     <MudCardHeader>
@@ -10,13 +12,17 @@
                 <MudSelectItem T="Operator" Value="@value">@Enum.GetName(value)</MudSelectItem>
             }
         </MudSelect>
-    </MudCardContent>
-    <MudCardActions>
-        @if (Node.InputPort.IncomingLinks.Count < 2)
+        @if (Node.InputPort.IncomingLinks.Count < 1)
         {
-            <MudText Typo="Typo.caption" Color="Color.Error">Link two number nodes to this node!</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Error">Link two or more nodes here!</MudText>
+            <p></p>
         }
-    </MudCardActions>
+        
+        @if (Node.NumberResult is not null)
+        {
+            <MudText Typo="Typo.caption" Color="Color.Success">Operation result: @Node.NumberResult</MudText>
+        }
+    </MudCardContent>
 </MudCard>
 
 @code {
@@ -35,7 +41,6 @@
             [
                 Service.Events.SubscribeWhere<NodeRedrawEvent>(p => p.Model.Id == Node.Id, OnRedraw),
             ];
-            Node.OnError += DisplayError;
         }
 
         return base.OnAfterRenderAsync(firstRender);
@@ -61,7 +66,6 @@
     public void Dispose()
     {
         _subscriptions.DisposeAll();
-        Node.OnError -= DisplayError;
     }
 
     private void DisplayError(string obj)

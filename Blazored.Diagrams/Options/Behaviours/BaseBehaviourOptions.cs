@@ -1,4 +1,6 @@
 using Blazored.Diagrams.Interfaces;
+using Blazored.Diagrams.Services.Events;
+using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Options.Behaviours;
 
@@ -18,11 +20,13 @@ public partial class BaseBehaviourOptions : IBehaviourOptions
             if (value != _isEnabled)
             {
                 _isEnabled = value;
-                OnEnabledChanged.Invoke(value);
+                OnEnabledChanged.Publish(new BehaviourEnabledEvent(value) );
             }
         }
     }
 
     /// <inheritdoc />
-    public event Action<bool>? OnEnabledChanged;
+    [JsonIgnore]
+    public ITypedEvent<BehaviourEnabledEvent> OnEnabledChanged { get; init; }
+        = new TypedEvent<BehaviourEnabledEvent>();
 }

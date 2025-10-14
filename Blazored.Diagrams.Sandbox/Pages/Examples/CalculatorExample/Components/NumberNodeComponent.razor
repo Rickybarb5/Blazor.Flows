@@ -1,9 +1,10 @@
+@using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.Nodes
 <MudCard style="-webkit-user-select: none;-ms-user-select: none;user-select: none;-webkit-user-drag: none;">
     <MudCardHeader>
         <MudText Typo="Typo.h6">Number Picker</MudText>
     </MudCardHeader>
     <MudCardContent>
-        <MudNumericField T="decimal?" Label="Number" Variant="Variant.Outlined" Required="true" Immediate="true" @bind-Value="Node.NumberOutput"></MudNumericField>
+        <MudNumericField T="decimal?" Label="Number" Variant="Variant.Outlined"  Required="true" Immediate="true" @bind-Value="Node.NumberResult"></MudNumericField>
     </MudCardContent>
 </MudCard>
 

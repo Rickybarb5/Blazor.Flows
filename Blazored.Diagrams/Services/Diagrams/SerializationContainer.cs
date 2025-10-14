@@ -28,11 +28,11 @@ public class SerializationContainer : ISerializationContainer
     }
 
     /// <inheritdoc />
-    public TDiagram FromJson<TDiagram>(string json)
+    public TDiagram Load<TDiagram>(string json)
         where TDiagram : IDiagram
     {
         var diagram = _serializationService.FromJson<TDiagram>(json);
-        _diagramService.SwitchDiagram(diagram);
+        _diagramService.UseDiagram(diagram);
         return diagram;
     }
 }

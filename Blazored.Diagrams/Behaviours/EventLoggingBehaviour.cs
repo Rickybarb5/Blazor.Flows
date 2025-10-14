@@ -22,13 +22,18 @@ public class EventLoggingBehavior : BaseBehaviour
     {
         _diagramService = diagramService;
         _behaviourOptions = _diagramService.Behaviours.GetBehaviourOptions<LoggingBehaviourOptions>()!;
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
-    private void OnEnabledChanged(bool enabled)
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
     {
-        if (enabled)
+        OnEnabledChanged(ev.IsEnabled);
+    }
+    
+    private void OnEnabledChanged(bool isEnabled)
+    {
+        if (isEnabled)
         {
             SubscribeToEvents();
         }
@@ -157,12 +162,5 @@ public class EventLoggingBehavior : BaseBehaviour
                 Console.WriteLine(
                     $"[{nameof(DiagramSizeChangedEvent)}] Diagram size changed from ({e.OldWidth}x{e.OldHeight}) to ({e.NewWidth}x{e.NewHeight})"))
         ];
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _behaviourOptions.OnEnabledChanged -= OnEnabledChanged;
-        DisposeSubscriptions();
     }
 }

@@ -26,13 +26,18 @@ public class RedrawBehaviour : BaseBehaviour
     {
         _service = service;
         options = _service.Behaviours.GetBehaviourOptions<RedrawBehaviourOptions>();
-        options.OnEnabledChanged += OnEnabledChanged;
+        options.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(options.IsEnabled);
     }
 
-    private void OnEnabledChanged(bool enabled)
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
     {
-        if (enabled)
+        OnEnabledChanged(ev.IsEnabled);
+    }
+    
+    private void OnEnabledChanged(bool isEnabled)
+    {
+        if (isEnabled)
         {
             SubscribeToEvents();
         }
@@ -40,13 +45,6 @@ public class RedrawBehaviour : BaseBehaviour
         {
             DisposeSubscriptions();
         }
-    }
-
-    /// <inheritdoc />
-    public new void Dispose()
-    {
-        options.OnEnabledChanged -= OnEnabledChanged;
-        DisposeSubscriptions();
     }
 
     private void SubscribeToEvents()
@@ -65,6 +63,8 @@ public class RedrawBehaviour : BaseBehaviour
             _service.Events.SubscribeTo<GroupPaddingChangedEvent>(e => NotifyRedraw(e.Model)),
 
             _service.Events.SubscribeTo<PortAddedEvent>(e => NotifyRedraw(e.Model)),
+            _service.Events.SubscribeTo<PortAddedToGroupEvent>(e => NotifyRedraw(e.Model)),
+            _service.Events.SubscribeTo<PortAddedToNodeEvent>(e => NotifyRedraw(e.Model)),
             _service.Events.SubscribeTo<PortRemovedEvent>(e => NotifyRedraw(e.Model)),
             _service.Events.SubscribeTo<PortSizeChangedEvent>(e => NotifyRedraw(e.Model)),
             _service.Events.SubscribeTo<PortPositionChangedEvent>(e => NotifyRedraw(e.Model)),

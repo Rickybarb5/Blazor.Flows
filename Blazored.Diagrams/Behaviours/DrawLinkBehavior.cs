@@ -29,13 +29,18 @@ public class DrawLinkBehavior : BaseBehaviour
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<DrawLinkBehaviourOptions>()!;
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
-    private void OnEnabledChanged(bool enabled)
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
     {
-        if (enabled)
+        OnEnabledChanged(ev.IsEnabled);
+    }
+    
+    private void OnEnabledChanged(bool isEnabled)
+    {
+        if (isEnabled)
         {
             SubscribeToEvents();
         }
@@ -46,14 +51,7 @@ public class DrawLinkBehavior : BaseBehaviour
     }
 
     private ILink? Link { get; set; }
-
-    /// <inheritdoc />
-    public new void Dispose()
-    {
-        DisposeSubscriptions();
-        _behaviourOptions.OnEnabledChanged -= OnEnabledChanged;
-    }
-
+    
     private void SubscribeToEvents()
     {
         Subscriptions =

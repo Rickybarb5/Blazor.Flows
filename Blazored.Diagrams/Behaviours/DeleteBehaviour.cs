@@ -17,18 +17,6 @@ public class DeleteBehaviour : BaseBehaviour
     private readonly IDiagramService _service;
     private readonly DeleteBehaviourOptions _behaviourOptions;
     
-    private void OnEnabledChanged(bool enabled)
-    {
-        if (enabled)
-        {
-            SubscribeToEvents();
-        }
-        else
-        {
-            DisposeSubscriptions();
-        }
-    }
-
     private void SubscribeToEvents()
     {
         Subscriptions =
@@ -49,8 +37,25 @@ public class DeleteBehaviour : BaseBehaviour
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<DeleteBehaviourOptions>()!;
-        _behaviourOptions.OnEnabledChanged += OnEnabledChanged;
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
+    }
+
+    private void OnEnabledChanged(BehaviourEnabledEvent ev)
+    {
+        OnEnabledChanged(ev.IsEnabled);
+    }
+    
+    private void OnEnabledChanged(bool isEnabled)
+    {
+        if (isEnabled)
+        {
+            SubscribeToEvents();
+        }
+        else
+        {
+            DisposeSubscriptions();
+        }
     }
 
     private void CleanupLayerDependencies(ILayer obj)

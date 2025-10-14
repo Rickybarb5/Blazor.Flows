@@ -6,8 +6,7 @@
 @implements IAsyncDisposable;
 @if (_port is not null && _port.IsVisible)
 {
-    <div style="@(Style)"
-
+    <div style="@($"left:{_port.PositionX}px;top:{_port.PositionY}px;position:absolute;")"
          @onpointerleave="ctx => DiagramService.Events.Publish(new PortPointerLeaveEvent(_port, ctx))"
          @onpointerdown="ctx => DiagramService.Events.Publish(new PortPointerDownEvent(_port, ctx))"
          @onpointerenter="ctx => DiagramService.Events.Publish(new PortPointerEnterEvent(_port, ctx))"
@@ -54,7 +53,6 @@
                 _visibilitySubscription?.Dispose();
                 _port = value;
                 _redrawSubscription = DiagramService?.Events.SubscribeWhere<PortRedrawEvent>(p => p.Model.Id == _port.Id, Redraw);
-                _visibilitySubscription = DiagramService?.Events.SubscribeWhere<PortVisibilityChangedEvent>(p => p.Model.Id == _port.Id, OnPortVisibilityChanged);
                 StateHasChanged();
             }
         }
@@ -62,26 +60,7 @@
 
     private void Redraw(PortRedrawEvent e)
     {
-        Style = GetDefaultStyle();
-        AddVisibilityStyle(_port);
         StateHasChanged();
-    }
-
-    private void OnPortVisibilityChanged(PortVisibilityChangedEvent e)
-    {
-        AddVisibilityStyle(e.Model);
-    }
-
-    private void AddVisibilityStyle(IPort arg1)
-    {
-        if (!arg1.IsVisible)
-        {
-            Style += "display:none;";
-        }
-        else
-        {
-            Style = GetDefaultStyle();
-        }
     }
 
     private IPort _port = null!;
@@ -98,10 +77,7 @@
     [Inject] private IResizeObserverService ResizeObserverService { get; set; } = null!;
 
     private string Style { get; set; } = null!;
-    private StringBuilder _sb = new();
-
-
-    private const string StyleTemplate = "left:{0}px;top:{1}px;position:absolute;";
+    
     private ElementReference _componentRef;
 
     /// <inheritdoc />
@@ -110,12 +86,9 @@
         if (firstRender)
         {
             _redrawSubscription = DiagramService?.Events.SubscribeWhere<PortRedrawEvent>(p => p.Model.Id == _port.Id, Redraw);
-            _visibilitySubscription = DiagramService?.Events.SubscribeWhere<PortVisibilityChangedEvent>(p => p.Model.Id == _port.Id, OnPortVisibilityChanged);
             await ResizeObserverService.ObserveAsync(ContainerId, OnSizeChanged);
             var size = await Js.GetBoundingClientRect(_componentRef);
             SetSize((int)size.Width, (int)size.Height);
-            Style = GetDefaultStyle();
-            AddVisibilityStyle(_port);
         }
 
         await base.OnAfterRenderAsync(firstRender);
@@ -129,11 +102,6 @@
     private void SetSize(int width, int height)
     {
         _port.SetSize(width, height);
-    }
-
-    private string GetDefaultStyle()
-    {
-        return string.Format(StyleTemplate, Port.PositionX, Port.PositionY);
     }
 
     /// <inheritdoc />

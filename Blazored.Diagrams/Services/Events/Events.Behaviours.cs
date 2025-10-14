@@ -39,3 +39,9 @@ public record DrawLinkCreatedEvent(ILink Link) : IEvent;
 /// </summary>
 /// <param name="Link">Link whose creation was cancelled .</param>
 public record DrawLinkCancelledEvent(ILink Link) : IEvent;
+
+/// <summary>
+/// Enabled event for behaviours.
+/// </summary>
+/// <param name="IsEnabled"></param>
+public record BehaviourEnabledEvent(bool IsEnabled):IEvent;
