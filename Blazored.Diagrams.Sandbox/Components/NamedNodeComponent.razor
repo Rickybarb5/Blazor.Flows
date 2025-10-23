@@ -1,6 +1,6 @@
 @if (Node is not null)
 {
-    <MudCard Style=@($"background:{Node.Color}") @ondblclick="HandleDoubleClick">
+    <MudCard Style="@(GetStyle())" @ondblclick="HandleDoubleClick">
         @if (!IsEditState)
         {
             <MudCardHeader>
@@ -41,6 +41,12 @@
     private void HandleDoubleClick()
     {
         IsEditState = !IsEditState;
+    }
+
+    private string GetStyle()
+    {
+        var color = Node.IsSelected ? "black" : Node.Color;
+        return $"background:{color};";
     }
 
 }

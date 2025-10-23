@@ -46,7 +46,7 @@
                             {
                                 <MudSwitch Color="Color.Primary"
                                            T="bool"
-                                           Label="@($"Layer {Service.Diagram.Layers.IndexOf(layer) + 1} ({layer.Id}) Visible")"
+                                           Label="@($"Layer {Service.Diagram.Layers.IndexOf(layer) + 1} Visible")"
                                            @bind-Value="layer.IsVisible"
                                            LabelPlacement="Placement.Left"/>
                             }
@@ -94,12 +94,6 @@
 
     [Inject] public IDiagramService Service { get; set; } = null!;
 
-    private class LayerNode : Node, IHasComponent<NamedNodeComponent>
-    {
-        public required string LayerId { get; init; }
-        public required string Name { get; init; }
-    }
-
     protected override Task OnInitializedAsync()
     {
         var layer2 = new Layer();
@@ -107,7 +101,7 @@
 
         for (var i = 0; i < 4; i++)
         {
-            var node = new LayerNode() { Name = "Layer 1 Node", LayerId = Service.Diagram.Layers[0].Id };
+            var node = new NamedNode() { Name = "Layer 1 Node" };
             node.SetPosition(50 + 200 * i, 100);
             Service.Add.Node(node);
         }
@@ -116,7 +110,7 @@
 
         for (int i = 0; i < 4; i++)
         {
-            var node = new LayerNode() { Name = "Layer 2 Node", LayerId = layer2.Id };
+            var node = new NamedNode() { Name = "Layer 2 Node" };
             node.SetPosition(50 + 200 * i, 300);
             Service.Add.Node(node);
         }

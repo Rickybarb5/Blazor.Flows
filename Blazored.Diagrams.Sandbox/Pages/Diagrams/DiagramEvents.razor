@@ -5,17 +5,69 @@
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8">
     <MudText Typo="Typo.h3" GutterBottom="true">Event Documentation</MudText>
-    <MudText Typo="Typo.body1" GutterBottom="true">
-        The Blazored Diagram event system uses an Event Aggregator to facilitate communication between the core diagram services, nodes, and ports. This mechanism allows you to react to user interactions (like dragging or clicking) and internal state changes (like adding a link) across your entire application without tightly coupling components.
-        The core interface is IEventAggregator, accessed via the Diagram Service.
-    </MudText>
+    
     @if (isLoading)
     {
         <MudProgressCircular Indeterminate="true" Color="Color.Primary"/>
     }
-    else if (eventGroups.Any())
+    else if (eventGroups.Any() || infoTabContent != null)
     {
         <MudTabs Elevation="2" Rounded="true" PanelClass="pa-4" Centered="true">
+            
+            @* The new "Info" Tab *@
+            @if (infoTabContent != null)
+            {
+                <MudTabPanel Text="Info">
+                <MudCard Elevation="3" Class="pa-4 mb-6">
+                    <MudText Typo="Typo.h5" GutterBottom="true">Core Event System</MudText>
+                    <MudText Typo="Typo.body1" Class="mb-4">
+                        The Blazored Diagram event system uses an **Event Aggregator** to facilitate communication between the core diagram services, nodes, and ports. This mechanism allows you to react to user interactions (like dragging or clicking) and internal state changes (like adding a link) across your entire application without tightly coupling components.
+                    </MudText>
+                    <MudAlert Severity="Severity.Info" Dense="true">
+                        The core interface is <code >IEventAggregator</code>, which is accessed via the Diagram Service.
+                    </MudAlert>
+                </MudCard>
+
+                <MudCard Elevation="3" Class="pa-4">
+                    <MudText Typo="Typo.h5" GutterBottom="true">Implementing Custom Events</MudText>
+                    <MudText Typo="Typo.body1" Class="mb-4">
+                        The diagram automatically registers any properties or fields in your components that implement the <code >ITypedEvent&lt;T&gt;</code> interface. This makes it easy to expose custom events from your own diagram nodes or services that other components can subscribe to.
+                    </MudText>
+
+                    <MudText Typo="Typo.subtitle1" Class="mt-4 mb-2"><strong>Steps to create and expose a custom event:</strong></MudText>
+                    <MudList T="object" Class="mb-4">
+                        <MudListItem Icon="@Icons.Material.Filled.LooksOne">
+                            <MudText><strong>Define the Event Message:</strong> Create a simple class/record to represent the data payload of your event.It must implement the IEvent interface.</MudText>
+                            <pre class="mud-codeblock mt-2"><code>public record MyCustomEvent(string Message): IEvent</code></pre>
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.LooksTwo">
+                            <MudText><strong>Publish the Event:</strong> Call the <code >Publish</code> method on your event property.</MudText>
+                            <pre class="mud-codeblock mt-2"><code>
+                            // Example of publishing
+                            DiagramService.Events.Publish(new MyCustomEvent("This is my event data"));
+                            </code></pre>
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.Looks4">
+                            <MudText><strong>Subscribe to the Event:</strong> Use the <code >IDiagramService</code> and subscribe to the event type.</MudText>
+                            <pre class="mud-codeblock mt-2"><code>
+                            public IDiagramService Service { get; set; }
+
+                            protected override void OnInitialized()
+                            {
+                                Service.Events.SubscribeTo&lt;MyCustomEvent&gt;(HandleCustomEvent);
+                            }
+
+                            private void HandleCustomEvent(MyCustomEventMessage message)
+                            {
+                                Console.WriteLine($"Received message for Node {message.Message}");
+                            }</code></pre>
+                        </MudListItem>
+                    </MudList>
+                </MudCard>
+            </MudTabPanel>
+            }
+
+            @* The dynamic event group tabs *@
             @foreach (var group in eventGroups)
             {
                 <MudTabPanel Text="@group.Name">
@@ -88,6 +140,7 @@
 
 @code {
     private List<EventGroup> eventGroups = new();
+    private InfoTabContent? infoTabContent; // New variable for the info tab content
     private bool isLoading = true;
 
     // The list of files to fetch from wwwroot/docs/
@@ -101,9 +154,24 @@
         "Layer",
         "ObservableList"
     };
+    
+    // The introductory text from the original component
+    private const string IntroductionText = @"
+        The Blazored Diagram event system uses an Event Aggregator to facilitate communication between the core diagram services, nodes, and ports. This mechanism allows you to react to user interactions (like dragging or clicking) and internal state changes (like adding a link) across your entire application without tightly coupling components.
+        The core interface is <code >IEventAggregator</code>, accessed via the Diagram Service.
+    ";
+
 
     protected override async Task OnInitializedAsync()
     {
+        // 1. Set up the Info Tab content
+        infoTabContent = new InfoTabContent
+        {
+            Name = "Info",
+            Content = IntroductionText
+        };
+
+        // 2. Load the dynamic event groups (existing logic)
         var options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
@@ -159,25 +227,32 @@
     }
 
     // --- C# Models to match the JSON structure ---
+    
+    // New model for the static Info Tab
+    public class InfoTabContent
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
+    }
 
     public class EventGroup
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public List<EventDoc> Events { get; set; } = new();
     }
 
     public class EventParameterDoc
     {
-        public string Name { get; set; }
-        public string TypeName { get; set; }
-        public string Documentation { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string TypeName { get; set; } = string.Empty;
+        public string Documentation { get; set; } = string.Empty;
     }
 
     public class EventDoc
     {
-        public string Name { get; set; }
-        public string Summary { get; set; }
-        public List<EventParameterDoc> Parameters { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Summary { get; set; } = string.Empty;
+        public List<EventParameterDoc> Parameters { get; set; } = new();
     }
 
 }

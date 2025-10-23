@@ -14,10 +14,10 @@
 
                     <MudExpansionPanel Text="Step 1: Create the C# Node Class" Expanded="true">
                         <MudText Typo="Typo.body1" GutterBottom="true">
-                            To define your custom node, inherit from the <code class="text-primary">Node&lt;T&gt;</code> class.
+                            To define your custom node, inherit from the <code class="text-primary">Node</code> class.
                         </MudText>
                         <MudText Typo="Typo.body1" GutterBottom="true">
-                            To associate it to a component use the <code class="text-primary">IHasComponent&lt;T&gt;</code> interface, where <code class="text-primary">T</code> is the name of your Razor component. The recommended pattern is inheriting from <code class="text-primary">Node&lt;T&gt;</code> which implements this interface for you.
+                            To associate it to a component use the <code class="text-primary">IHasComponent&lt;T&gt;</code> interface, where <code class="text-primary">T</code> is the name of your Razor component. The recommended pattern is inheriting from <code class="text-primary">Node</code> which implements the basic features of a node.
                         </MudText>
                         <CodeHighlighter Language="csharp" Code="@nodeClassCode"></CodeHighlighter>
                     </MudExpansionPanel>
@@ -195,6 +195,7 @@ public class MyCustomNode : Node, IHasComponent<MyCustomComponent>
     <div class=""d-flex flex-column align-center"">
         <MudText Typo=""Typo.h5"">@Node.Name</MudText>
         <MudText Typo=""Typo.body2"">Status: @Node.Status</MudText>
+        <MudText Typo=""Typo.body2"">Selected: @Node.IsSelected</MudText>
     </div>
     
     <PortRenderer Alignment=""PortAlignment.All"" />

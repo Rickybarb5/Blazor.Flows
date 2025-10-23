@@ -1,40 +1,41 @@
-<MudNavMenu>
-    <MudNavLink Href="/get-started">Overview</MudNavLink>
-    <MudNavGroup Title="Diagram">
+<MudNavMenu >
+    <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Overview</MudNavLink>
+    
+    <MudNavGroup Title="Diagram" Icon="@Icons.Material.Filled.Polyline" HideExpandIcon="true">
         <MudNavLink Href="/diagram-container-component">Overview</MudNavLink>
-        <MudNavLink Href="/diagram-behaviours">Behaviours</MudNavLink>
+    </MudNavGroup>
+    
+    <MudNavGroup Title="Behaviours" Icon="@Icons.Material.Filled.SettingsSuggest" HideExpandIcon="true">
+        <MudNavLink Href="/diagram-behaviours">Existing Behaviours</MudNavLink>
         <MudNavLink Href="/custom-behaviours">Custom Behaviours</MudNavLink>
     </MudNavGroup>
-    <MudNavLink Href="/diagram-events">Events</MudNavLink>
-    <MudNavLink Href="/layer-overview">Layers</MudNavLink>
+    
+    <MudNavLink Href="/diagram-events" Icon="@Icons.Material.Filled.Event">Events</MudNavLink>
+    <MudNavLink Href="/layer-overview" Icon="@Icons.Material.Filled.Layers">Layers</MudNavLink>
 
-    <MudNavGroup Title="Node">
+    <MudNavGroup Title="Node" Icon="@Icons.Material.Filled.CropSquare" HideExpandIcon="true">
         <MudNavLink Href="/node-overview">Overview</MudNavLink>
         <MudNavLink Href="/custom-nodes">Custom Nodes</MudNavLink>
     </MudNavGroup>
 
-    <MudNavGroup Title="Group">
+    <MudNavGroup Title="Group" Icon="@Icons.Material.Filled.Widgets" HideExpandIcon="true">
         <MudNavLink Href="/group-overview">Overview</MudNavLink>
-        <MudNavLink Href="/group-events">Events</MudNavLink>
-        <MudNavLink Href="/group-behaviours">Behaviours</MudNavLink>
+        <MudNavLink Href="/custom-groups">Custom Groups</MudNavLink>
     </MudNavGroup>
 
-    <MudNavGroup Title="Port">
+    <MudNavGroup Title="Port" Icon="@Icons.Material.Filled.CallSplit" HideExpandIcon="true">
         <MudNavLink Href="/port-overview">Overview</MudNavLink>
-        <MudNavLink Href="/port-events">Events</MudNavLink>
-        <MudNavLink Href="/port-behaviours">Behaviours</MudNavLink>
+        <MudNavLink Href="/custom-ports">Custom Ports</MudNavLink>
     </MudNavGroup>
 
-    <MudNavGroup Title="Link">
+    <MudNavGroup Title="Link" Icon="@Icons.Material.Filled.Link" HideExpandIcon="true">
         <MudNavLink Href="/link-overview">Overview</MudNavLink>
-        <MudNavLink Href="/link-events">Events</MudNavLink>
-        <MudNavLink Href="/link-behaviours">Behaviours</MudNavLink>
+        <MudNavLink Href="/link-events">Custom links</MudNavLink>
     </MudNavGroup>
 
-    <MudNavGroup Title="Examples">
+    <MudNavGroup Title="Examples" Icon="@Icons.Material.Filled.Code" HideExpandIcon="true">
         <MudNavLink Href="/editor">Playground</MudNavLink>
         <MudNavLink Href="/CalculatorExample">Simple calculator</MudNavLink>
-        @* <MudNavLink Href="/drag-and-drop">Drag and drop</MudNavLink> *@
         <MudNavLink Href="/organogram-example">Organogram</MudNavLink>
     </MudNavGroup>
 </MudNavMenu>

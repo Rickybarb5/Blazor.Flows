@@ -11,7 +11,11 @@
         <MudIcon Icon="@Icons.Custom.Brands.GitHub" ></MudIcon>
         <MudToggleIconButton bind-Toggled="@_mudThemeProvider.IsDarkMode" ToggledChanged="b => IsDarkMode = !IsDarkMode" Icon="@Icons.Material.Filled.LightMode" ToggledIcon="@Icons.Material.Filled.DarkMode"></MudToggleIconButton>
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+    <MudDrawer 
+        @bind-Open="@_drawerOpen" 
+        Elevation="2" 
+        ClipMode="DrawerClipMode.Always"
+        Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">         
         <DrawerItems></DrawerItems>
     </MudDrawer>
     <MudMainContent>

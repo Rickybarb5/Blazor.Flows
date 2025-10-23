@@ -3,16 +3,20 @@ using Blazored.Diagrams.Interfaces;
 namespace Blazored.Diagrams.Services.Events;
 
 /// <summary>
+/// Base type for all events
+/// </summary>
+public abstract record EventBase : IEvent;
+/// <summary>
 ///     Base Model for a model event.
 /// </summary>
 /// <param name="Model"></param>
 /// <typeparam name="TModel"></typeparam>
-public abstract record ModelEventBase<TModel>(TModel Model) : IModelEvent<TModel> where TModel : IId;
+public abstract record ModelEventBase<TModel>(TModel Model) : EventBase, IModelEvent<TModel> where TModel : IId;
 
 /// <summary>
 /// Base class for an input event
 /// </summary>
-public abstract record InputEventBase : IEvent;
+public abstract record InputEventBase : EventBase, IEvent;
 
 /// <summary>
 /// Base class for an input event, originated from a model.
