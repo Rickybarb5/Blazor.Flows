@@ -6,7 +6,9 @@
 
         <MudItem xs="12" sm="12" md="4" Style="height:100%;">
             <MudPaper Class="pa-4 mud-height-full overflow-y-auto" Elevation="2">
-                <MudText Typo="Typo.h5" Class="mb-4">Diagram Behaviors Configuration</MudText>
+                <MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-6">
+                    Diagram Behaviours
+                </MudText>
 
                 <MudStack Spacing="3" Class="mb-6">
                     <MudText Typo="Typo.h6">Zoom Behaviour</MudText>
@@ -21,9 +23,9 @@
                                    LabelPosition="LabelPosition.Start"/>
                     </div>
 
-                    <MudNumericField T="double" Immediate="true" Label="Max zoom value" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.MaxZoom"/>
-                    <MudNumericField T="double" Immediate="true" HelperText="Must be bigger than 0" Label="Min zoom value" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.MinZoom"/>
-                    <MudNumericField T="double" Immediate="true" Label="Zoom step" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.ZoomStep"/>
+                    <MudNumericField T="decimal" Immediate="true" Label="Max zoom value" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.MaxZoom"/>
+                    <MudNumericField T="decimal" Immediate="true" HelperText="Must be bigger than 0" Label="Min zoom value" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.MinZoom"/>
+                    <MudNumericField T="decimal" Immediate="true" Label="Zoom step" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.ZoomStep"/>
                 </MudStack>
                 <MudDivider Class="my-4"/>
 
@@ -84,11 +86,11 @@
                                Label="Link creation enabled"
                                LabelPosition="LabelPosition.Start"/>
 
-                    <MudSelect T="DefaultLinkComponentPathType" Label="Default Link Type"
-                               @bind-Value="@(Service.Behaviours.GetBehaviourOptions<DrawLinkBehaviourOptions>().DefaultLinkComponentOptions.PathType)">
-                        <MudSelectItem T="DefaultLinkComponentPathType" Value="@(DefaultLinkComponentPathType.Line)">Line (Straight)</MudSelectItem>
-                        <MudSelectItem T="DefaultLinkComponentPathType" Value="@(DefaultLinkComponentPathType.Curved)">Curved (Bezier)</MudSelectItem>
-                        <MudSelectItem T="DefaultLinkComponentPathType" Value="@(DefaultLinkComponentPathType.Orthogonal)">Orthogonal (Right-angle)</MudSelectItem>
+                    <MudSelect T="Type" Label="Default Link Type"
+                               @bind-Value="@(Service.Behaviours.GetBehaviourOptions<DrawLinkBehaviourOptions>().LinkType)">
+                        <MudSelectItem T="Type" Value="@(typeof(LineLink))">Line (Straight)</MudSelectItem>
+                        <MudSelectItem T="Type" Value="@(typeof(CurvedLink))">Curved (Bezier)</MudSelectItem>
+                        <MudSelectItem T="Type" Value="@(typeof(OrthogonalLink))">Orthogonal (Right-angle)</MudSelectItem>
                     </MudSelect>
                 </MudStack>
                 <MudDivider Class="my-4"/>

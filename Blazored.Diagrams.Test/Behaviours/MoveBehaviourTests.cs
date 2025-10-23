@@ -1,4 +1,3 @@
-using Blazored.Diagrams.Diagrams;
 using Blazored.Diagrams.Groups;
 using Blazored.Diagrams.Layers;
 using Blazored.Diagrams.Nodes;
@@ -139,7 +138,7 @@ public class MoveBehaviourTests
         var layer = new Layer();
         layer.Nodes.Add(node);
         service.Diagram.Layers.Add(layer);
-        service.Diagram.SetZoom(2.0); // Set zoom to 200%
+        service.Diagram.SetZoom(2.0m); // Set zoom to 200%
 
         var startArgs = new PointerEventArgs
         {

@@ -3,7 +3,7 @@
 @using Blazored.Diagrams.Services.Observers
 @using Blazored.Diagrams.Services.Registry
 @implements IAsyncDisposable
-@if (_link is not null && _link.IsVisible && _link.SourcePort is not null)
+@if (_link is { IsVisible: true, SourcePort: not null })
 {
     <CascadingValue Value=@(this) TValue="LinkContainer" >
         <div style="@ContainerStyle" id="@(ContainerId)" @ref="_componentRef">
@@ -11,8 +11,6 @@
         </div>
     </CascadingValue>
 }
-
-
 @code {
 
 

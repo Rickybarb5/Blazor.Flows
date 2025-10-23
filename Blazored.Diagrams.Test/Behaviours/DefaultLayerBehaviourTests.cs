@@ -1,4 +1,3 @@
-using Blazored.Diagrams.Diagrams;
 using Blazored.Diagrams.Layers;
 using Blazored.Diagrams.Services.Diagrams;
 using Blazored.Diagrams.Services.Events;

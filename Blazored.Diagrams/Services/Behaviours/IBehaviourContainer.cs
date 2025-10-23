@@ -15,19 +15,6 @@ public interface IBehaviourContainer : IDisposable
         where TBehaviour : IBehaviour;
 
     /// <summary>
-    /// Register a behaviour and it's options.
-    /// </summary>
-    /// <param name="behaviour"></param>
-    /// <param name="options"></param>
-    /// <typeparam name="TBehaviour"></typeparam>
-    /// <typeparam name="TBehaviourOptions"></typeparam>
-    /// <returns></returns>
-    IBehaviourContainer Register<TBehaviour, TBehaviourOptions>(TBehaviour behaviour,
-        TBehaviourOptions options)
-        where TBehaviour : IBehaviour
-        where TBehaviourOptions : IBehaviourOptions;
-
-    /// <summary>
     /// Register the behaviour and options using a function.
     /// </summary>
     /// <param name="behaviourConfiguration"></param>

@@ -58,11 +58,6 @@
     public required LinkContainer Container { get; set; }
     
     /// <summary>
-    ///     Wave height when <see cref="DefaultLinkComponentPathType"/> is <see cref="DefaultLinkComponentPathType.Curved"/>.
-    /// </summary>
-    [Parameter] public int WaveHeight { get; set; } = 20;
-    
-    /// <summary>
     ///     Color of the link path. Default is black.
     /// </summary>
     [Parameter] public string StrokeColor { get; set; } = "black";
@@ -76,13 +71,6 @@
     ///     Width of the path. Default is 4.
     /// </summary>
     [Parameter] public int StrokeWidth { get; set; } = 4;
-
-    /// <summary>
-    ///     Default link type when using the <see cref="DefaultLinkComponent"/>.
-    ///     Will only be applied to newly created links.
-    /// </summary>
-    [Parameter] public DefaultLinkComponentPathType DefaultLinkComponentPathType { get; set; }
-
     
     /// <summary>
     ///     Function that generates a path when <see cref="DefaultLinkComponentPathType"/> is <see cref="Models.DefaultLinkComponentPathType.Custom"/>.
@@ -101,7 +89,7 @@
     {
         if (firstRender)
         {
-            _subcriptions = [DiagramService.Events.SubscribeTo<LinkSelectionChangedEvent>(OnLinkSelectionChanged)];
+            _subcriptions = [DiagramService.Events.SubscribeWhere<LinkSelectionChangedEvent>(p=> p.Model.Id == Link.Id,OnLinkSelectionChanged)];
             _strokeColor = Link.IsSelected ? SelectedStrokeColor : StrokeColor; 
         }
         return base.OnAfterRenderAsync(firstRender);
@@ -168,44 +156,20 @@
         }
     }
 
-    private int RelativeX1 => Link.SourcePort.GetCenterCoordinates().CenterX - Container.PositionX;
-    private int RelativeY1 => Link.SourcePort.GetCenterCoordinates().CenterY - Container.PositionY;
-    private int RelativeX2 => Container.TargetX - Container.PositionX;
-    private int RelativeY2 => Container.TargetY - Container.PositionY;
+    protected int RelativeX1 => Link.SourcePort.GetCenterCoordinates().CenterX - Container.PositionX;
+    protected int RelativeY1 => Link.SourcePort.GetCenterCoordinates().CenterY - Container.PositionY;
+    protected int RelativeX2 => Container.TargetX - Container.PositionX;
+    protected int RelativeY2 => Container.TargetY - Container.PositionY;
     
-    private string GetPath()
+    
+    /// <summary>
+    /// Gets the path to be drawn on the svg.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotSupportedException"></exception>
+    protected virtual string GetPath()
     {
-        switch (DefaultLinkComponentPathType)
-        {
-            case DefaultLinkComponentPathType.Curved:
-
-                // Calculate control points for a single sine wave
-                var control1X = (RelativeX1 + RelativeX2) / 2;
-                var control1Y = RelativeY1 - WaveHeight; // control point above the line
-                var control2X = (RelativeX1 + RelativeX2) / 2;
-                var control2Y = RelativeY2 + WaveHeight; // control point below the line
-
-                // Using a simple cubic Bézier curve to draw a single wave
-                return $"M {RelativeX1} {RelativeY1} C {control1X} {control1Y}, {control2X} {control2Y}, {RelativeX2} {RelativeY2}";
-            case DefaultLinkComponentPathType.Line:
-                return $"M {RelativeX1} {RelativeY1} L {RelativeX2} {RelativeY2}";
-            case DefaultLinkComponentPathType.Orthogonal:
-                var sourceX = RelativeX1;
-                var sourceY = RelativeY1;
-                var targetX = RelativeX2;
-                var targetY = RelativeY2;
-
-                var midX = (sourceX + targetX) / 2;
-                return $"M {sourceX} {sourceY} " +
-                       $"H {midX} " +
-                       $"V {targetY} " +
-                       $"H {targetX}";
-                case DefaultLinkComponentPathType.Custom:
-                    ArgumentNullException.ThrowIfNull(CustomLinkPath);
-                    return CustomLinkPath.Invoke();
-            default:
-                throw new NotSupportedException();
-        }
+       return string.Empty;
     }
 
     /// <inheritdoc />

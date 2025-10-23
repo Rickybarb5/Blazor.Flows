@@ -1,15 +1,5 @@
-﻿@using Blazored.Diagrams.Services.Events
-@using Blazored.Diagrams.Services.Diagrams
-@using System.Text
-@implements IDisposable
-<div class="@Class"
-     style="@(Style)"
-     @onpointerleave="HandlePointerLeave"
-     @onpointerdown="HandlePointerDown"
-     @onpointerenter="HandlePointerEnter"
-     @onpointermove="HandlePointerMove"
-     @onpointerup="HandlePointerUp"
-     @onpointerdown:stopPropagation>
+﻿@using Blazored.Diagrams.Services.Diagrams
+<div class="@GetClass()">
     @if (Content is not null)
     {
         @Content
@@ -19,107 +9,18 @@
 @code {
     [CascadingParameter] public required IDiagramService DiagramService { get; set; }
     [Parameter] public required Port Port { get; set; }
-    
+
     /// <summary>
     /// Optional content if people want to use the default component.
     /// </summary>
     [Parameter]
     public RenderFragment? Content { get; set; }
-    
-    private string Class { get; set; } = DefaultCssClass;
-    
-    private List<IDisposable> _subscriptions = [];
 
     private const string DefaultCssClass = "default-port";
-    private readonly StringBuilder _builder = new();
-    private bool _pointerIsDown = false;
-    private readonly StringBuilder _sb = new();
-    private string Style { get; set; } = null!;
 
-    /// <inheritdoc />
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private string GetClass()
     {
-        await base.OnAfterRenderAsync(firstRender);
-        if (firstRender)
-        {
-            _subscriptions =
-            [
-                DiagramService.Events.SubscribeWhere<IncomingLinkAddedEvent>(p => p.Model.Id == Port.Id, SetNodeCssClass),
-                DiagramService.Events.SubscribeWhere<IncomingLinkRemovedEvent>(p => p.Model.Id == Port.Id, SetNodeCssClass),
-                DiagramService.Events.SubscribeWhere<OutgoingLinkAddedEvent>(p => p.Model.Id == Port.Id, SetNodeCssClass),
-                DiagramService.Events.SubscribeWhere<OutgoingLinkRemovedEvent>(p => p.Model.Id == Port.Id, SetNodeCssClass),
-                DiagramService.Events.SubscribeWhere<PortPointerEnterEvent>(p => p.Model.Id == Port.Id, SetNodeCssClass),
-                DiagramService.Events.SubscribeWhere<PortPointerLeaveEvent>(p => p.Model.Id == Port.Id, SetNodeCssClass),
-            ];
-        }
+        return $"{DefaultCssClass}{(Port.HasLinks? " linked": string.Empty)}";
     }
-    
-    private void SetNodeCssClass(IEvent ev)
-    {
-        _builder.Clear();
-        _builder.Append(Class);
-        if (Port.HasLinks)
-        {
-            _builder.Append(" linked");
-        }
-
-        Class = _builder.ToString();
-    }
-
-    private Task HandlePointerDown(PointerEventArgs e)
-    {
-        _pointerIsDown = true;
-        _sb.Clear();
-        _sb.Append("cursor:grabbing;");
-        Style = _sb.ToString();
-        DiagramService.Events.Publish(new PortPointerDownEvent(Port, e));
-        return Task.CompletedTask;
-    }
-
-    private Task HandlePointerUp(PointerEventArgs e)
-    {
-        _sb.Clear();
-        _pointerIsDown = false;
-        Style = _sb.ToString();
-        DiagramService.Events.Publish(new PortPointerUpEvent(Port, e));
-        return Task.CompletedTask;
-    }
-
-    private Task HandlePointerLeave(PointerEventArgs e)
-    {
-        _sb.Clear();
-        if (!_pointerIsDown)
-        {
-            _sb.Append(Style);
-            _sb.Append("cursor:grab;");
-        }
-
-        Style = _sb.ToString();
-        DiagramService.Events.Publish(new PortPointerLeaveEvent(Port, e));
-        return Task.CompletedTask;
-    }
-
-    private Task HandlePointerEnter(PointerEventArgs e)
-    {
-        _sb.Clear();
-        _sb.Append(Style);
-        _sb.Append("cursor:grab;");
-        Style = _sb.ToString();
-        DiagramService.Events.Publish(new PortPointerEnterEvent(Port, e));
-        return Task.CompletedTask;
-    }
-
-    private Task HandlePointerMove(PointerEventArgs e)
-    {
-        DiagramService.Events.Publish(new PortPointerMoveEvent(Port, e));
-        return Task.CompletedTask;
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _subscriptions.DisposeAll();
-    }
-
 
 }

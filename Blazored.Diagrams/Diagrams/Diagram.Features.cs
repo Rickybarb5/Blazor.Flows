@@ -43,7 +43,7 @@ public partial class Diagram
     }
 
     /// <inheritdoc />
-    public virtual void SetZoom(double zoom)
+    public virtual void SetZoom(decimal zoom)
     {
         if (zoom != _zoom)
         {

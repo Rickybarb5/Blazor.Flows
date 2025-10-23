@@ -1,5 +1,4 @@
 ﻿using Blazored.Diagrams.Interfaces;
-using Blazored.Diagrams.Ports;
 using Blazored.Diagrams.Services.Events;
 using Newtonsoft.Json;
 

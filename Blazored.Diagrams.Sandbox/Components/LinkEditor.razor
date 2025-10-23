@@ -6,10 +6,10 @@
             <MudText>Edit Link</MudText>
         </MudCardHeader>
         <MudCardContent>
-            <MudSelect T="DefaultLinkComponentPathType" Value="@(DefaultLinkComponentPathType.Curved)" ValueChanged="ctx => OnSelectChanged(SelectedItem, ctx)">
-                <MudSelectItem T="DefaultLinkComponentPathType" Value="@(DefaultLinkComponentPathType.Line)">Line</MudSelectItem>
-                <MudSelectItem T="DefaultLinkComponentPathType" Value="@(DefaultLinkComponentPathType.Curved)">Curve</MudSelectItem>
-                <MudSelectItem T="DefaultLinkComponentPathType" Value="@(DefaultLinkComponentPathType.Orthogonal)">Orthogonal</MudSelectItem>
+            <MudSelect T="Type" Value="@(typeof(CurvedLink))" ValueChanged="ctx => OnSelectChanged(SelectedItem, ctx)">
+                <MudSelectItem T="Type" Value="@(typeof(LineLink))">Line</MudSelectItem>
+                <MudSelectItem T="Type" Value="@(typeof(CurvedLink))">Curve</MudSelectItem>
+                <MudSelectItem T="Type" Value="@(typeof(OrthogonalLink))">Orthogonal</MudSelectItem>
             </MudSelect>
         </MudCardContent>
 
@@ -28,22 +28,30 @@
         link.IsSelected = true;
     }
 
-    private void OnSelectChanged(ILink link, DefaultLinkComponentPathType ctx)
+    private void OnSelectChanged(ILink link, Type ctx)
     {
-        switch (ctx)
+        ILink newL;
+        
+        if (ctx == typeof(CurvedLink))
         {
-            case DefaultLinkComponentPathType.Line:
-                Service.Add.AddLinkTo(link.SourcePort, link.TargetPort, new Link());
-                break;
-            case DefaultLinkComponentPathType.Curved:
-                Service.Add.AddLinkTo(link.SourcePort, link.TargetPort, new Link());
-                break;
-            case DefaultLinkComponentPathType.Orthogonal:
-                Service.Add.AddLinkTo(link.SourcePort, link.TargetPort, new Link());
-                break;
+            newL = new CurvedLink();
         }
-
+        else  if (ctx == typeof(LineLink))
+        {
+            newL = new LineLink();
+        }
+        else if (ctx == typeof(OrthogonalLink))
+        {
+            newL = new OrthogonalLink();
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
+        
+        Service.Add.AddLinkTo(link.SourcePort, link.TargetPort, newL);
         Service.Remove.Link(link);
+
     }
 
 }

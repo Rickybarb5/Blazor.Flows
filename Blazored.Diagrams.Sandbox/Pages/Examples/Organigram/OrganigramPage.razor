@@ -12,7 +12,7 @@
     {
         if (firstRender)
         {
-            Service.Behaviours.GetBehaviourOptions<DrawLinkBehaviourOptions>().DefaultLinkComponentOptions.PathType = DefaultLinkComponentPathType.Orthogonal;
+            Service.Behaviours.GetBehaviourOptions<DrawLinkBehaviourOptions>().LinkType =typeof(OrthogonalLink);
             string[] jobs =
             [
                 "Mark - CEO",

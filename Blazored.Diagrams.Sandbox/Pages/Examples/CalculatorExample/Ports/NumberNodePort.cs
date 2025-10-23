@@ -1,7 +1,5 @@
-using Blazored.Diagrams.Interfaces;
 using Blazored.Diagrams.Ports;
 using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.Nodes;
-using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.OperatorNode;
 
 namespace Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.Ports;
 

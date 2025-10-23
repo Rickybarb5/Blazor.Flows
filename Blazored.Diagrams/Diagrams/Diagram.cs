@@ -23,7 +23,7 @@ public partial class Diagram : IDiagram
 
     private int _panX;
     private int _panY;
-    private double _zoom = 1;
+    private decimal _zoom = 1;
     private int _positionX;
     private int _positionY;
     private int _width;
@@ -65,7 +65,7 @@ public partial class Diagram : IDiagram
     }
 
     /// <inheritdoc />
-    public virtual double Zoom
+    public virtual decimal Zoom
     {
         get => _zoom;
         set => SetZoom(value);

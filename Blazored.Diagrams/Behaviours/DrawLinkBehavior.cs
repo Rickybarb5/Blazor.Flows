@@ -158,8 +158,8 @@ public class DrawLinkBehavior : BaseBehaviour
         if (_isCreatingLink && Link is not null)
         {
             // Calculate new target position based on the movement from the initial click
-            var newX = (int)(_sourcePort!.PositionX + (e.Args.ClientX - _initialClickX) / _service.Diagram.Zoom);
-            var newY = (int)(_sourcePort.PositionY + (e.Args.ClientY - _initialClickY) / _service.Diagram.Zoom);
+            var newX = (int)(_sourcePort!.PositionX + (e.Args.ClientX - _initialClickX) / (double)_service.Diagram.Zoom);
+            var newY = (int)(_sourcePort.PositionY + (e.Args.ClientY - _initialClickY) / (double)_service.Diagram.Zoom);
 
             Link.SetTargetPosition(newX, newY);
         }
@@ -193,6 +193,9 @@ public class DrawLinkBehavior : BaseBehaviour
         }
         else
         {
+            if(_sourcePort is not null && Link is not null)
+                _sourcePort.OutgoingLinks.Remove(Link);
+            
             _service.Events.Publish(new DrawLinkCancelledEvent(Link!));
         }
 

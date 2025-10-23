@@ -34,16 +34,6 @@ public class BehaviourContainer : IBehaviourContainer
     }
 
     /// <inheritdoc />
-    public IBehaviourContainer Register<TBehaviour, TBehaviourOptions>(TBehaviour behaviour, TBehaviourOptions options) 
-        where TBehaviour : IBehaviour
-        where TBehaviourOptions : IBehaviourOptions
-    {
-        RegisterBehaviourOptions(options);
-        RegisterBehaviour(behaviour);
-        return this;
-    }
-
-    /// <inheritdoc />
     public IBehaviourContainer Register<TBehaviour, TBehaviourOptions>(
         Func<TBehaviour> behaviourConfiguration, 
         Func<TBehaviourOptions> optionConfiguration) 

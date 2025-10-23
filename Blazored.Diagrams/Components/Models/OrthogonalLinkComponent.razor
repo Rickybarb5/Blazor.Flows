@@ -1,0 +1,23 @@
+@inherits DefaultLinkComponent
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+
+    /// <inheritdoc />
+    protected override string GetPath()
+    {
+        var sourceX = RelativeX1;
+        var sourceY = RelativeY1;
+        var targetX = RelativeX2;
+        var targetY = RelativeY2;
+
+        var midX = (sourceX + targetX) / 2;
+        return $"M {sourceX} {sourceY} " +
+               $"H {midX} " +
+               $"V {targetY} " +
+               $"H {targetX}";
+    }
+
+}

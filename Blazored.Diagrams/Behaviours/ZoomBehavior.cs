@@ -1,5 +1,4 @@
 ﻿using Blazored.Diagrams.Diagrams;
-using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Options.Behaviours;
 using Blazored.Diagrams.Services.Diagrams;
 using Blazored.Diagrams.Services.Events;
@@ -70,7 +69,7 @@ public class ZoomBehavior : BaseBehaviour
         }
     }
     
-    private void SetZoom(double zoom)
+    private void SetZoom(decimal zoom)
     {
         if (zoom == _diagramService.Diagram.Zoom) return;
         

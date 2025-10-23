@@ -1,5 +1,4 @@
 ﻿using Blazored.Diagrams.Interfaces;
-using Blazored.Diagrams.Links;
 using Blazored.Diagrams.Services.Events;
 
 namespace Blazored.Diagrams.Ports;

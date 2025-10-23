@@ -1,60 +1,167 @@
 @page "/layer-overview"
 
-<MudContainer MaxWidth="MaxWidth.False" Style="height:100%">
-    <div style="display:flex;flex-direction: row;height:100%">
-        <div style="height:100%;overflow:auto">
-            <MudExpansionPanels MultiExpansion="true">
-                <MudExpansionPanel Text=@("Layer overview") IsInitiallyExpanded="true">
-                    <MudText Typo="Typo.body1">
-                        Layers serve as containers for diagram models(nodes, groups,etc). They allow you to receive events from models within it, as well as some general operations:
-                    </MudText>
-                    <MudContainer>
-                        <MudText Typo="Typo.h6">Toggle layer visibility: Show/Hide multiple models at once.</MudText>
-                        <CodeHighlighter Language="csharp" Code=@($"layer.{nameof(Layer.IsVisible)}")></CodeHighlighter>
-                    </MudContainer>
-                    <MudContainer>
-                        <MudSwitch Color="Color.Primary" T="bool" Label="Layer 1 visible" Value="@Service.Diagram.Layers[0].IsVisible" ValueChanged="ctx => Service.Diagram.Layers[0].IsVisible = ctx"></MudSwitch>
-                        <MudSwitch Color="Color.Primary" T="bool" Label="Layer 2 visible" Value="@Service.Diagram.Layers[1].IsVisible" ValueChanged="ctx => Service.Diagram.Layers[1].IsVisible = ctx"></MudSwitch>
-                    </MudContainer>
+<MudContainer MaxWidth="MaxWidth.False" Style="height:100%; padding-top: 20px;">
+    <MudGrid Style="height:100%">
 
-                </MudExpansionPanel>
+        <MudItem xs="12" sm="12" md="4" Style="height:100%;">
+            <MudPaper Class="pa-4 mud-height-full d-flex flex-column overflow-y-auto" Elevation="4">
+                <MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-4">Layer Overview</MudText>
 
-            </MudExpansionPanels>
-        </div>
+                <MudExpansionPanels MultiExpansion="true">
 
-        <div style="width:100%;height:100%">
-            <DiagramContainer DiagramService="Service"></DiagramContainer>
-        </div>
-    </div>
+                    <MudExpansionPanel Text="Layer Status" Expanded="true">
+                        <MudStack Spacing="2">
+                            <MudText Typo="Typo.subtitle1">
+                                Active Layer:
+                                <MudChip Color="Color.Secondary" Size="Size.Small" T="string">
+                                    @Service.Diagram.CurrentLayer.Id
+                                </MudChip>
+                            </MudText>
+
+                            @foreach (var layer in Service.Diagram.Layers)
+                            {
+                                <MudText Typo="Typo.body2" Class="d-flex justify-content-between">
+                                    <MudText>Layer ID: <code>@layer.Id</code></MudText>
+                                    <MudText>
+                                        Nodes: <MudChip Size="Size.Small" Color="Color.Info" Class="mr-2" T="int">@layer.Nodes.Count</MudChip>
+                                        Groups: <MudChip Size="Size.Small" Color="Color.Tertiary" T="int">@layer.Groups.Count</MudChip>
+                                    </MudText>
+                                </MudText>
+                            }
+                        </MudStack>
+                    </MudExpansionPanel>
+
+                    <MudExpansionPanel Text="Visibility Control" Expanded="true">
+                        <MudText Typo="Typo.body1" GutterBottom="true">
+                            Toggling a layer's <code>IsVisible</code> property instantly hides or shows all its contents.
+                        </MudText>
+                        <MudDivider Class="my-4"/>
+                        <MudStack Spacing="3">
+                            @foreach (var layer in Service.Diagram.Layers)
+                            {
+                                <MudSwitch Color="Color.Primary"
+                                           T="bool"
+                                           Label="@($"Layer {Service.Diagram.Layers.IndexOf(layer) + 1} ({layer.Id}) Visible")"
+                                           @bind-Value="layer.IsVisible"
+                                           LabelPlacement="Placement.Left"/>
+                            }
+                        </MudStack>
+                    </MudExpansionPanel>
+
+                    <MudExpansionPanel Text="Bulk Operations (Active Layer)" Expanded="true">
+                        <MudText Typo="Typo.body1" GutterBottom="true">
+                            Layers provide methods for batch operations on their contents, like selection. These operations only affect the currently active layer.
+                        </MudText>
+                        <MudDivider Class="my-4"/>
+                        <MudStack Row="true" Spacing="2" Justify="Justify.FlexStart">
+                            <MudButton OnClick="SelectAll"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Success"
+                                       StartIcon="@Icons.Material.Filled.SelectAll"
+                                       Size="Size.Medium">
+                                Select All
+                            </MudButton>
+                            <MudButton OnClick="UnselectAll"
+                                       Variant="Variant.Outlined"
+                                       Color="Color.Warning"
+                                       StartIcon="@Icons.Material.Filled.Deselect"
+                                       Size="Size.Medium">
+                                Unselect All
+                            </MudButton>
+                        </MudStack>
+                    </MudExpansionPanel>
+
+                    <MudExpansionPanel Text="Layer Switching" Expanded="true">
+                        <MudText Typo="Typo.body1" GutterBottom="true">
+                            Use the <code>Diagram.UseLayer(layer)</code> method to change which layer new models are added to.
+                        </MudText>
+                        <MudSelect T="ILayer"
+                                   Label="Set Active Layer"
+                                   Value="@Service.Diagram.CurrentLayer"
+                                   ValueChanged="UseLayer"
+                                   AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var layer in Service.Diagram.Layers)
+                            {
+                                <MudSelectItem Value="@layer">Layer ID: @layer.Id</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudExpansionPanel>
+
+                </MudExpansionPanels>
+
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="8" Style="height:100%">
+            <MudPaper Class="mud-height-full" Elevation="4">
+                <DiagramContainer DiagramService="Service"></DiagramContainer>
+            </MudPaper>
+        </MudItem>
+
+    </MudGrid>
 </MudContainer>
 
 
 @code {
 
-    [Inject] public IDiagramService Service { get; set; }
+    [Inject] public IDiagramService Service { get; set; } = null!;
+
+// Custom node to make the layers visually distinct
+    private class LayerNode : NamedNode
+    {
+        public required string LayerId { get; init; }
+    }
 
     protected override Task OnInitializedAsync()
     {
+// 1. Setup Layer 2 and add it to the service
         var layer2 = new Layer();
         Service.Add.Layer(layer2);
-        foreach (var index in Enumerable.Range(1, 4))
+
+// 2. Add nodes to the default layer (Layer 1)
+        for (int i = 0; i < 4; i++)
         {
-            var node = new NamedNode(){ Name = "Im on layer 1!"};
-            node.SetPosition(200 * index, 100);
+            var node = new LayerNode() { Name = "Layer 1 Node", LayerId = Service.Diagram.Layers[0].Id };
+            node.SetPosition(50 + 200 * i, 100);
             Service.Add.Node(node);
         }
 
+// 3. Set the service to use Layer 2
         Service.Diagram.UseLayer(layer2);
-        var group = new Group();
-        foreach (var index in Enumerable.Range(1, 4))
+
+// 4. Add nodes to Layer 2
+        for (int i = 0; i < 4; i++)
         {
-            var node = new NamedNode(){ Name = "Im on layer 2!"};
-            node.SetPosition(200 * index, 300);
+            var node = new LayerNode() { Name = "Layer 2 Node", LayerId = layer2.Id };
+            node.SetPosition(50 + 200 * i, 300);
             Service.Add.Node(node);
         }
 
+// 5. Switch back to Layer 1 for default operations when the page loads
         Service.Diagram.UseLayer(Service.Diagram.Layers[0]);
+
         return base.OnInitializedAsync();
+    }
+
+    private Task SelectAll()
+    {
+        Service.Diagram.CurrentLayer.SelectAll();
+// Use InvokeAsync to safely marshal StateHasChanged() back to the UI thread
+        return InvokeAsync(StateHasChanged);
+    }
+
+    private Task UnselectAll()
+    {
+        Service.Diagram.CurrentLayer.UnselectAll();
+// Use InvokeAsync to safely marshal StateHasChanged() back to the UI thread
+        return InvokeAsync(StateHasChanged);
+    }
+
+    private void UseLayer(ILayer layer)
+    {
+        Service.Diagram.UseLayer(layer);
+// This is safe to call directly as it's triggered from a standard MudBlazor event
+        StateHasChanged();
     }
 
 }

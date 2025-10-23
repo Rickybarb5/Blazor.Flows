@@ -1,4 +1,3 @@
-using Blazored.Diagrams.Diagrams;
 using Blazored.Diagrams.Groups;
 using Blazored.Diagrams.Links;
 using Blazored.Diagrams.Nodes;

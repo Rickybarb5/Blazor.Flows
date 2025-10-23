@@ -274,12 +274,12 @@
       },
       {
         "Name": "OldZoom",
-        "TypeName": "Double",
+        "TypeName": "Decimal",
         "Documentation": "The previous zoom factor (e.g., 1.0 for 100%)."
       },
       {
         "Name": "NewZoom",
-        "TypeName": "Double",
+        "TypeName": "Decimal",
         "Documentation": "The new zoom factor."
       }
     ]

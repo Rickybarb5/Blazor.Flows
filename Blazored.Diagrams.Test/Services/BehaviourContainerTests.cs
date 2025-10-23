@@ -2,7 +2,6 @@ using Blazored.Diagrams.Behaviours;
 using Blazored.Diagrams.Options.Behaviours;
 using Blazored.Diagrams.Services.Behaviours;
 using Blazored.Diagrams.Services.Diagrams;
-using Moq;
 
 namespace Blazored.Diagrams.Test.Services;
 

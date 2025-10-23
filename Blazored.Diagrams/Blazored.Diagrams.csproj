@@ -54,9 +54,6 @@
         <Compile Update="Services\Events\Events.Ports.cs">
           <DependentUpon>Events.cs</DependentUpon>
         </Compile>
-        <Compile Update="Options\Behaviours\DefaultLinkOptions.cs">
-          <DependentUpon>DrawLinkBehaviourOptions.cs</DependentUpon>
-        </Compile>
         <Compile Update="Services\Events\Events.ObservableList.cs">
           <DependentUpon>Events.cs</DependentUpon>
         </Compile>

@@ -1,0 +1,14 @@
+@inherits DefaultLinkComponent
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+
+    /// <inheritdoc />
+    protected override string GetPath()
+    {
+        return $"M {RelativeX1} {RelativeY1} L {RelativeX2} {RelativeY2}";
+    }
+
+}

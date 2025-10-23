@@ -11,7 +11,8 @@ namespace Blazored.Diagrams.Options.Behaviours;
 public partial class DrawLinkBehaviourOptions : BaseBehaviourOptions
 {
     [JsonInclude]
-    private string TypeName = typeof(Link).FullName;
+    private string TypeName = typeof(CurvedLink).FullName;
+    
     /// <summary>
     ///     Type of link that the behaviour will create.
     /// Default is <see cref="Link"/>
@@ -27,9 +28,12 @@ public partial class DrawLinkBehaviourOptions : BaseBehaviourOptions
         }
         set
         {
+            ArgumentNullException.ThrowIfNull(value);
+            if (!typeof(ILink).IsAssignableFrom(value))
+            {
+                throw new ArgumentException($"{nameof(LinkType)} must implement the ILink interface.");
+            }
             TypeName = value.FullName;
         }
     }
-
-    public DefaultLinkComponentOptions DefaultLinkComponentOptions { get; set; } = new();
 }

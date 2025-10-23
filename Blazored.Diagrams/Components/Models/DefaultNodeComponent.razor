@@ -1,8 +1,6 @@
-﻿@using Blazored.Diagrams.Services.Events
-@using Blazored.Diagrams.Services.Diagrams
+﻿@using Blazored.Diagrams.Services.Diagrams
 @using System.Text
-@implements IDisposable
-<div class="@Class">
+<div class="@GetClass()">
     @if (Content is not null)
     {
         @Content
@@ -22,8 +20,6 @@
     /// </summary>
     [Parameter]
     public RenderFragment? Content { get; set; }
-    
-    private string Class { get; set; } = DefaultCssClass;
 
     /// <summary>
     /// <see cref="IDiagramService"/>
@@ -33,34 +29,17 @@
 
     private const string DefaultCssClass = "default-node";
     private readonly StringBuilder _builder = new();
-    private IDisposable _subscription = null!;
 
-    /// <inheritdoc />
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        if (firstRender)
-        {
-            _subscription = DiagramService.Events.SubscribeWhere<NodeSelectionChangedEvent>(p => p.Model.Id == Node.Id, SetNodeCssClass);
-        }
-    }
-
-    private void SetNodeCssClass(NodeSelectionChangedEvent e)
+    private string GetClass()
     {
         _builder.Clear();
         _builder.Append(DefaultCssClass);
-        if (e.Model.IsSelected)
+        if (Node.IsSelected)
         {
             _builder.Append(" selected");
         }
 
-        Class = _builder.ToString();
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _subscription.Dispose();
+       return _builder.ToString();
     }
 
 }
