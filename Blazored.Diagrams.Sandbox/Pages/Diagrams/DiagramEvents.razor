@@ -5,7 +5,10 @@
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8">
     <MudText Typo="Typo.h3" GutterBottom="true">Event Documentation</MudText>
-
+    <MudText Typo="Typo.body1" GutterBottom="true">
+        The Blazored Diagram event system uses an Event Aggregator to facilitate communication between the core diagram services, nodes, and ports. This mechanism allows you to react to user interactions (like dragging or clicking) and internal state changes (like adding a link) across your entire application without tightly coupling components.
+        The core interface is IEventAggregator, accessed via the Diagram Service.
+    </MudText>
     @if (isLoading)
     {
         <MudProgressCircular Indeterminate="true" Color="Color.Primary"/>
@@ -131,10 +134,6 @@
         isLoading = false;
     }
 
-    /// <summary>
-    /// Formats the XML doc string to render <see> and <paramref> tags as code.
-    /// This is a safe way to render doc comments without enabling raw HTML.
-    /// </summary>
     private MarkupString FormatDocumentation(string doc)
     {
         if (string.IsNullOrEmpty(doc))

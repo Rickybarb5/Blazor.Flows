@@ -17,17 +17,22 @@
                                     @Service.Diagram.CurrentLayer.Id
                                 </MudChip>
                             </MudText>
-
-                            @foreach (var layer in Service.Diagram.Layers)
-                            {
-                                <MudText Typo="Typo.body2" Class="d-flex justify-content-between">
-                                    <MudText>Layer ID: <code>@layer.Id</code></MudText>
-                                    <MudText>
-                                        Nodes: <MudChip Size="Size.Small" Color="Color.Info" Class="mr-2" T="int">@layer.Nodes.Count</MudChip>
-                                        Groups: <MudChip Size="Size.Small" Color="Color.Tertiary" T="int">@layer.Groups.Count</MudChip>
-                                    </MudText>
-                                </MudText>
-                            }
+                            <MudText Typo="Typo.body1" GutterBottom="true">
+                                Use the <code>Diagram.UseLayer(layer)</code> method to change which layer new models are added to.
+                            </MudText>
+                            <MudSelect T="ILayer"
+                                       Label="Set Active Layer"
+                                       Value="@Service.Diagram.CurrentLayer"
+                                       ValueChanged="UseLayer"
+                                       AnchorOrigin="Origin.BottomCenter">
+                                @for (int i = 0; i < Service.Diagram.Layers.Count; i++)
+                                {
+                                    var idx = i; // local copy to avoid capture issues
+                                    var layer = Service.Diagram.Layers[idx];
+                                    var label = $"Layer {idx + 1}";
+                                    <MudSelectItem Value="@layer">@label</MudSelectItem>
+                                }
+                            </MudSelect>
                         </MudStack>
                     </MudExpansionPanel>
 
@@ -70,23 +75,6 @@
                             </MudButton>
                         </MudStack>
                     </MudExpansionPanel>
-
-                    <MudExpansionPanel Text="Layer Switching" Expanded="true">
-                        <MudText Typo="Typo.body1" GutterBottom="true">
-                            Use the <code>Diagram.UseLayer(layer)</code> method to change which layer new models are added to.
-                        </MudText>
-                        <MudSelect T="ILayer"
-                                   Label="Set Active Layer"
-                                   Value="@Service.Diagram.CurrentLayer"
-                                   ValueChanged="UseLayer"
-                                   AnchorOrigin="Origin.BottomCenter">
-                            @foreach (var layer in Service.Diagram.Layers)
-                            {
-                                <MudSelectItem Value="@layer">Layer ID: @layer.Id</MudSelectItem>
-                            }
-                        </MudSelect>
-                    </MudExpansionPanel>
-
                 </MudExpansionPanels>
 
             </MudPaper>
@@ -106,30 +94,26 @@
 
     [Inject] public IDiagramService Service { get; set; } = null!;
 
-// Custom node to make the layers visually distinct
-    private class LayerNode : NamedNode
+    private class LayerNode : Node, IHasComponent<NamedNodeComponent>
     {
         public required string LayerId { get; init; }
+        public required string Name { get; init; }
     }
 
     protected override Task OnInitializedAsync()
     {
-// 1. Setup Layer 2 and add it to the service
         var layer2 = new Layer();
         Service.Add.Layer(layer2);
 
-// 2. Add nodes to the default layer (Layer 1)
-        for (int i = 0; i < 4; i++)
+        for (var i = 0; i < 4; i++)
         {
             var node = new LayerNode() { Name = "Layer 1 Node", LayerId = Service.Diagram.Layers[0].Id };
             node.SetPosition(50 + 200 * i, 100);
             Service.Add.Node(node);
         }
 
-// 3. Set the service to use Layer 2
         Service.Diagram.UseLayer(layer2);
 
-// 4. Add nodes to Layer 2
         for (int i = 0; i < 4; i++)
         {
             var node = new LayerNode() { Name = "Layer 2 Node", LayerId = layer2.Id };
@@ -137,7 +121,6 @@
             Service.Add.Node(node);
         }
 
-// 5. Switch back to Layer 1 for default operations when the page loads
         Service.Diagram.UseLayer(Service.Diagram.Layers[0]);
 
         return base.OnInitializedAsync();
@@ -146,21 +129,18 @@
     private Task SelectAll()
     {
         Service.Diagram.CurrentLayer.SelectAll();
-// Use InvokeAsync to safely marshal StateHasChanged() back to the UI thread
         return InvokeAsync(StateHasChanged);
     }
 
     private Task UnselectAll()
     {
         Service.Diagram.CurrentLayer.UnselectAll();
-// Use InvokeAsync to safely marshal StateHasChanged() back to the UI thread
         return InvokeAsync(StateHasChanged);
     }
 
     private void UseLayer(ILayer layer)
     {
         Service.Diagram.UseLayer(layer);
-// This is safe to call directly as it's triggered from a standard MudBlazor event
         StateHasChanged();
     }
 
