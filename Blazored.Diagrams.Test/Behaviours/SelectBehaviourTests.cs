@@ -186,7 +186,7 @@ public class SelectBehaviourTests
         var group = new Group();
         var sourcePort = new Port();
         var targetPort = new Port();
-        var link = new Link() { SourcePort = sourcePort, TargetPort = targetPort };
+        var link = new LineLink { SourcePort = sourcePort, TargetPort = targetPort };
 
         var layer = new Layer();
         layer.Nodes.Add(node);

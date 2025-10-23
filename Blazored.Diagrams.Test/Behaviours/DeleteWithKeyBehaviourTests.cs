@@ -72,7 +72,7 @@ public class DeleteWithKeyBehaviourTests
 
         group1.Ports.Add(sourcePort);
         group2.Ports.Add(targetPort);
-        var link1 = new Link() { IsSelected = true, SourcePort = sourcePort, TargetPort = targetPort };
+        var link1 = new LineLink { IsSelected = true, SourcePort = sourcePort, TargetPort = targetPort };
         service.Add.Group(group1);
         service.Add.Group(group2);
 
@@ -100,7 +100,7 @@ public class DeleteWithKeyBehaviourTests
         var targetPort = new Port();
         node.Ports.Add(sourcePort);
         group.Ports.Add(targetPort);
-        var link = new Link();
+        var link = new LineLink();
         service.Add.AddLinkTo(sourcePort, targetPort, link);
         link.IsSelected = true;
 

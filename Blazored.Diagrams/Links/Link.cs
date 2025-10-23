@@ -9,7 +9,7 @@ namespace Blazored.Diagrams.Links;
 /// <summary>
 /// Default link implementation.
 /// </summary>
-public partial class Link : ILink, IHasComponent<DefaultLinkComponent>
+public abstract partial class Link : ILink, IHasComponent<DefaultLinkComponent>
 {
     private bool _isSelected;
     private bool _isVisible = true;

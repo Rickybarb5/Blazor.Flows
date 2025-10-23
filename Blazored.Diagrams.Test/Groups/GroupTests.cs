@@ -439,7 +439,7 @@ public class GroupTests
         // Arrange
         var nestedGroup = new Group { IsSelected = true };
         var node = new Node { IsSelected = true };
-        var parentGroup = new Group()
+        var parentGroup = new Group
         {
             Groups =
             [
@@ -468,7 +468,7 @@ public class GroupTests
         var diagram = new Diagram();
         var nestedGroup = new Group { IsSelected = false };
         var node = new Node { IsSelected = false };
-        var parentGroup = new Group()
+        var parentGroup = new Group
         {
             Groups =
             [

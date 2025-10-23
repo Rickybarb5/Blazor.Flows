@@ -28,15 +28,15 @@ public abstract partial class DefaultLinkComponent
     /// Service cascaded through the <see cref="LinkContainer"/>
     /// </summary>
     [CascadingParameter]
-    public required IDiagramService DiagramService { get; set; } = null!;
+    public required IDiagramService DiagramService { get; init; } = null!;
 
-    [Inject] private IJSRuntime Js { get; set; } = null!;
+    [Inject] private IJSRuntime Js { get; init; } = null!;
 
     /// <summary>
     ///     The <see cref="LinkContainer"/> that renders the component.
     /// </summary>
     [CascadingParameter]
-    public required LinkContainer Container { get; set; }
+    public required LinkContainer Container { get; init; }
 
     /// <summary>
     ///     Color of the link path. Default is black.

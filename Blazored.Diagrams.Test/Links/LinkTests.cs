@@ -7,7 +7,7 @@ namespace Blazored.Diagrams.Test.Links;
 
 public class LinkTests
 {
-    private Link Instance => new();
+    private LineLink Instance => new();
 
     [Fact]
     public void Assert_Id_Is_Initialized()
@@ -233,7 +233,7 @@ public class LinkTests
     {
         // Arrange
         var obj = Instance;
-        var targetPort = new Port() { Parent = new Node() };
+        var targetPort = new Port { Parent = new Node() };
 
         //Act
         obj.TargetPort = targetPort;
@@ -266,7 +266,7 @@ public class LinkTests
         obj.OnTargetPortChanged.Subscribe((e) => eventCount++);
 
         //Act
-        obj.TargetPort = new Port() { Parent = new Node() };
+        obj.TargetPort = new Port { Parent = new Node() };
 
         //Assert
         Assert.Equal(1, eventCount);

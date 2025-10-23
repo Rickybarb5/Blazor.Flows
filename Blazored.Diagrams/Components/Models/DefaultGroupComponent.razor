@@ -15,13 +15,13 @@
     /// <see cref="DiagramService"/>
     /// </summary>
     [CascadingParameter]
-    public IDiagramService DiagramService { get; set; } = null!;
+    public IDiagramService DiagramService { get; init; } = null!;
 
     /// <summary>
     /// <see cref="Group"/>
     /// </summary>
     [Parameter]
-    public required Group Group { get; set; }
+    public required Group Group { get; init; }
 
     /// <summary>
     /// Optional content if people want to use the default component.

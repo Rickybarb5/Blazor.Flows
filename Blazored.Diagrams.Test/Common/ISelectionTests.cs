@@ -13,7 +13,7 @@ public class SelectionTests
         [
             new Node(),
             new Group(),
-            new Link()
+            new LineLink()
         ];
     }
 

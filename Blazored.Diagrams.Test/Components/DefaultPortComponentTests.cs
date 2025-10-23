@@ -40,7 +40,7 @@ public class DefaultPortComponentTests : TestContext
             p => p.Add(x => x.Port, _testPort)
                 .AddCascadingValue(_diagramService.Object)
         );
-        _testPort.OutgoingLinks.Add(new Link(){});
+        _testPort.OutgoingLinks.Add(new LineLink {});
 
         // Act
         cut.Render();
@@ -57,7 +57,7 @@ public class DefaultPortComponentTests : TestContext
             p => p.Add(x => x.Port, _testPort)
                 .AddCascadingValue(_diagramService.Object)
         );
-        _testPort.IncomingLinks.Add(new Link(){});
+        _testPort.IncomingLinks.Add(new LineLink {});
 
         // Act
         cut.Render();

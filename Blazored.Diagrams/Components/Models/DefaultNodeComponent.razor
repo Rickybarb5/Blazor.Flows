@@ -13,7 +13,7 @@
     /// <see cref="Node"/>
     /// </summary>
     [Parameter]
-    public required Node Node { get; set; }
+    public required Node Node { get; init; }
     
     /// <summary>
     /// Optional content if people want to use the default component.
@@ -25,7 +25,7 @@
     /// <see cref="IDiagramService"/>
     /// </summary>
     [CascadingParameter]
-    public IDiagramService DiagramService { get; set; } = null!;
+    public IDiagramService DiagramService { get; init; } = null!;
 
     private const string DefaultCssClass = "default-node";
     private readonly StringBuilder _builder = new();

@@ -29,7 +29,7 @@ public class SerializationServiceTests
         var groupNode = new Node();
         var nodePort = new Port();
         var groupPort = new Port();
-        var link = new Link();
+        var link = new LineLink();
         diagramService
             .Add
             .Node(node)

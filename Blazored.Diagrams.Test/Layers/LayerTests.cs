@@ -151,7 +151,7 @@ public class LayerTests
     {
         //Arrange
         var layer = Instance;
-        var added = new Group() { Groups = [new Group()] };
+        var added = new Group { Groups = [new Group()] };
 
 
         //Act
@@ -166,7 +166,7 @@ public class LayerTests
     {
         //Arrange
         var layer = Instance;
-        var group = new Group() { Nodes = [new Node()] };
+        var group = new Group { Nodes = [new Node()] };
         var node = new Node();
 
 
@@ -192,7 +192,7 @@ public class LayerTests
 
         node1.Ports.Add(sourcePort);
         node2.Ports.Add(targetPort);
-        var link = new Link
+        var link = new LineLink
         {
             IsSelected = true,
             SourcePort = sourcePort,
@@ -233,7 +233,7 @@ public class LayerTests
         layer.Nodes.Add(node2);
         layer.Groups.Add(group);
         diagram.Layers.Add(layer);
-        var link = new Link { SourcePort = sourcePort, TargetPort = targetPort };
+        var link = new LineLink { SourcePort = sourcePort, TargetPort = targetPort };
         link.IsSelected = true;
 
         // Act

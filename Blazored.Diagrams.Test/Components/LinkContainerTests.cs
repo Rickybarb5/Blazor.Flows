@@ -20,7 +20,7 @@ public class LinkContainerTests : ContainerTestBase<LinkContainer>
     public void DoesNotRender_WhenLinkIsNotVisible()
     {
         // Arrange
-        var link = new Link { IsVisible = false };
+        var link = new LineLink { IsVisible = false };
         var cut = CreateComponent(link);
 
         //Assert
@@ -31,7 +31,7 @@ public class LinkContainerTests : ContainerTestBase<LinkContainer>
     public void RendersDiv_WhenLinkIsVisible()
     {
         // Arrange
-        var link = new Link { IsVisible = true, SourcePort = new Port()};
+        var link = new CurvedLink { IsVisible = true, SourcePort = new Port()};
         var cut = CreateComponent(link);
 
         //Act

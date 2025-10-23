@@ -15,7 +15,7 @@ public abstract class ContainerTestBase<TComponent> : TestContext
 {
     protected readonly Mock<IDiagramService> _diagramServiceMock;
     protected readonly Mock<IEventAggregator> _eventServiceMock;
-    protected readonly Mock<IOptionsContainer> _optionsMock;
+    protected readonly OptionsContainer _diagramOptions;
     protected readonly Mock<IVirtualizationService> _virtualizationServiceMock;
     protected readonly MockedComponentRegistry _componentRegistry;
     protected readonly ResizeObserverServiceMock _observerService;
@@ -27,15 +27,14 @@ public abstract class ContainerTestBase<TComponent> : TestContext
         _eventServiceMock = new Mock<IEventAggregator>();
         _componentRegistry = new();
         _observerService = new ResizeObserverServiceMock();
-        _optionsMock = new Mock<IOptionsContainer>();
+        _diagramOptions = new(_diagramServiceMock.Object);
         _jsRuntime = new JSRuntimeMock();
         _virtualizationServiceMock = new();
 
-        _optionsMock.SetupGet(s => s.Virtualization).Returns(new VirtualizationOptions());
-        _optionsMock.SetupGet(s => s.Styling).Returns(new DiagramStyleOptions());
         _diagramServiceMock.SetupGet(s => s.Events).Returns(_eventServiceMock.Object);
-        _diagramServiceMock.SetupGet(s => s.Options).Returns(_optionsMock.Object);
+        _diagramServiceMock.SetupGet(s => s.Options).Returns(_diagramOptions);
         _diagramServiceMock.SetupGet(s => s.Diagram).Returns(new Diagram());
+        
 
         Services.AddSingleton(_diagramServiceMock.Object);
         Services.AddSingleton(_componentRegistry.Object);

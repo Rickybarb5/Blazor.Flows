@@ -6,7 +6,7 @@ namespace Blazored.Diagrams.Test.Ports;
 
 public class PortTests
 {
-    private Port Instance => new Port() { Parent = new Node() };
+    private Port Instance => new Port { Parent = new Node() };
 
     [Fact]
     public void Assert_Id_Is_Initialized()
@@ -271,7 +271,7 @@ public class PortTests
         //Arrange
         var node = new Node();
         var sourcePort = new Port { Parent = node };
-        var targetPort = new Port() { Parent = node };
+        var targetPort = new Port { Parent = node };
         node.Ports.Add(sourcePort);
         node.Ports.Add(targetPort);
 
@@ -302,7 +302,7 @@ public class PortTests
     public void Test_Dispose()
     {
         //Arrange
-        var port = new Port() { Parent = new Node() };
+        var port = new Port { Parent = new Node() };
         // Act
         port.Dispose();
         // Assert
@@ -317,7 +317,7 @@ public class PortTests
         //Arrange
         var port = new Port();
         // Act
-        port.OutgoingLinks.Add(new Link());
+        port.OutgoingLinks.Add(new LineLink());
         // Assert
         Assert.True(port.HasOutGoingLinks);
         Assert.True(port.HasLinks);
@@ -329,7 +329,7 @@ public class PortTests
         //Arrange
         var port = new Port();
         // Act
-        port.IncomingLinks.Add(new Link());
+        port.IncomingLinks.Add(new LineLink());
         // Assert
         Assert.True(port.HasIncomingLinks);
         Assert.True(port.HasLinks);

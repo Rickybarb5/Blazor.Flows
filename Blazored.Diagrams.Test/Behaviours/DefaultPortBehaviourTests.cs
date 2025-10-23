@@ -115,7 +115,7 @@ public class DefaultPortBehaviourTests
         targetNode.Ports.Add(targetPort);
         service.Add.Node(sourceNode);
         service.Add.Node(targetNode);
-        var link = new Link();
+        var link = new LineLink();
 
         // Act
         service.Add.AddLinkTo(sourcePort, targetPort, link);
@@ -137,7 +137,7 @@ public class DefaultPortBehaviourTests
         targetNode.Ports.Add(targetPort);
         service.Add.Node(sourceNode);
         service.Add.Node(targetNode);
-        var link = new Link();
+        var link = new LineLink();
 
         // Act
         service.Add.AddLinkTo(sourcePort, targetPort, link);
@@ -179,7 +179,7 @@ public class DefaultPortBehaviourTests
         service.Add.Node(sourceNode);
         service.Add.Node(targetNode);
         
-        var link = new Link();
+        var link = new LineLink();
        service.Add.AddLinkTo<Link>(sourcePort, targetPort, link);
 
         // Act
@@ -203,7 +203,7 @@ public class DefaultPortBehaviourTests
         service.Add.Node(sourceNode);
         service.Add.Node(targetNode);
 
-        var link = new Link();
+        var link = new LineLink();
         service.Add.AddLinkTo(sourcePort, targetPort, link);
 
         // Act

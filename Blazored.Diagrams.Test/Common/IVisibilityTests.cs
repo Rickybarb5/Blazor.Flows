@@ -15,7 +15,7 @@ public class VisibilityTests
         [
             new Node(),
             new Group(),
-            new Link(),
+            new LineLink(),
             new Port(),
             new Layer()
         ];

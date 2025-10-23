@@ -137,7 +137,7 @@ public class DiagramTests
 
         diagram.Layers.Add(layer1);
         diagram.Layers.Add(layer2);
-        var link = new Link { SourcePort = sourcePort, TargetPort = targetPort };
+        var link = new LineLink { SourcePort = sourcePort, TargetPort = targetPort };
         link.IsSelected = true;
 
         // Act
@@ -169,7 +169,7 @@ public class DiagramTests
 
         diagram.Layers.Add(layer1);
         diagram.Layers.Add(layer2);
-        var link = new Link { SourcePort = sourcePort, TargetPort = targetPort };
+        var link = new LineLink { SourcePort = sourcePort, TargetPort = targetPort };
         link.IsSelected = true;
 
         // Act

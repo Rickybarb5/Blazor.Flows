@@ -7,8 +7,8 @@
 </div>
 
 @code {
-    [CascadingParameter] public required IDiagramService DiagramService { get; set; }
-    [Parameter] public required Port Port { get; set; }
+    [CascadingParameter] public required IDiagramService DiagramService { get; init; }
+    [Parameter] public required Port Port { get; init; }
 
     /// <summary>
     /// Optional content if people want to use the default component.

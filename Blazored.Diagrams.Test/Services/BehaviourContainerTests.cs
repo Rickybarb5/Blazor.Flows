@@ -50,7 +50,7 @@ public class BehaviourContainerTests
     public void EnableBehaviour_Works()
     {
         // Arrange
-        var options = new TestBehaviourOptions()
+        var options = new TestBehaviourOptions
         {
             IsEnabled = false,
         };
@@ -71,7 +71,7 @@ public class BehaviourContainerTests
     public void DisableBehaviour_Works()
     {
         // Arrange
-        var options = new TestBehaviourOptions()
+        var options = new TestBehaviourOptions
         {
             IsEnabled = true,
         };

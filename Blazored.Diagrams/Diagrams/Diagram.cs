@@ -45,7 +45,7 @@ public partial class Diagram : IDiagram
     {
         if (_layers.All(l=>l.Id != Guid.Empty.ToString()))
         {
-            var defaultLayer = new Layer()
+            var defaultLayer = new Layer
             {
                 Id = Guid.Empty.ToString(),
             };
