@@ -1,3 +1,4 @@
+@using Blazored.Diagrams.Events
 @if (SelectedItem is not null)
 {
     <MudCard>
@@ -51,6 +52,8 @@
         
         Service.Add.AddLinkTo(link.SourcePort, link.TargetPort, newL);
         Service.Remove.Link(link);
+        Service.Events.Publish(new DiagramRedrawEvent(Service.Diagram));
+        SelectedItem = null;
 
     }
 

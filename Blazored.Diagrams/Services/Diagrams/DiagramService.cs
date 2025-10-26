@@ -29,7 +29,7 @@ public partial class DiagramService : IDiagramService
     public IDeleteContainer Remove { get; set; } = null!;
 
     /// <inheritdoc />
-    public IDiagram Diagram { get; set; } = null!;
+    public IDiagram Diagram { get; private set; } = null!;
 
     /// <summary>
     /// Initializes a new instance of <see cref="DiagramService"/>.

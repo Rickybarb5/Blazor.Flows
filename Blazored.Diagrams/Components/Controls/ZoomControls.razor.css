@@ -1,0 +1,64 @@
+/* Container */
+.diagram-zoom-container {
+    position: absolute;
+    bottom: 40px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Base Button Style */
+.zoom-in-button, .zoom-out-button {
+    width: 40px;
+    height: 30px;
+    background-color: #444;
+    color: white;
+    border: 1px solid #555;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 0;
+    transition: background-color 0.1s;
+}
+
+.zoom-in-button:hover, .zoom-out-button:hover {
+    background-color: #555;
+}
+
+/* Specific Border Overrides for Grouping */
+.zoom-in-button {
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+}
+.zoom-out-button {
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+}
+
+/* Display */
+.zoom-display {
+    padding: 4px 8px;
+    font-size: 12px;
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-left: 1px solid #555;
+    border-right: 1px solid #555;
+    cursor: pointer;
+    user-select: none;
+    width: 40px;
+    height: 30px;display: flex; 
+    align-items: center;
+    justify-content: center;
+}
+
+/* Disabled State */
+.zoom-in-disabled, .zoom-out-disabled {
+    background-color: #666 !important; /* !important to override :hover */
+    cursor: not-allowed !important;
+    opacity: 0.5;
+    box-shadow: none;
+}

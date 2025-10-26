@@ -6,7 +6,7 @@ namespace Blazored.Diagrams.Interfaces;
 /// <summary>
 ///     Describes a model that contains ports.
 /// </summary>
-public interface IPortContainer : IPosition, ISize, IId
+public interface IPortContainer : ISizePosition, IId
 {
     /// <summary>
     ///     Ports associated with this model.

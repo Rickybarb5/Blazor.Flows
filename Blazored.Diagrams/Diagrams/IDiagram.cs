@@ -140,15 +140,15 @@ public interface IDiagram :
     /// </summary>
     void SelectAll();
 
-    /// <inheritdoc />
-    void StepZoomUp();
-
-    /// <inheritdoc />
-    void StepZoomDown();
-
-    /// <inheritdoc />
+    /// <summary>
+    /// Sets a layer as the current layer.
+    /// </summary>
+    /// <param name="layer">Layer to be used.</param>
     void UseLayer(ILayer layer);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Sets a layer as the current layer.
+    /// </summary>
+    /// <param name="layerId">Id of the layer to be used.</param>
     void UseLayer(string layerId);
 }

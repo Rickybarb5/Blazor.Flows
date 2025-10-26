@@ -29,18 +29,6 @@ public partial class Diagram
     {
         _layers.ForEach(l =>l.SelectAll());
     }
-    
-    /// <inheritdoc />
-    public virtual void StepZoomUp()
-    {
-        SetZoom(Zoom);
-    }
-
-    /// <inheritdoc />
-    public virtual void StepZoomDown()
-    {
-        SetZoom(Zoom);
-    }
 
     /// <inheritdoc />
     public virtual void SetZoom(decimal zoom)

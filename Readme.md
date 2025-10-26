@@ -50,7 +50,7 @@
 
 [![Blazored.Diagrams Screenshot][product-screenshot]](https://github.com/Rickybarb5/Blazored.Diagrams)
 
-**Blazored.Diagrams** is a comprehensive Blazor component library that allows you to create interactive, vector-based diagrams entirely within your C# Blazor application. It is built to offer maximum flexibility, allowing developers to create custom nodes, links, and implement complex interaction behaviors.
+**Blazored.Diagrams** is a comprehensive Blazor component library that allows you to create interactive diagrams entirely within your C# Blazor application. It is built to offer maximum flexibility, allowing developers to create custom nodes, links, and implement complex interaction behaviors.
 
 It provides a strong C# API, accessible via the `IDiagramService`, for managing diagram state, elements (Layers, Nodes, Ports, Links, Groups), and user interactions (panning, zooming, selection).
 

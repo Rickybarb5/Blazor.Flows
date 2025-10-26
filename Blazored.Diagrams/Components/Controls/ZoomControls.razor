@@ -1,0 +1,123 @@
+@using Blazored.Diagrams.Options.Behaviours
+@using Blazored.Diagrams.Services.Diagrams
+@implements IDisposable
+
+<div class="@ContainerClass">
+    
+    <button @onclick="ZoomIn" 
+            disabled="@IsZoomLimitReached(ZoomDirection.In)"
+            title="Zoom In"
+            class="@GetButtonClass(ZoomDirection.In)">
+        +
+    </button>
+
+    <div @onclick="ResetZoom" 
+         title="Reset Zoom (100%)"
+         class="@DisplayClass">
+        @($"{(Service.Diagram.Zoom * 100):0}%")
+    </div>
+
+    <button @onclick="ZoomOut" 
+            disabled="@IsZoomLimitReached(ZoomDirection.Out)"
+            title="Zoom Out"
+            class="@GetButtonClass(ZoomDirection.Out)">
+        &minus;
+    </button>
+</div>
+
+@code {
+    [CascadingParameter]
+    public required IDiagramService Service { get; set; } = null!;
+    
+    [Parameter] public string ContainerClass { get; set; } = "diagram-zoom-container";
+    
+    [Parameter] public string ZoomInClass { get; set; } = "zoom-in-button";
+    [Parameter] public string ZoomInDisabledClass { get; set; } = "zoom-in-disabled";
+
+    [Parameter] public string ZoomOutClass { get; set; } = "zoom-out-button";
+    [Parameter] public string ZoomOutDisabledClass { get; set; } = "zoom-out-disabled";
+    
+    [Parameter] public string DisplayClass { get; set; } = "zoom-display";
+    
+    private enum ZoomDirection { In, Out }
+    
+    private IDisposable? _redrawSubscription;
+    private ZoomBehaviourOptions options = new(); // Initialize to prevent null
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        _redrawSubscription = Service.Events
+            .SubscribeTo<DiagramRedrawEvent>(OnRedraw);
+    }
+
+    /// <inheritdoc />
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Set options after first render to ensure Service is fully initialized
+            options = Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!;
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    // --- Styling Logic ---
+
+    private string GetButtonClass(ZoomDirection direction)
+    {
+        bool isDisabled = IsZoomLimitReached(direction);
+        
+        var baseClass = direction == ZoomDirection.In ? ZoomInClass : ZoomOutClass;
+        
+        var disabledClass = direction == ZoomDirection.In ? ZoomInDisabledClass : ZoomOutDisabledClass;
+        
+        if (isDisabled)
+        {
+            // If disabled, append the disabled class
+            return $"{baseClass} {disabledClass}";
+        }
+        
+        return baseClass;
+    }
+    
+    // --- Action Logic ---
+
+    private void ZoomIn()
+    {
+        Service.Diagram.SetZoom(Service.Diagram.Zoom + options.ZoomStep);
+    }
+
+    private void ZoomOut()
+    {
+        Service.Diagram.SetZoom(Service.Diagram.Zoom - options.ZoomStep);
+    }
+    
+    private void ResetZoom()
+    {
+        Service.Diagram.SetZoom(1);
+    }
+
+    private bool IsZoomLimitReached(ZoomDirection direction)
+    {
+        // Use the fetched options
+        return direction switch
+        {
+            ZoomDirection.In => Service.Diagram.Zoom >= options.MaxZoom,
+            ZoomDirection.Out => Service.Diagram.Zoom <= options.MinZoom,
+            _ => false
+        };
+    }
+
+    private void OnRedraw(DiagramRedrawEvent e)
+    {
+        // Since this event might fire off-thread, ensure StateHasChanged runs on the UI thread
+        InvokeAsync(StateHasChanged);
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _redrawSubscription?.Dispose();
+    }
+}

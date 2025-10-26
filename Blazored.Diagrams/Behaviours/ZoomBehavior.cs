@@ -71,7 +71,6 @@ public class ZoomBehavior : BaseBehaviour
     
     private void SetZoom(decimal zoom)
     {
-        if (zoom == _diagramService.Diagram.Zoom) return;
         
         if (zoom > _behaviourOptions.MaxZoom)
         {
@@ -83,5 +82,6 @@ public class ZoomBehavior : BaseBehaviour
         }
 
         _diagramService.Diagram.Zoom = zoom;
+        _diagramService.Events.Publish(new DiagramRedrawEvent(_diagramService.Diagram));
     }
 }

@@ -5,19 +5,10 @@
 <CascadingValue Value="Service">
     <MudToolBar Dense="true">
         <DiagramEditor OnDiagramLoaded="OnDiagramLoaded"></DiagramEditor>
-        @* <MudTooltip Text="Add Layer"> *@
-        @*     <MudIconButton Icon="@Icons.Material.Outlined.Add" Color="Color.Inherit" OnClick="AddLayer"/> *@
-        @* </MudTooltip> *@
-        @* <MudTooltip Text="Remove Layer"> *@
-        @*     <MudIconButton Icon="@Icons.Material.Outlined.Delete" Color="Color.Inherit" OnClick="DeleteLayer" Disabled="SelectedItem is not ILayer"/> *@
-        @* </MudTooltip> *@
-        @* <MudDivider Vertical="true" DividerType="DividerType.FullWidth"></MudDivider> *@
-        @* <MudSpacer></MudSpacer> *@
+       
     </MudToolBar>
     <div style="display:flex;flex-direction:row;width:100%; height:100%">
         <div style="display:flex;flex-direction:column;height:100%;width:20%">
-
-            @* <LayerDisplay Diagram="_diagram" OnSelectionChanged="SelectionChanged"></LayerDisplay> *@
 
             @if (selectedLink is not null)
             {
@@ -36,19 +27,20 @@
                 <GroupEditor Group="SelectedGroup"></GroupEditor>
             }
         </div>
-        <DiagramContainer DiagramService="Service"></DiagramContainer>
+        <DiagramContainer DiagramService="Service">
+            <ZoomControls ></ZoomControls>
+        </DiagramContainer>
     </div>
 </CascadingValue>
 
 
 @code {
-    [Inject] public IDiagramService Service { get; set; }
-    [Inject] public ISerializationService SerializationService { get; set; }
+    [Inject] public IDiagramService Service { get; set; } = null!;
     IPort? SelectedPort;
     ILink? selectedLink;
     INode? SelectedNode;
     IGroup? SelectedGroup;
-    private List<IDisposable> _subscriptions;
+    private List<IDisposable> _subscriptions= [];
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -56,7 +48,7 @@
         {
             // _diagram.Behaviours.Add(new PortPopBehaviour(_diagram));
             GroupWithNodesAndPorts();
-            Service.Behaviours.GetBehaviourOptions<SelectBehaviourOptions>()!.MultiSelectEnabled = true;
+            Service.Behaviours.GetBehaviourOptions<SelectBehaviourOptions>().MultiSelectEnabled = true;
             _subscriptions =
             [
                 Service.Events.SubscribeTo<PortClickedEvent>(OnPortClicked),
