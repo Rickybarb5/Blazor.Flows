@@ -25,10 +25,12 @@
 @code {
 
     [Parameter] public IPort Port { get; set; }
+    
+    [CascadingParameter]public IDiagramService Service { get; set; }
 
     private void DeletePort(MouseEventArgs obj)
     {
-        Port.Parent.Ports.Remove(Port);
+        Service.Remove.Port(Port);
     }
 
 }

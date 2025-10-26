@@ -88,7 +88,7 @@ public partial class Diagram
     {
         if (!Layers.Contains(layer))
         {
-            Layers.Add(layer);
+            Layers.AddInternal(layer);
         }
 
         CurrentLayer = layer;

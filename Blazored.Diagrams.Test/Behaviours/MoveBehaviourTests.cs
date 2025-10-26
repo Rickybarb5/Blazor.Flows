@@ -23,8 +23,8 @@ public class MoveBehaviourTests
         using var service = CreateService();
         var node = new Node { IsSelected = true };
         var layer = new Layer();
-        layer.Nodes.Add(node);
-        service.Diagram.Layers.Add(layer);
+        service.Add.Layer(layer);
+        service.Add.NodeTo(layer, node);
 
         var args = new PointerEventArgs
         {
@@ -47,8 +47,8 @@ public class MoveBehaviourTests
         using var service = CreateService();
         var group = new Group { IsSelected = true };
         var layer = new Layer();
-        layer.Groups.Add(group);
-        service.Diagram.Layers.Add(layer);
+        service.Add.Layer(layer);
+        service.Add.AddGroupTo(layer, group);
 
         var args = new PointerEventArgs
         {
@@ -71,8 +71,8 @@ public class MoveBehaviourTests
         using var service = CreateService();
         var node = new Node { IsSelected = true };
         var layer = new Layer();
-        layer.Nodes.Add(node);
-        service.Diagram.Layers.Add(layer);
+        service.Add.Layer(layer);
+        service.Add.NodeTo(layer, node);
 
         var startArgs = new PointerEventArgs
         {
@@ -103,8 +103,8 @@ public class MoveBehaviourTests
         using var service = CreateService();
         var group = new Group { IsSelected = true };
         var layer = new Layer();
-        layer.Groups.Add(group);
-        service.Diagram.Layers.Add(layer);
+        service.Add.Layer(layer);
+        service.Add.AddGroupTo(layer, group);
 
         var startArgs = new PointerEventArgs
         {
@@ -135,8 +135,8 @@ public class MoveBehaviourTests
         using var service = CreateService();
         var node = new Node { IsSelected = true };
         var layer = new Layer();
-        layer.Nodes.Add(node);
-        service.Diagram.Layers.Add(layer);
+        service.Add.Layer(layer);
+        service.Add.NodeTo(layer, node);
         service.Diagram.SetZoom(2.0m); // Set zoom to 200%
 
         var startArgs = new PointerEventArgs
@@ -168,8 +168,8 @@ public class MoveBehaviourTests
         using var service = CreateService();
         var node = new Node { IsSelected = true };
         var layer = new Layer();
-        layer.Nodes.Add(node);
-        service.Diagram.Layers.Add(layer);
+        service.Add.Layer(layer);
+        service.Add.NodeTo(layer, node);
 
         var startArgs = new PointerEventArgs
         {
@@ -206,8 +206,8 @@ public class MoveBehaviourTests
         using var service = CreateService();
         var node = new Node { IsSelected = true };
         var layer = new Layer();
-        layer.Nodes.Add(node);
-        service.Diagram.Layers.Add(layer);
+        service.Add.Layer(layer);
+        service.Add.NodeTo(layer, node);
 
         var startArgs = new PointerEventArgs
         {
@@ -249,8 +249,8 @@ public class MoveBehaviourTests
 
         var node = new Node { IsSelected = true };
         var layer = new Layer();
-        layer.Nodes.Add(node);
-        service.Diagram.Layers.Add(layer);
+        service.Add.Layer(layer);
+        service.Add.NodeTo(layer, node);
 
         var startArgs = new PointerEventArgs
         {
@@ -282,8 +282,8 @@ public class MoveBehaviourTests
 
         var node = new Node { IsSelected = true };
         var layer = new Layer();
-        layer.Nodes.Add(node);
-        service.Diagram.Layers.Add(layer);
+        service.Add.Layer(layer);
+        service.Add.NodeTo(layer, node);
 
         var startArgs = new PointerEventArgs
         {

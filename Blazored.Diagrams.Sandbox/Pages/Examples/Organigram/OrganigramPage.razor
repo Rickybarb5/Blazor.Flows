@@ -42,9 +42,11 @@
                     Alignment = PortAlignment.Top,
                     Justification = PortJustification.Center,
                 };
-                node.Ports.Add(port);
-                node.Ports.Add(port2);
-                Service.Add.Node(node);
+                
+                Service.Add
+                    .Node(node)
+                    .PortTo(node, port)
+                    .PortTo(node, port2);
             }
         }
 

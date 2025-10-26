@@ -66,8 +66,8 @@ public partial class Layer : ILayer
         get => _nodes;
         set
         {
-            _nodes.Clear();
-            value.ForEach(val=>_nodes.Add(val));
+            _nodes.ClearInternal();
+            value.ForEach(val=>_nodes.AddInternal(val));
         }
     }
 
@@ -77,9 +77,9 @@ public partial class Layer : ILayer
         get => _groups;
         set
         {
-            _groups.Clear();
+            _groups.ClearInternal();
             
-            value.ForEach(val=>_groups.Add(val));
+            value.ForEach(val=>_groups.AddInternal(val));
         }
     }
 
@@ -209,9 +209,9 @@ public ITypedEvent<GroupRemovedEvent> OnGroupRemoved { get; init; } = new TypedE
     public virtual void Dispose()
     {
         _nodes.ForEach(x => x.Dispose());
-        _nodes.Clear();
+        _nodes.ClearInternal();
         _groups.ForEach(x => x.Dispose());
-        _groups.Clear();
+        _groups.ClearInternal();
         _nodes.OnItemAdded.Unsubscribe(HandleNodeAdded); 
         _nodes.OnItemRemoved.Unsubscribe(HandleNodeRemoved);
 

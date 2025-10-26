@@ -50,7 +50,7 @@ public partial class Diagram : IDiagram
             {
                 Id = Guid.Empty.ToString(),
             };
-            _layers.Add(defaultLayer);
+            _layers.AddInternal(defaultLayer);
             _currentLayer = defaultLayer;
         }
     }
@@ -141,8 +141,8 @@ public partial class Diagram : IDiagram
         get => _layers;
         set
         {
-            _layers.Clear();
-            value.ForEach(l=> _layers.Add(l));
+            _layers.ClearInternal();
+            value.ForEach(l=> _layers.AddInternal(l));
             EnsureDefaultLayer();
         }
     }
@@ -179,7 +179,7 @@ public partial class Diagram : IDiagram
                 // add layer if it doesn't exist
                 if (_layers.FirstOrDefault(l => l.Id == value.Id) is null)
                 {
-                    _layers.Add(value);
+                    _layers.AddInternal(value);
                 }
 
                 var oldLayer = _currentLayer;

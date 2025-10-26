@@ -25,14 +25,12 @@
     private void AddNumber(MouseEventArgs obj)
     {
         var node = new NumberNode();
-        node.SetPosition(200, 200 * Service.Diagram.AllNodes.Count);
         Service.Add.Node(node);
     }
 
     private void AddOperator(MouseEventArgs obj)
     {
         var node = new Nodes.OperatorNode();
-        node.SetPosition(400, 200 * Service.Diagram.AllNodes.Count);
         Service.Add.Node(node);
     }
     

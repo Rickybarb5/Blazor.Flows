@@ -25,7 +25,7 @@ public class PortContainerTests
         foreach (var container in containers)
         {
             // Act
-            container.Ports.Add(port);
+            container.Ports.AddInternal(port);
 
             //Assert
             Assert.Same(port, container.Ports[0]);
@@ -41,9 +41,9 @@ public class PortContainerTests
         var port = new Port();
         foreach (var container in containers)
         {
-            container.Ports.Add(port);
+            container.Ports.AddInternal(port);
             // Act
-            container.Ports.Remove(port);
+            container.Ports.RemoveInternal(port);
 
             //Assert
             Assert.Empty(container.Ports);

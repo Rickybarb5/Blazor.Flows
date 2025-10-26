@@ -37,7 +37,7 @@ public interface IDeleteContainer
     /// </summary>
     /// <param name="port"></param>
     /// <returns></returns>
-    IDeleteContainer Remove(IPort port);
+    IDeleteContainer Port(IPort port);
 
     /// <summary>
     /// Removes a link

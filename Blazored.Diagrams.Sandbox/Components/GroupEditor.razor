@@ -29,7 +29,7 @@
                 var port = new Port();
                 port.Justification = alignment;
                 port.Alignment = position;
-                Group.Ports.Add(port);
+                Service.Add.PortTo(Group, port);
                 return;
             }
         }

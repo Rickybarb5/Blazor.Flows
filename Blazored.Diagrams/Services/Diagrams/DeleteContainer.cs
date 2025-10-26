@@ -23,14 +23,14 @@ public class DeleteContainer : IDeleteContainer
     /// <inheritdoc />
     public virtual IDeleteContainer Node(INode nodeToRemove)
     {
-        if (service.Diagram.Layers.Select(layer => layer.Nodes.Remove(nodeToRemove)).Any(removed => removed))
+        if (service.Diagram.Layers.Select(layer => layer.Nodes.RemoveInternal(nodeToRemove)).Any(removed => removed))
         {
             return this;
         }
 
         service.Diagram.Layers
             .SelectMany(x => x.AllGroups)
-            .ForEach(group => group.Nodes.Remove(nodeToRemove));
+            .ForEach(group => group.Nodes.RemoveInternal(nodeToRemove));
 
         return this;
     }
@@ -40,14 +40,14 @@ public class DeleteContainer : IDeleteContainer
     {
         foreach (var layer in service.Diagram.Layers)
         {
-            var removed = layer.Groups.Remove(groupToRemove);
+            var removed = layer.Groups.RemoveInternal(groupToRemove);
             if (removed) 
                 return this;
         }
 
         service.Diagram.Layers
             .SelectMany(x => x.AllGroups)
-            .ForEach(group => group.Groups.Remove(groupToRemove));
+            .ForEach(group => group.Groups.RemoveInternal(groupToRemove));
         
         return this;
     }
@@ -55,16 +55,14 @@ public class DeleteContainer : IDeleteContainer
     /// <inheritdoc />
     public virtual IDeleteContainer Layer(ILayer layer)
     {
-        service.Diagram.Layers.Remove(layer);
+        service.Diagram.Layers.RemoveInternal(layer);
         return this;
     }
 
     /// <inheritdoc />
-    public IDeleteContainer Remove(IPort port)
+    public IDeleteContainer Port(IPort port)
     {
-        service.Diagram.Layers
-            .SelectMany(x => x.AllNodes)
-            .ForEach(node => node.Ports.Remove(port));
+        port.Parent.Ports.RemoveInternal(port);
 
         return this;
     }
@@ -72,8 +70,8 @@ public class DeleteContainer : IDeleteContainer
     /// <inheritdoc />
     public virtual IDeleteContainer Link(ILink linkToRemove)
     {
-        linkToRemove.SourcePort.OutgoingLinks.Remove(linkToRemove);
-        linkToRemove.TargetPort?.IncomingLinks.Remove(linkToRemove);
+        linkToRemove.SourcePort.OutgoingLinks.RemoveInternal(linkToRemove);
+        linkToRemove.TargetPort?.IncomingLinks.RemoveInternal(linkToRemove);
         
         return this;
     }

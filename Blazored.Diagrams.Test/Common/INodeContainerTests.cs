@@ -25,7 +25,7 @@ public class NodeContainerTests
         foreach (var container in containers)
         {
             // Act
-            container.Nodes.Add(node);
+            container.Nodes.AddInternal(node);
 
             //Assert
             Assert.Same(node, container.Nodes[0]);
@@ -41,9 +41,9 @@ public class NodeContainerTests
         var node = new Node();
         foreach (var container in containers)
         {
-            container.Nodes.Add(node);
+            container.Nodes.AddInternal(node);
             // Act
-            container.Nodes.Remove(node);
+            container.Nodes.RemoveInternal(node);
 
             //Assert
             Assert.Empty(container.Nodes);

@@ -8,34 +8,28 @@ using Newtonsoft.Json;
 namespace Blazored.Diagrams.Helpers;
 
 /// <summary>
-/// Custom list implementation with add and remove events.
+/// Custom list implementation with add and remove events that enforces
+/// access control by making mutation methods internal or explicitly implemented.
 /// </summary>
 /// <typeparam name="TModel"></typeparam>
-
 [JsonConverter(typeof(ObservableListConverter))]
 public class ObservableList<TModel> : IList<TModel> where TModel : IId
 {
     private readonly Dictionary<string, TModel> _internalIDictionary = [];
+    private const string MutationError = "Modification must go through the DiagramService to ensure state consistency.";
 
-    /// <summary>
-    /// Event triggered when an item is added.
-    /// </summary>
+    // --- Events ---
     internal ITypedEvent<ItemAddedEvent<TModel>> OnItemAdded = new TypedEvent<ItemAddedEvent<TModel>>();
-
-    /// <summary>
-    /// Event triggered when an item is removed.
-    /// </summary>
     internal ITypedEvent<ItemRemovedEvent<TModel>> OnItemRemoved = new TypedEvent<ItemRemovedEvent<TModel>>();
 
-    /// <inheritdoc />
+    // --- Public Read-Only Properties ---
     [JsonIgnore]
     public int Count => _internalIDictionary.Count;
 
-    /// <inheritdoc />
     [JsonIgnore]
-    public bool IsReadOnly { get; set; }
+    public bool IsReadOnly { get; set; } // Note: Must remain public/implement ICollection<T>.IsReadOnly
 
-    /// <inheritdoc />
+    // --- Indexer (Mutation) ---
     [JsonIgnore]
     public TModel this[int index]
     {
@@ -43,24 +37,25 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
         set
         {
             var oldItem = _internalIDictionary.Values.ElementAt(index);
-            _internalIDictionary.Remove(oldItem.Id);
-            OnItemRemoved?.Publish(new(oldItem));
-            _internalIDictionary[value.Id] = value;
-            OnItemAdded?.Publish(new(value));
+            
+            // Use internal methods for mutation and event publishing
+            RemoveInternal(oldItem); 
+            AddInternal(value);
         }
     }
-
-    /// <summary>
-    /// Internal property for serialization - gets/sets the dictionary directly
-    /// </summary>
+    
+    // --- Internal Property for Serialization ---
     [JsonProperty("Items")]
     internal Dictionary<string, TModel> InternalDictionary => _internalIDictionary;
 
+    // -----------------------------------------------------------------
+    // --- INTERNAL MUTATION METHODS (Used ONLY by DiagramService) ---
+    // -----------------------------------------------------------------
+
     /// <summary>
-    /// Adds an item, if it doesn't already exist.
+    /// Adds an item, if it doesn't already exist. (Internal method)
     /// </summary>
-    /// <param name="item"></param>
-    public void Add(TModel item)
+    internal void AddInternal(TModel item)
     {
         if (_internalIDictionary.TryAdd(item.Id, item))
         {
@@ -69,20 +64,17 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
     }
 
     /// <summary>
-    /// Adds a collection of items to the list.
+    /// Adds a collection of items to the list. (Internal method)
     /// </summary>
-    /// <param name="collection"></param>
-    public void AddRange(IEnumerable<TModel> collection)
+    internal void AddRangeInternal(IEnumerable<TModel> collection)
     {
-        collection.ForEach(Add);
+        collection.ForEach(AddInternal);
     }
 
     /// <summary>
-    /// Removes an item, if it exists.
+    /// Removes an item, if it exists. (Internal method)
     /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
-    public bool Remove(TModel item)
+    internal bool RemoveInternal(TModel item)
     {
         if (_internalIDictionary.Remove(item.Id))
         {
@@ -93,13 +85,38 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
         return false;
     }
 
-    /// <inheritdoc />
-    public void Clear()
+    /// <summary>
+    /// Clears the list. (Internal method)
+    /// </summary>
+    internal void ClearInternal()
     {
         var itemsToRemove = _internalIDictionary.Values.ToList();
         _internalIDictionary.Clear();
         itemsToRemove.ForEach(x => OnItemRemoved?.Publish(new(x)));
     }
+    
+    internal void InsertInternal(int index, TModel item)
+    {
+        if (index < 0 || index > Count)
+            throw new ArgumentOutOfRangeException(nameof(index));
+            
+        // Implementation logic for inserting at a specific index in a Dictionary-backed list is complex.
+        // For simplicity and to enforce the intended use (Add/Remove), we use the existing logic:
+        var removedElement = _internalIDictionary.Values.ElementAt(index);
+        RemoveInternal(removedElement); 
+        AddInternal(item);             
+    }
+    
+    internal void RemoveAtInternal(int index)
+    {
+        if (index < 0 || index >= Count)
+            throw new ArgumentOutOfRangeException(nameof(index));
+        RemoveInternal(this[index]);
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // --- PUBLIC READ/QUERY METHODS (Unchanged to support LINQ and public accessors) ---
+    // ------------------------------------------------------------------------------------------
 
     /// <inheritdoc />
     public bool Contains(TModel item) => _internalIDictionary.ContainsKey(item.Id);
@@ -117,24 +134,6 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
     }
 
     /// <inheritdoc />
-    public void Insert(int index, TModel item)
-    {
-        if (index < 0 || index > Count)
-            throw new ArgumentOutOfRangeException(nameof(index));
-        var removedElement = _internalIDictionary.Values.ElementAt(index);
-        Remove(removedElement);
-        Add(item);
-    }
-
-    /// <inheritdoc />
-    public void RemoveAt(int index)
-    {
-        if (index < 0 || index >= Count)
-            throw new ArgumentOutOfRangeException(nameof(index));
-        Remove(this[index]);
-    }
-
-    /// <inheritdoc />
     public IEnumerator<TModel> GetEnumerator()
     {
         return _internalIDictionary.Values.GetEnumerator();
@@ -145,4 +144,28 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
     {
         return GetEnumerator();
     }
+    
+    // -------------------------------------------------------------------------------------------
+    // --- EXPLICIT INTERFACE IMPLEMENTATION (Hiding mutation methods from public access) ---
+    // -------------------------------------------------------------------------------------------
+
+    /// <inheritdoc />
+    void ICollection<TModel>.Add(TModel item) =>
+        throw new NotSupportedException(MutationError);
+
+    /// <inheritdoc />
+    bool ICollection<TModel>.Remove(TModel item) =>
+        throw new NotSupportedException(MutationError);
+
+    /// <inheritdoc />
+    void ICollection<TModel>.Clear() =>
+        throw new NotSupportedException(MutationError);
+    
+    /// <inheritdoc />
+    void IList<TModel>.Insert(int index, TModel item) =>
+        throw new NotSupportedException(MutationError);
+    
+    /// <inheritdoc />
+    void IList<TModel>.RemoveAt(int index) =>
+        throw new NotSupportedException(MutationError);
 }

@@ -43,7 +43,16 @@ public partial class Node : INode, IHasComponent<DefaultNodeComponent>
         OnPortAddedToNode.Publish(new(this, obj.Item));
         OnPortAdded.Publish(new PortAddedEvent(obj.Item));
     }
-
+    
+    /// <summary>
+    /// Adds a port to the port list.
+    /// This method is useful if you want to initialize a node with default ports.
+    /// </summary>
+    /// <param name="port"></param>
+    protected void AddPortInternal(IPort port)
+    {
+        Ports.AddInternal(port);
+    }
 
     /// <inheritdoc />
     public virtual string Id { get; init; } = Guid.NewGuid().ToString();
@@ -145,8 +154,8 @@ public partial class Node : INode, IHasComponent<DefaultNodeComponent>
         get => _ports;
         set
         {
-            _ports.Clear();
-            value.ForEach(val => _ports.Add(val));
+            _ports.ClearInternal();
+            value.ForEach(val => _ports.AddInternal(val));
         }
     }
 
@@ -154,7 +163,7 @@ public partial class Node : INode, IHasComponent<DefaultNodeComponent>
     public virtual void Dispose()
     {
         _ports.ForEach(x => x.Dispose());
-        _ports.Clear();
+        _ports.ClearInternal();
         _ports.OnItemAdded.Unsubscribe(HandlePortAdded);
         _ports.OnItemRemoved.Unsubscribe(HandlePortRemoved);
     }

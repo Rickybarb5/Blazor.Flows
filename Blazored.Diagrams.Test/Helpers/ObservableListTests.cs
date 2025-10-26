@@ -14,7 +14,7 @@ public class ObservableListTests
         var eventTriggered = false;
         list.OnItemAdded.Subscribe(e=>{ eventTriggered = true; });
         // Act
-        list.Add(new Node());
+        list.AddInternal(new Node());
 
         // Assert
         Assert.Single(list);
@@ -26,13 +26,13 @@ public class ObservableListTests
     {
         // Arrange
         var list = new ObservableList<INode>();
-        list.Add(new Node());
+        list.AddInternal(new Node());
         var addEventTriggered = false;
         var removeEventTriggered = false;
         list.OnItemAdded.Subscribe(e=>{ addEventTriggered = true; });
         list.OnItemRemoved.Subscribe(ctx=>{ removeEventTriggered = true; });
         // Act
-        list.Insert(0, new Node());
+        list.InsertInternal(0, new Node());
 
         // Assert
         Assert.Single(list);
@@ -48,10 +48,10 @@ public class ObservableListTests
         var eventTriggered = false;
         list.OnItemRemoved.Subscribe(ctx=>eventTriggered = true);
         var node = new Node();
-        list.Add(node);
+        list.AddInternal(node);
 
         // Act
-        list.Remove(node);
+        list.RemoveInternal(node);
 
         // Assert
         Assert.Empty(list);
@@ -66,10 +66,10 @@ public class ObservableListTests
         var eventTriggered = false;
         list.OnItemRemoved.Subscribe(ctx=>{ eventTriggered = true; });
         var node = new Node();
-        list.Add(node);
+        list.AddInternal(node);
 
         // Act
-        list.RemoveAt(0);
+        list.RemoveAtInternal(0);
 
         // Assert
         Assert.Empty(list);
@@ -90,7 +90,7 @@ public class ObservableListTests
         });
 
         // Act
-        list.AddRange([new Node(), new Node(), new Node()]);
+        list.AddRangeInternal([new Node(), new Node(), new Node()]);
 
         // Assert
         Assert.True(eventTriggered);
@@ -106,7 +106,7 @@ public class ObservableListTests
         var removeEventTriggered = false;
         var node1 = new Node();
         var node2 = new Node();
-        list.Add(node1);
+        list.AddInternal(node1);
         list.OnItemAdded.Subscribe(ctx=>{ addEventTriggered = true; });
         list.OnItemRemoved .Subscribe(ctx=>{ removeEventTriggered = true; });
 
@@ -132,10 +132,10 @@ public class ObservableListTests
             eventTriggered = true;
             eventCount++;
         });
-        list.AddRange([new Node(), new Node(), new Node()]);
+        list.AddRangeInternal([new Node(), new Node(), new Node()]);
 
         // Act
-        list.Clear();
+        list.ClearInternal();
 
         // Assert
         Assert.Empty(list);
@@ -149,7 +149,7 @@ public class ObservableListTests
         // Arrange
         var list = new ObservableList<INode>();
         int eventCount = default;
-        list.AddRange([new Node(), new Node(), new Node()]);
+        list.AddRangeInternal([new Node(), new Node(), new Node()]);
 
         // Act
         list.ForEach(ctx => eventCount++);
@@ -164,7 +164,7 @@ public class ObservableListTests
         // Arrange
         var list = new ObservableList<INode>();
         var node = new Node();
-        list.AddRange([new Node(), node, new Node()]);
+        list.AddRangeInternal([new Node(), node, new Node()]);
 
         // Act
         var result = list.IndexOf(node);
@@ -179,7 +179,7 @@ public class ObservableListTests
         // Arrange
         var list = new ObservableList<INode>();
         var node = new Node();
-        list.AddRange([new Node(), node, new Node()]);
+        list.AddRangeInternal([new Node(), node, new Node()]);
 
         // Act
         var result = list.Contains(node);

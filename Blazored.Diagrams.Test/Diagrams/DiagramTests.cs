@@ -92,8 +92,8 @@ public class DiagramTests
         diagram.OnLayerRemoved.Subscribe((e) => removeEventCount++);
 
         //Act
-        diagram.Layers.Add(layer);
-        diagram.Layers.Remove(layer);
+        diagram.Layers.AddInternal(layer);
+        diagram.Layers.RemoveInternal(layer);
 
         //Assert
         Assert.Equal(1, addEventCount);
@@ -129,14 +129,14 @@ public class DiagramTests
         var sourcePort = new Port();
         var targetPort = new Port();
 
-        node1.Ports.Add(sourcePort);
-        node2.Ports.Add(targetPort);
+        node1.Ports.AddInternal(sourcePort);
+        node2.Ports.AddInternal(targetPort);
 
-        layer1.Nodes.Add(node1);
-        layer2.Nodes.Add(node2);
+        layer1.Nodes.AddInternal(node1);
+        layer2.Nodes.AddInternal(node2);
 
-        diagram.Layers.Add(layer1);
-        diagram.Layers.Add(layer2);
+        diagram.Layers.AddInternal(layer1);
+        diagram.Layers.AddInternal(layer2);
         var link = new LineLink { SourcePort = sourcePort, TargetPort = targetPort };
         link.IsSelected = true;
 
@@ -161,14 +161,14 @@ public class DiagramTests
         var sourcePort = new Port();
         var targetPort = new Port();
 
-        node1.Ports.Add(sourcePort);
-        node2.Ports.Add(targetPort);
+        node1.Ports.AddInternal(sourcePort);
+        node2.Ports.AddInternal(targetPort);
 
-        layer1.Nodes.Add(node1);
-        layer2.Nodes.Add(node2);
+        layer1.Nodes.AddInternal(node1);
+        layer2.Nodes.AddInternal(node2);
 
-        diagram.Layers.Add(layer1);
-        diagram.Layers.Add(layer2);
+        diagram.Layers.AddInternal(layer1);
+        diagram.Layers.AddInternal(layer2);
         var link = new LineLink { SourcePort = sourcePort, TargetPort = targetPort };
         link.IsSelected = true;
 

@@ -272,8 +272,8 @@ public class PortTests
         var node = new Node();
         var sourcePort = new Port { Parent = node };
         var targetPort = new Port { Parent = node };
-        node.Ports.Add(sourcePort);
-        node.Ports.Add(targetPort);
+        node.Ports.AddInternal(sourcePort);
+        node.Ports.AddInternal(targetPort);
 
         // Act
         var result = sourcePort.CanConnectTo(targetPort);
@@ -289,8 +289,8 @@ public class PortTests
         var node2 = new Node();
         var sourcePort = new Port();
         var targetPort = new Port();
-        node.Ports.Add(sourcePort);
-        node2.Ports.Add(targetPort);
+        node.Ports.AddInternal(sourcePort);
+        node2.Ports.AddInternal(targetPort);
 
         // Act
         var result = sourcePort.CanConnectTo(targetPort);
@@ -317,7 +317,7 @@ public class PortTests
         //Arrange
         var port = new Port();
         // Act
-        port.OutgoingLinks.Add(new LineLink());
+        port.OutgoingLinks.AddInternal(new LineLink());
         // Assert
         Assert.True(port.HasOutGoingLinks);
         Assert.True(port.HasLinks);
@@ -329,7 +329,7 @@ public class PortTests
         //Arrange
         var port = new Port();
         // Act
-        port.IncomingLinks.Add(new LineLink());
+        port.IncomingLinks.AddInternal(new LineLink());
         // Assert
         Assert.True(port.HasIncomingLinks);
         Assert.True(port.HasLinks);

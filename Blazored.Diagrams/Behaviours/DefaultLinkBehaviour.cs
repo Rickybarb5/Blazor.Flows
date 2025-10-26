@@ -65,14 +65,14 @@ public class DefaultLinkBehaviour : BaseBehaviour
 
     private void HandleSourcePortConnected(LinkSourcePortChangedEvent obj)
     {
-        obj.OldSourcePort.OutgoingLinks.Remove(obj.Model);
-        obj.NewSourcePort.OutgoingLinks.Add(obj.Model);
+        obj.OldSourcePort.OutgoingLinks.RemoveInternal(obj.Model);
+        obj.NewSourcePort.OutgoingLinks.AddInternal(obj.Model);
     }
 
     private void HandleTargetPortChanged(LinkTargetPortChangedEvent obj)
     {
-        obj.OldTargetPort?.IncomingLinks.Remove(obj.Model);
-        obj.NewTargetPort?.IncomingLinks.Add(obj.Model);
+        obj.OldTargetPort?.IncomingLinks.RemoveInternal(obj.Model);
+        obj.NewTargetPort?.IncomingLinks.AddInternal(obj.Model);
         if (obj.NewTargetPort is not null)
         {
             obj.Model.SetTargetPosition(obj.NewTargetPort);

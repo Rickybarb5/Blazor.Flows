@@ -23,8 +23,8 @@ public class DrawLinkBehaviorTests
         using var service = CreateService();
         var sourceNode = new Node();
         var sourcePort = new Port();
-        sourceNode.Ports.Add(sourcePort);
         service.Add.Node(sourceNode);
+        service.Add.PortTo(sourceNode, sourcePort);
 
         DrawLinkStartEvent? capturedEvent = null;
         service.Events.SubscribeTo<DrawLinkStartEvent>(e => capturedEvent = e);
@@ -53,8 +53,8 @@ public class DrawLinkBehaviorTests
         using var service = CreateService();
         var sourceNode = new Node();
         var sourcePort = new Port();
-        sourceNode.Ports.Add(sourcePort);
         service.Add.Node(sourceNode);
+        service.Add.PortTo(sourceNode, sourcePort);
 
         // Start link creation
         var startArgs = new PointerEventArgs
@@ -93,10 +93,10 @@ public class DrawLinkBehaviorTests
         var targetNode = new Node();
         var sourcePort = new Port();
         var targetPort = new Port();
-        sourceNode.Ports.Add(sourcePort);
-        targetNode.Ports.Add(targetPort);
         service.Add.Node(sourceNode);
         service.Add.Node(targetNode);
+        service.Add.PortTo(sourceNode, sourcePort);
+        service.Add.PortTo(targetNode, targetPort);
 
         DrawLinkCreatedEvent? capturedEvent = null;
         service.Events.SubscribeTo<DrawLinkCreatedEvent>(e => capturedEvent = e);
@@ -132,7 +132,7 @@ public class DrawLinkBehaviorTests
         sourcePort.Setup(x => x.Parent).Returns(sourceNode);
         sourcePort.Setup(x => x.IncomingLinks).Returns([]);
         sourcePort.Setup(x => x.OutgoingLinks).Returns([]);
-        sourceNode.Ports.Add(sourcePort.Object);
+        service.Add.PortTo(sourceNode, sourcePort.Object);
         service.Add.Node(sourceNode);
 
         DrawLinkCancelledEvent? capturedEvent = null;
@@ -161,8 +161,8 @@ public class DrawLinkBehaviorTests
         using var service = CreateService();
         var sourceNode = new Node();
         var sourcePort = new Port();
-        sourceNode.Ports.Add(sourcePort);
         service.Add.Node(sourceNode);
+        service.Add.PortTo(sourceNode, sourcePort);
 
         // Start link creation
         var startArgs = new PointerEventArgs
@@ -189,8 +189,8 @@ public class DrawLinkBehaviorTests
 
         var sourceNode = new Node();
         var sourcePort = new Port();
-        sourceNode.Ports.Add(sourcePort);
         service.Add.Node(sourceNode);
+        service.Add.PortTo(sourceNode, sourcePort);
 
         var startArgs = new PointerEventArgs
         {

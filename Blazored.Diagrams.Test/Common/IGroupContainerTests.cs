@@ -24,7 +24,7 @@ public class GroupContainerTests
         foreach (var container in containers)
         {
             // Act
-            container.Groups.Add(group);
+            container.Groups.AddInternal(group);
 
             //Assert
             Assert.Same(group, container.Groups[0]);
@@ -40,9 +40,9 @@ public class GroupContainerTests
         var group = new Group();
         foreach (var container in containers)
         {
-            container.Groups.Add(group);
+            container.Groups.AddInternal(group);
             // Act
-            container.Groups.Remove(group);
+            container.Groups.RemoveInternal(group);
 
             //Assert
             Assert.Empty(container.Groups);

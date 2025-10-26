@@ -214,7 +214,7 @@ public class NodeTests
         });
 
         //Act
-        node.Ports.Add(added);
+        node.Ports.AddInternal(added);
 
         //Assert
         Assert.Single(node.Ports);
@@ -235,10 +235,10 @@ public class NodeTests
             Assert.Same(port, e.Port);
             Assert.Same(node, e.Model);
         });
-        node.Ports.Add(port);
+        node.Ports.AddInternal(port);
 
         //Act
-        node.Ports.Remove(port);
+        node.Ports.RemoveInternal(port);
 
         //Assert
         Assert.Empty(node.Ports);
@@ -249,10 +249,8 @@ public class NodeTests
     public void Test_Dispose()
     {
         // Arrange
-        var obj = new Node
-        {
-            Ports = [new Port()]
-        };
+        var obj = new Node();
+        obj.Ports.AddInternal(new Port());
 
         //Act
         obj.Dispose();

@@ -109,8 +109,8 @@ public class DrawLinkBehavior : BaseBehaviour
             CanLinkBeCreated(sourcePort, targetPort);
         }
 
-        sourcePort.OutgoingLinks.Add(link);
-        targetPort?.IncomingLinks.Add(link);
+        sourcePort.OutgoingLinks.AddInternal(link);
+        targetPort?.IncomingLinks.AddInternal(link);
         return link;
     }
 
@@ -188,19 +188,19 @@ public class DrawLinkBehavior : BaseBehaviour
     {
         if (CanLinkToTarget())
         {
-            //Port gets selected when the pointer goes down.
-            _sourcePort!.IsSelected = false;
-            _targetPort!.IncomingLinks.Add(Link!);
+            _targetPort!.IncomingLinks.AddInternal(Link!);
             _service.Events.Publish(new DrawLinkCreatedEvent(Link!));
         }
         else
         {
             if(_sourcePort is not null && Link is not null)
-                _sourcePort.OutgoingLinks.Remove(Link);
+                _sourcePort.OutgoingLinks.RemoveInternal(Link);
             
             _service.Events.Publish(new DrawLinkCancelledEvent(Link!));
         }
 
+        //Port gets selected when the pointer goes down.
+        if (_sourcePort != null) _sourcePort.IsSelected = false;
         ClearUnboundedLinks();
 
         Link = null;

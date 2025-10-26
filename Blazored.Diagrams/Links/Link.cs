@@ -36,7 +36,7 @@ public abstract partial class Link : ILink, IHasComponent<DefaultLinkComponent>
             {
                 var oldPort = _sourcePort;
                 _sourcePort = value;
-                _sourcePort.OutgoingLinks.Add(this);
+                _sourcePort.OutgoingLinks.AddInternal(this);
                 OnSourcePortChanged.Publish(new(this, oldPort, _sourcePort));
             }
         }
@@ -53,7 +53,7 @@ public abstract partial class Link : ILink, IHasComponent<DefaultLinkComponent>
             {
                 var oldTargetPort = _targetPort;
                 _targetPort = value;
-                _targetPort?.IncomingLinks.Add(this);
+                _targetPort?.IncomingLinks.AddInternal(this);
                 OnTargetPortChanged.Publish(new(this, oldTargetPort, _targetPort));
             }
         }
@@ -185,7 +185,7 @@ public abstract partial class Link : ILink, IHasComponent<DefaultLinkComponent>
     /// Severs the connection between link and ports.
     public virtual void Dispose()
     {
-        _sourcePort?.OutgoingLinks.Remove(this);
-        _targetPort?.IncomingLinks.Remove(this);
+        _sourcePort?.OutgoingLinks.RemoveInternal(this);
+        _targetPort?.IncomingLinks.RemoveInternal(this);
     }
 }

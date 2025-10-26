@@ -6,7 +6,7 @@
             <MudText>Edit Link</MudText>
         </MudCardHeader>
         <MudCardContent>
-            <MudSelect T="Type" Value="@(typeof(CurvedLink))" ValueChanged="ctx => OnSelectChanged(SelectedItem, ctx)">
+            <MudSelect T="Type" Value="SelectedItem.GetType()" ValueChanged="ctx => OnSelectChanged(SelectedItem, ctx)">
                 <MudSelectItem T="Type" Value="@(typeof(LineLink))">Line</MudSelectItem>
                 <MudSelectItem T="Type" Value="@(typeof(CurvedLink))">Curve</MudSelectItem>
                 <MudSelectItem T="Type" Value="@(typeof(OrthogonalLink))">Orthogonal</MudSelectItem>

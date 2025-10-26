@@ -76,16 +76,46 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
         OnPortAddedToGroup?.Publish(new(this, obj.Item));
         OnPortAdded.Publish(new(obj.Item));
     }
+    
+    /// <summary>
+    /// Adds a port to the port list.
+    /// This method is useful if you want to initialize a node with default ports.
+    /// </summary>
+    /// <param name="port">The port that will be added.</param>
+    protected void AddPortInternal(IPort port)
+    {
+        Ports.AddInternal(port);
+    }
+    
+    /// <summary>
+    /// Adds a node to the node list.
+    /// This method is useful if you want to initialize a node with default ports.
+    /// </summary>
+    /// <param name="node">Node to be added</param>
+    protected void AddNodeInternal(INode node)
+    {
+        Nodes.AddInternal(node);
+    }
 
+    /// <summary>
+    /// Adds a group to the group list.
+    /// This method is useful if you want to initialize a node with default ports.
+    /// </summary>
+    /// <param name="group"></param>
+    protected void AddGroupInternal(IGroup group)
+    {
+        Groups.AddInternal(group);
+    }
+    
     /// <inheritdoc />
     public virtual void Dispose()
     {
         _ports.ForEach(x => x.Dispose());
-        _ports.Clear();
+        _ports.ClearInternal();
         _nodes.ForEach(x => x.Dispose());
-        _nodes.Clear();
+        _nodes.ClearInternal();
         _groups.ForEach(x => x.Dispose());
-        _groups.Clear();
+        _groups.ClearInternal();
         _nodes.OnItemAdded.Unsubscribe(HandleNodeAdded);
         _nodes.OnItemRemoved.Unsubscribe(HandleNodeRemoved);
 
@@ -212,8 +242,8 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
         get => _ports;
         set
         {
-            _ports.Clear();
-            value.ForEach(p=>_ports.Add(p));
+            _ports.ClearInternal();
+            value.ForEach(p=>_ports.AddInternal(p));
         }
     }
 
@@ -223,8 +253,8 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
         get => _nodes;
         set
         {
-            _nodes.Clear();
-            value.ForEach(n=>_nodes.Add(n));
+            _nodes.ClearInternal();
+            value.ForEach(n=>_nodes.AddInternal(n));
         }
     }
 
@@ -234,8 +264,8 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
         get => _groups;
         set
         {
-            _groups.Clear();
-            value.ForEach(g=>_groups.Add(g));
+            _groups.ClearInternal();
+            value.ForEach(g=>_groups.AddInternal(g));
         }
     }
 

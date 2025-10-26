@@ -67,7 +67,7 @@ public class DefaultLayerBehaviour : BaseBehaviour
 
         if (!_service.Diagram.Layers.Contains(obj.NewLayer))
         {
-            _service.Diagram.Layers.Add(obj.NewLayer);
+            _service.Diagram.Layers.AddInternal(obj.NewLayer);
         }
     }
 

@@ -26,7 +26,7 @@
                 var port = new Port();
                 port.Justification = alignment;
                 port.Alignment = position;
-                Node.Ports.Add(port);
+                Service.Add.PortTo(Node, port);
                 return;
             }
         }

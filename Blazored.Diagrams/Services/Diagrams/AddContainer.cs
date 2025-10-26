@@ -36,7 +36,7 @@ public class AddContainer : IAddContainer
             group.CenterIn(s.Width, s.Height, p.PositionX, p.PositionY, padding);
         }
         
-        parent.Groups.Add(group);
+        parent.Groups.AddInternal(group);
         return this;
     }
 
@@ -56,7 +56,7 @@ public class AddContainer : IAddContainer
             node.CenterIn(s.Width, s.Height, p.PositionX, p.PositionY, padding);
         }
         
-        nodeContainer.Nodes.Add(node);
+        nodeContainer.Nodes.AddInternal(node);
         return this;
     }
 
@@ -70,7 +70,7 @@ public class AddContainer : IAddContainer
     public IAddContainer PortTo<TPort>(IPortContainer parent, TPort port)
         where TPort : IPort
     {
-        parent.Ports.Add(port);
+        parent.Ports.AddInternal(port);
         return this;
     }
 
@@ -85,8 +85,8 @@ public class AddContainer : IAddContainer
     public IAddContainer AddLinkTo<TLink>(ILinkContainer sourcePort, ILinkContainer? targetPort, TLink link)
         where TLink : ILink
     {
-        sourcePort.OutgoingLinks.Add(link);
-        targetPort?.IncomingLinks.Add(link);
+        sourcePort.OutgoingLinks.AddInternal(link);
+        targetPort?.IncomingLinks.AddInternal(link);
         return this;
     }
 
@@ -99,7 +99,7 @@ public class AddContainer : IAddContainer
     public IAddContainer Layer<TLayer>(TLayer layer)
         where TLayer : ILayer
     {
-        service.Diagram.Layers.Add(layer);
+        service.Diagram.Layers.AddInternal(layer);
         return this;
     }
 
@@ -110,7 +110,7 @@ public class AddContainer : IAddContainer
         {
             node.CenterIn(service.Diagram);
         }
-        service.Diagram.CurrentLayer.Nodes.Add(node);
+        service.Diagram.CurrentLayer.Nodes.AddInternal(node);
         return this;
     }
 
@@ -121,14 +121,14 @@ public class AddContainer : IAddContainer
         {
             group.CenterIn(service.Diagram);
         }
-        service.Diagram.CurrentLayer.Groups.Add(group);
+        service.Diagram.CurrentLayer.Groups.AddInternal(group);
         return this;
     }
 
     /// <inheritdoc />
     public virtual IAddContainer AddLayer(ILayer layer)
     {
-        service.Diagram.Layers.Add(layer);
+        service.Diagram.Layers.AddInternal(layer);
         return this;
     }
 }

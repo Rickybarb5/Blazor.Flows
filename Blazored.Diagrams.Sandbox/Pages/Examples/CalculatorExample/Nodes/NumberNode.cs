@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.Nodes;
 
-public partial class NumberNode : Node, IHasComponent<NumberNodeComponent>, INumberResult
+public class NumberNode : Node, IHasComponent<NumberNodeComponent>, INumberResult
 {
     private decimal? _number;
     public NumberNodePort Port { get; init; }
@@ -32,8 +32,7 @@ public partial class NumberNode : Node, IHasComponent<NumberNodeComponent>, INum
             Parent = this,
             Alignment = PortAlignment.Right,
         };
-
-        Ports.Add(Port);
+        AddPortInternal(Port);
     }
 
 }

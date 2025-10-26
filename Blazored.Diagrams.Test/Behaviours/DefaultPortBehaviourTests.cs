@@ -26,7 +26,7 @@ public class DefaultPortBehaviourTests
         service.Add.Node(node);
 
         // Act
-        node.Ports.Add(port);
+        service.Add.PortTo(node, port);
 
         // Assert
         Assert.Equal(node, port.Parent);
@@ -42,7 +42,7 @@ public class DefaultPortBehaviourTests
         service.Add.Group(group);
 
         // Act
-        group.Ports.Add(port);
+        service.Add.PortTo(group, port);
 
         // Assert
         Assert.Equal(group, port.Parent);
@@ -68,7 +68,7 @@ public class DefaultPortBehaviourTests
         var node = new Node { Width = 100, Height = 100, PositionX = 50, PositionY = 50 };
         var port = new Port { Width = 100, Height = 100 };
         service.Add.Node(node);
-        node.Ports.Add(port);
+        service.Add.PortTo(node, port);
 
         var initialX = port.PositionX;
         var initialY = port.PositionY;
@@ -89,7 +89,7 @@ public class DefaultPortBehaviourTests
         var node = new Node { Width = 100, Height = 100, PositionX = 0, PositionY = 0 };
         var port = new Port { Width = 10, Height = 10, Alignment = PortAlignment.Left };
         service.Add.Node(node);
-        node.Ports.Add(port);
+        service.Add.PortTo(node, port);
 
         var initialX = port.PositionX;
         var initialY = port.PositionY;
@@ -111,8 +111,8 @@ public class DefaultPortBehaviourTests
         var targetNode = new Node();
         var sourcePort = new Port();
         var targetPort = new Port();
-        sourceNode.Ports.Add(sourcePort);
-        targetNode.Ports.Add(targetPort);
+        service.Add.PortTo(sourceNode, sourcePort);
+        service.Add.PortTo(targetNode, targetPort);
         service.Add.Node(sourceNode);
         service.Add.Node(targetNode);
         var link = new LineLink();
@@ -133,8 +133,8 @@ public class DefaultPortBehaviourTests
         var targetNode = new Node();
         var sourcePort = new Port();
         var targetPort = new Port();
-        sourceNode.Ports.Add(sourcePort);
-        targetNode.Ports.Add(targetPort);
+        service.Add.PortTo(sourceNode, sourcePort);
+        service.Add.PortTo(targetNode, targetPort);
         service.Add.Node(sourceNode);
         service.Add.Node(targetNode);
         var link = new LineLink();
@@ -154,7 +154,7 @@ public class DefaultPortBehaviourTests
         var node = new Node { Width = 100, Height = 100 };
         var port = new Port { Width = 10, Height = 10, Alignment = PortAlignment.Right };
         service.Add.Node(node);
-        node.Ports.Add(port);
+        service.Add.PortTo(node, port);
 
         var initialX = port.PositionX;
 
@@ -174,8 +174,8 @@ public class DefaultPortBehaviourTests
         var targetNode = new Node();
         var sourcePort = new Port();
         var targetPort = new Port();
-        sourceNode.Ports.Add(sourcePort);
-        targetNode.Ports.Add(targetPort);
+        service.Add.PortTo(sourceNode, sourcePort);
+        service.Add.PortTo(targetNode, targetPort);
         service.Add.Node(sourceNode);
         service.Add.Node(targetNode);
         
@@ -183,7 +183,7 @@ public class DefaultPortBehaviourTests
        service.Add.AddLinkTo<Link>(sourcePort, targetPort, link);
 
         // Act
-        targetPort.IncomingLinks.Remove(link);
+        targetPort.IncomingLinks.RemoveInternal(link);
 
         // Assert
         Assert.Null(link.TargetPort);
@@ -198,8 +198,8 @@ public class DefaultPortBehaviourTests
         var targetNode = new Node();
         var sourcePort = new Port();
         var targetPort = new Port();
-        sourceNode.Ports.Add(sourcePort);
-        targetNode.Ports.Add(targetPort);
+        service.Add.PortTo(sourceNode, sourcePort);
+        service.Add.PortTo(targetNode, targetPort);
         service.Add.Node(sourceNode);
         service.Add.Node(targetNode);
 
@@ -207,7 +207,7 @@ public class DefaultPortBehaviourTests
         service.Add.AddLinkTo(sourcePort, targetPort, link);
 
         // Act
-        sourcePort.OutgoingLinks.Remove(link);
+        sourcePort.OutgoingLinks.RemoveInternal(link);
 
         // Assert
         Assert.DoesNotContain(link, service.Diagram.AllLinks);
@@ -223,7 +223,7 @@ public class DefaultPortBehaviourTests
         var node = new Node { Width = 100, Height = 100 };
         var port = new Port { Width = 10, Height = 10 };
         service.Add.Node(node);
-        node.Ports.Add(port);
+        service.Add.PortTo(node, port);
 
         var initialX = port.PositionX;
         var initialY = port.PositionY;

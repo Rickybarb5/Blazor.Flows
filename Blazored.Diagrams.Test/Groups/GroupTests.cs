@@ -1,4 +1,3 @@
-using Blazored.Diagrams.Diagrams;
 using Blazored.Diagrams.Groups;
 using Blazored.Diagrams.Nodes;
 using Blazored.Diagrams.Ports;
@@ -245,7 +244,7 @@ public class GroupTests
         });
 
         //Act
-        group.Nodes.Add(node);
+        group.Nodes.AddInternal(node);
 
         //Assert
         Assert.Single(group.Nodes);
@@ -266,10 +265,10 @@ public class GroupTests
             Assert.Same(node, e.Node);
             Assert.Same(group, e.Model);
         });
-        group.Nodes.Add(node);
+        group.Nodes.AddInternal(node);
 
         //Act
-        group.Nodes.Remove(node);
+        group.Nodes.RemoveInternal(node);
 
         //Assert
         Assert.Empty(group.Nodes);
@@ -292,7 +291,7 @@ public class GroupTests
         });
 
         //Act
-        group.Groups.Add(added);
+        group.Groups.AddInternal(added);
 
         //Assert
         Assert.Single(group.Groups);
@@ -313,10 +312,10 @@ public class GroupTests
             Assert.Same(added, e.RemovedGroup);
             Assert.Same(group, e.ParentModel);
         });
-        group.Groups.Add(added);
+        group.Groups.AddInternal(added);
 
         //Act
-        group.Groups.Remove(added);
+        group.Groups.RemoveInternal(added);
 
         //Assert
         Assert.Empty(group.Groups);
@@ -339,7 +338,7 @@ public class GroupTests
         });
 
         //Act
-        group.Ports.Add(added);
+        group.Ports.AddInternal(added);
 
         //Assert
         Assert.Single(group.Ports);
@@ -360,10 +359,10 @@ public class GroupTests
             Assert.Same(added, e.Port);
             Assert.Same(group, e.Model);
         });
-        group.Ports.Add(added);
+        group.Ports.AddInternal(added);
 
         //Act
-        group.Ports.Remove(added);
+        group.Ports.RemoveInternal(added);
 
         //Assert
         Assert.Empty(group.Ports);
@@ -375,12 +374,14 @@ public class GroupTests
     {
         // Arrange
         //Act
-        var obj = new Group
-        {
-            Ports = [new Port()],
-            Nodes = [new Node { Ports = [new Port()] }],
-            Groups = [new Group { Ports = [new Port()] }],
-        };
+        var obj = new Group();
+        var node = new Node();
+        var group = new Group();
+        node.Ports.AddInternal(new Port());
+        group.Ports.AddInternal(new Port());
+        obj.Ports.AddInternal(new Port());
+        obj.Nodes.AddInternal(node);
+        obj.Groups.AddInternal(group);
 
         //Assert
         Assert.Equal(3, obj.AllPorts.Count);
@@ -391,11 +392,12 @@ public class GroupTests
     {
         // Arrange
         //Act
-        var obj = new Group
-        {
-            Nodes = [new Node { Ports = [new Port()] }],
-            Groups = [new Group { Nodes = [new Node()] }],
-        };
+        var obj = new Group();
+        var innerNode = new Node();
+        var innerGroup = new Group();
+        obj.Nodes.AddInternal(new Node());
+        obj.Groups.AddInternal(innerGroup);
+        innerGroup.Nodes.AddInternal(innerNode);
 
         //Assert
         Assert.Equal(2, obj.AllNodes.Count);
@@ -406,10 +408,12 @@ public class GroupTests
     {
         // Arrange
         //Act
-        var obj = new Group
-        {
-            Groups = [new Group { Groups = [new Group()] }],
-        };
+        var obj = new Group();
+        
+        var nestedGroup = new Group();
+        var lv2Group = new Group();
+        obj.Groups.AddInternal(nestedGroup);
+        nestedGroup.Groups.AddInternal(lv2Group);
         //Assert
         Assert.Equal(2, obj.AllGroups.Count);
     }
@@ -418,12 +422,10 @@ public class GroupTests
     public void Test_Dispose()
     {
         // Arrange
-        var obj = new Group
-        {
-            Ports = [new Port()],
-            Nodes = [new Node()],
-            Groups = [new Group()],
-        };
+        var obj = new Group();
+        obj.Nodes.AddInternal(new Node());
+        obj.Groups.AddInternal(new Group());
+        obj.Ports.AddInternal(new Port());
 
         //Act
         obj.Dispose();
@@ -439,20 +441,10 @@ public class GroupTests
         // Arrange
         var nestedGroup = new Group { IsSelected = true };
         var node = new Node { IsSelected = true };
-        var parentGroup = new Group
-        {
-            Groups =
-            [
-                nestedGroup,
-            ],
-            Nodes =
-            [
-                node,
-            ]
-        };
+        var parentGroup = new Group();
         
-        parentGroup.Groups.Add(nestedGroup);
-        parentGroup.Nodes.Add(node);
+        parentGroup.Groups.AddInternal(nestedGroup);
+        parentGroup.Nodes.AddInternal(node);
         // Act
         parentGroup.UnselectAll();
 
@@ -465,23 +457,12 @@ public class GroupTests
     public void Group_SelectAll_ShouldSelectAllNestedModels()
     {
         // Arrange
-        var diagram = new Diagram();
         var nestedGroup = new Group { IsSelected = false };
         var node = new Node { IsSelected = false };
-        var parentGroup = new Group
-        {
-            Groups =
-            [
-                nestedGroup,
-            ],
-            Nodes =
-            [
-                node,
-            ]
-        };
+        var parentGroup = new Group();
 
-        parentGroup.Groups.Add(nestedGroup);
-        parentGroup.Nodes.Add(node);
+        parentGroup.Groups.AddInternal(nestedGroup);
+        parentGroup.Nodes.AddInternal(node);
 
         // Act
         parentGroup.SelectAll();

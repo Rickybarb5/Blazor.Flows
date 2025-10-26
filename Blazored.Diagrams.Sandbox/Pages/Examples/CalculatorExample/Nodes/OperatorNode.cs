@@ -32,14 +32,14 @@ public class OperatorNode : Node, IHasComponent<OperatorNodeComponent>, INumberR
             Parent = this,
             Alignment = PortAlignment.Left,
         };
-        Ports.Add(InputPort);
 
         OutputPort = new OperatorOutputPort
         {
             Parent = this,
             Alignment = PortAlignment.Right,
         };
-        Ports.Add(OutputPort);
+        AddPortInternal(InputPort);
+        AddPortInternal(OutputPort);
     }
     
   

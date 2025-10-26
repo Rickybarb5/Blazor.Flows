@@ -261,10 +261,10 @@ public ITypedEvent<LinkAddedEvent> OnLinkAdded { get; init; } = new TypedEvent<L
         get => _outgoingLinks;
         set
         {
-            _outgoingLinks.Clear();
+            _outgoingLinks.ClearInternal();
             value.ForEach(val =>
             {
-                _outgoingLinks.Add(val);
+                _outgoingLinks.AddInternal(val);
                 val.SourcePort = this;
             });
         }
@@ -276,10 +276,10 @@ public ITypedEvent<LinkAddedEvent> OnLinkAdded { get; init; } = new TypedEvent<L
         get => _incomingLinks;
         set
         {
-            _incomingLinks.Clear();
+            _incomingLinks.ClearInternal();
             value.ForEach(val =>
             {
-                _incomingLinks.Add(val);
+                _incomingLinks.AddInternal(val);
                 val.TargetPort = this;
             });
         }
@@ -298,7 +298,7 @@ public ITypedEvent<LinkAddedEvent> OnLinkAdded { get; init; } = new TypedEvent<L
             {
                 var oldParent = _parent;
                 _parent = value;
-                _parent.Ports.Add(this);
+                _parent.Ports.AddInternal(this);
                 OnPortParentChanged.Publish(new(this, oldParent, _parent));
             }
         }
@@ -309,9 +309,9 @@ public ITypedEvent<LinkAddedEvent> OnLinkAdded { get; init; } = new TypedEvent<L
     {
         _incomingLinks.ForEach(x => x.Dispose());
         _outgoingLinks.ForEach(x => x.Dispose());
-        _incomingLinks.Clear();
-        _outgoingLinks.Clear();
-        _parent.Ports.Remove(this);
+        _incomingLinks.ClearInternal();
+        _outgoingLinks.ClearInternal();
+        _parent.Ports.RemoveInternal(this);
 
         _incomingLinks.OnItemAdded.Unsubscribe(HandleIncomingLinkAdded);
         _incomingLinks.OnItemRemoved.Unsubscribe(HandleIncomingLinkRemoved);

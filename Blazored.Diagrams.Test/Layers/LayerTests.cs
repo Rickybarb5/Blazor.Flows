@@ -68,7 +68,7 @@ public class LayerTests
         });
 
         //Act
-        layer.Nodes.Add(node);
+        layer.Nodes.AddInternal(node);
 
         //Assert
         Assert.Single(layer.Nodes);
@@ -89,10 +89,10 @@ public class LayerTests
             Assert.Same(node, e.Node);
             Assert.Same(layer, e.Model);
         });
-        layer.Nodes.Add(node);
+        layer.Nodes.AddInternal(node);
 
         //Act
-        layer.Nodes.Remove(node);
+        layer.Nodes.RemoveInternal(node);
 
         //Assert
         Assert.Empty(layer.Nodes);
@@ -115,7 +115,7 @@ public class LayerTests
         });
 
         //Act
-        layer.Groups.Add(added);
+        layer.Groups.AddInternal(added);
 
         //Assert
         Assert.Single(layer.Groups);
@@ -136,10 +136,10 @@ public class LayerTests
             Assert.Same(added, e.RemovedGroup);
             Assert.Same(layer, e.Model);
         });
-        layer.Groups.Add(added);
+        layer.Groups.AddInternal(added);
 
         //Act
-        layer.Groups.Remove(added);
+        layer.Groups.RemoveInternal(added);
 
         //Assert
         Assert.Empty(layer.Groups);
@@ -151,11 +151,12 @@ public class LayerTests
     {
         //Arrange
         var layer = Instance;
-        var added = new Group { Groups = [new Group()] };
+        var added = new Group();
+        added.Groups.AddInternal(new Group());
 
 
         //Act
-        layer.Groups.Add(added);
+        layer.Groups.AddInternal(added);
 
         //Assert
         Assert.Equal(2, layer.AllGroups.Count);
@@ -166,13 +167,14 @@ public class LayerTests
     {
         //Arrange
         var layer = Instance;
-        var group = new Group { Nodes = [new Node()] };
+        var group = new Group();
+        group.Nodes.AddInternal(new Node());
         var node = new Node();
 
 
         //Act
-        layer.Nodes.Add(node);
-        layer.Groups.Add(group);
+        layer.Nodes.AddInternal(node);
+        layer.Groups.AddInternal(group);
 
         //Assert
         Assert.Equal(2, layer.AllNodes.Count);
@@ -190,8 +192,8 @@ public class LayerTests
         var sourcePort = new Port();
         var targetPort = new Port();
 
-        node1.Ports.Add(sourcePort);
-        node2.Ports.Add(targetPort);
+        node1.Ports.AddInternal(sourcePort);
+        node2.Ports.AddInternal(targetPort);
         var link = new LineLink
         {
             IsSelected = true,
@@ -199,10 +201,10 @@ public class LayerTests
             TargetPort = targetPort
         };
 
-        layer.Nodes.Add(node1);
-        layer.Nodes.Add(node2);
-        layer.Groups.Add(group);
-        diagram.Layers.Add(layer);
+        layer.Nodes.AddInternal(node1);
+        layer.Nodes.AddInternal(node2);
+        layer.Groups.AddInternal(group);
+        diagram.Layers.AddInternal(layer);
 
         // Act
         layer.UnselectAll();
@@ -226,13 +228,13 @@ public class LayerTests
         var sourcePort = new Port();
         var targetPort = new Port();
 
-        node1.Ports.Add(sourcePort);
-        node2.Ports.Add(targetPort);
+        node1.Ports.AddInternal(sourcePort);
+        node2.Ports.AddInternal(targetPort);
 
-        layer.Nodes.Add(node1);
-        layer.Nodes.Add(node2);
-        layer.Groups.Add(group);
-        diagram.Layers.Add(layer);
+        layer.Nodes.AddInternal(node1);
+        layer.Nodes.AddInternal(node2);
+        layer.Groups.AddInternal(group);
+        diagram.Layers.AddInternal(layer);
         var link = new LineLink { SourcePort = sourcePort, TargetPort = targetPort };
         link.IsSelected = true;
 
@@ -256,10 +258,10 @@ public class LayerTests
         var nestedGroup = new Group { IsSelected = true };
         var node = new Node { IsSelected = true };
 
-        group.Groups.Add(nestedGroup);
-        group.Nodes.Add(node);
-        layer.Groups.Add(group);
-        diagram.Layers.Add(layer);
+        group.Groups.AddInternal(nestedGroup);
+        group.Nodes.AddInternal(node);
+        layer.Groups.AddInternal(group);
+        diagram.Layers.AddInternal(layer);
 
         // Act
         layer.UnselectAll();
@@ -280,10 +282,10 @@ public class LayerTests
         var nestedGroup = new Group { IsSelected = false };
         var node = new Node { IsSelected = false };
 
-        group.Groups.Add(nestedGroup);
-        group.Nodes.Add(node);
-        layer.Groups.Add(group);
-        diagram.Layers.Add(layer);
+        group.Groups.AddInternal(nestedGroup);
+        group.Nodes.AddInternal(node);
+        layer.Groups.AddInternal(group);
+        diagram.Layers.AddInternal(layer);
 
         // Act
         layer.SelectAll();

@@ -100,9 +100,9 @@
     {
         // Todo user builders.
         var diagramNode1 = new Node();
-        diagramNode1.Ports.Add(new Port());
         var diagramNode2 = new Node();
         Service.Add.Node(diagramNode1);
+        Service.Add.PortTo(diagramNode1, new Port());
         Service.Add.Node(diagramNode2);
 
         var group1 = new Group();
@@ -136,20 +136,18 @@
 
         Service.Add.Group(group1);
         Service.Add.Group(group2);
-        group1.Nodes.Add(node1);
-        group1.Nodes.Add(node2);
-        group2.Nodes.Add(node3);
-        group2.Nodes.Add(node4);
-
-        nestedGroup.Nodes.Add(node5);
-        nestedGroup.Nodes.Add(node6);
-        group2.Groups.Add(nestedGroup);
-
-        node1.Ports.Add(port1);
-        node2.Ports.Add(port2);
-
-        group1.Ports.Add(port3);
-        group2.Ports.Add(port4);
+        Service.Add.NodeTo(group1, node1);
+        Service.Add.NodeTo(group1, node2);
+        Service.Add.NodeTo(group2, node3);
+        Service.Add.NodeTo(group2, node4);
+        Service.Add.NodeTo(nestedGroup, node5);
+        Service.Add.NodeTo(nestedGroup, node6);
+        Service.Add.AddGroupTo(group2, nestedGroup);
+        Service.Add.PortTo(node1, port1);
+        Service.Add.PortTo(node2, port2);
+        Service.Add.PortTo(group1, port3);
+        Service.Add.PortTo(group2, port4);
+        
         StateHasChanged();
     }
 

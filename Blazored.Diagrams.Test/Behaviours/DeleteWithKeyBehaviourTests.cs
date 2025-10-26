@@ -69,8 +69,9 @@ public class DeleteWithKeyBehaviourTests
         var group1 = new Group { IsSelected = true };
         var group2 = new Group { IsSelected = false };
 
-        group1.Ports.Add(sourcePort);
-        group2.Ports.Add(targetPort);
+        service.Add.PortTo(group1, sourcePort);
+        service.Add.PortTo(group2, targetPort);
+        
         var link1 = new LineLink { IsSelected = true, SourcePort = sourcePort, TargetPort = targetPort };
         service.Add.Group(group1);
         service.Add.Group(group2);
@@ -97,8 +98,8 @@ public class DeleteWithKeyBehaviourTests
         service.Add.Group(group);
         var sourcePort = new Port();
         var targetPort = new Port();
-        node.Ports.Add(sourcePort);
-        group.Ports.Add(targetPort);
+        service.Add.PortTo(node, sourcePort);
+        service.Add.PortTo(group, targetPort);
         var link = new LineLink();
         service.Add.AddLinkTo(sourcePort, targetPort, link);
         link.IsSelected = true;
