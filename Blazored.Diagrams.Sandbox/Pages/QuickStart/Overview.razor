@@ -1,6 +1,6 @@
 @page "/"
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="my-8">
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-8">
     <MudGrid Justify="Justify.Center">
 
         <MudItem xs="12" sm="10">
@@ -9,28 +9,25 @@
                     <MudText Typo="Typo.h4" Color="Color.Primary">🚀 Get Started</MudText>
                 </MudCardHeader>
                 <MudCardContent>
-                    <MudTimeline Align="TimelineAlign.Start">
+                    <MudTimeline  TimelineAlign="TimelineAlign.Default" TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Start">
 
-                        <MudTimelineItem Color="Color.Primary" Size="Size.Large">
-                                <ItemOpposite>
-                                    <MudText Typo="Typo.h6">Step 1: Install NuGet Package</MudText>
-                                    <MudText Class="mb-2">Add the core package to your Blazor project:</MudText>
-                                    <CodeHighlighter Code="dotnet add package Blazored.Diagrams" Language="powershell"></CodeHighlighter>
-
-                                </ItemOpposite>
+                        <MudTimelineItem Color="Color.Primary" Size="Size.Medium">
+                                <MudText Typo="Typo.h6">Step 1: Install NuGet Package</MudText>
+                                <MudText Class="mb-2">Add the core package to your Blazor project:</MudText>
+                                <CodeHighlighter Code="dotnet add package Blazored.Diagrams" Language="powershell"></CodeHighlighter>
                         </MudTimelineItem>
 
-                        <MudTimelineItem Color="Color.Secondary" Size="Size.Large">
-                            <ItemOpposite>
+                        <MudTimelineItem Color="Color.Secondary" Size="Size.Medium" I>
                                 <MudText Typo="Typo.h6">Step 2: Register Services</MudText>
                                 <MudText Class="mb-2">In your `Program.cs` or `Startup.cs`, register the required services:</MudText>
                                 <CodeHighlighter Code="@($"builder.Services.{nameof(BlazoredDiagramsExtensions.AddBlazoredDiagrams)}();")" Language="csharp"></CodeHighlighter>
-                            </ItemOpposite>
+                                <MudText Class="mb-2">In your `index.html` or `_Host.cs` add:</MudText>
+                                <CodeHighlighter Code="@($"<script src=\"_content/Blazored.Diagrams/Blazored.Diagrams.js\"></script>")" Language="markup"></CodeHighlighter>
+                                <CodeHighlighter Code="@($"<link href=\"_content/Blazored.Diagrams/Blazored.Diagrams.css\" rel=\"stylesheet\"/>")" Language="markup"></CodeHighlighter>
+                                
                         </MudTimelineItem>
-                        <MudTimelineItem Color="Color.Success" Size="Size.Large">
-                            <ItemOpposite>
-                                <MudText Typo="Typo.h6">Step 3: Start developing!</MudText>
-                                </ItemOpposite>
+                        <MudTimelineItem Color="Color.Success" Size="Size.Medium">
+                            <MudText Typo="Typo.h6">Step 3: Start developing!</MudText>
                         </MudTimelineItem>
                     </MudTimeline>
                 </MudCardContent>

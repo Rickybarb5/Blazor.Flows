@@ -19,7 +19,7 @@
     ///     Cascading diagram from <see cref="DiagramContainer"/>
     /// </summary>
     [CascadingParameter]
-    public required IDiagramService? DiagramService { get; set; }
+    public required IDiagramService DiagramService { get; set; }
 
     [Inject] private IResizeObserverService ResizeObserverService { get; set; } = null!;
 
@@ -64,7 +64,7 @@
     /// <summary>
     /// Current container style.
     /// </summary>
-    public string ContainerStyle => $"position:absolute;left:{PositionX}px; top:{PositionY}px;width:{Width}px;height:{Height}px;pointer-events:none";
+    public string ContainerStyle => $"position:absolute;left:{PositionX}px;top:{PositionY}px;width:{Width}px;height:{Height}px;pointer-events:none;";
 
 
     /// <summary>
@@ -86,11 +86,11 @@
     /// <summary>
     ///  Y coordinate of the start of the link
     /// </summary>
-    public int PositionY => Math.Min(DiagramService.GetCenterCoordinates(_link.SourcePort).CenterX, TargetX);
+    public int PositionY => Math.Min(DiagramService.GetCenterCoordinates(_link.SourcePort).CenterY, TargetY);
 
-    private int Width => Math.Abs(DiagramService.GetCenterCoordinates(_link.SourcePort).CenterX - TargetX);
+    private int Width => Math.Clamp(Math.Abs(DiagramService.GetCenterCoordinates(_link.SourcePort).CenterX - TargetX),1,int.MaxValue);
 
-    private int Height => Math.Abs(DiagramService.GetCenterCoordinates(_link.SourcePort).CenterY - TargetY);
+    private int Height => Math.Clamp(Math.Abs(DiagramService.GetCenterCoordinates(_link.SourcePort).CenterY - TargetY),1,int.MaxValue);
 
     /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)

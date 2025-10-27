@@ -1,6 +1,6 @@
 .default-port {
-    min-height: 15px;
-    min-width: 15px;
+    min-height: 20px;
+    min-width: 20px;
     border-radius: 50%;
     background-color: whitesmoke;
     border-color: black;
