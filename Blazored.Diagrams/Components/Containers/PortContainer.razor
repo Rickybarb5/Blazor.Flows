@@ -21,13 +21,15 @@
 
 @code {
     
-    [Inject]
-    IComponentRegistry ComponentRegistry { get; init; } = null!;
+    private Dictionary<string, object> Parameters => new() { { nameof(Port), Port } };
+    private ElementReference _componentRef;
+    private List<IDisposable> _subscriptions = [];
+    
+    [Inject] IComponentRegistry ComponentRegistry { get; init; } = null!;
 
-    /// <summary>
-    /// ID of the port container.
-    /// </summary>
-    public string ContainerId => $"port-container-{Port.Id}";
+    [Inject] private IJSRuntime Js { get; set; } = null!;
+
+    [Inject] private IResizeObserverService ResizeObserverService { get; set; } = null!;
 
     /// <summary>
     ///     Cascading diagram from <see cref="DiagramContainer"/>
@@ -46,35 +48,29 @@
         set;
     }
 
+    /// <summary>
+    /// ID of the port container.
+    /// </summary>
+    public string ContainerId => $"port-container-{Port.Id}";
+
     private void Redraw(IEvent e)
     {
         RefreshPositionCoordinates();
     }
-
-    private Dictionary<string, object> Parameters => new() { { nameof(Port), Port } };
-    private ElementReference _componentRef;
-
-    /// <summary>
-    /// <see cref="IJSRuntime"/>
-    /// </summary>
-    [Inject]
-    public required IJSRuntime Js { get; set; }
-
-    [Inject] private IResizeObserverService ResizeObserverService { get; set; } = null!;
-
-    private List<IDisposable> Subscriptions = [];
     
     /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            Subscriptions =
+            _subscriptions =
             [
                 DiagramService.Events.SubscribeWhere<PortRedrawEvent>(p => p.Model.Id == Port.Id, Redraw),
                 DiagramService.Events.SubscribeWhere<PortJustificationChangedEvent>(p => p.Model.Id == Port.Id, Redraw),
                 DiagramService.Events.SubscribeWhere<PortAlignmentChangedEvent>(p => p.Model.Id == Port.Id, Redraw),
                 DiagramService.Events.SubscribeWhere<GroupPositionChangedEvent>(p => p.Model.Id == Port.Parent.Id,
+                    Redraw),                
+                DiagramService.Events.SubscribeWhere<GroupPaddingChangedEvent>(p => p.Model.Id == Port.Parent.Id,
                     Redraw),
                 DiagramService.Events.SubscribeWhere<GroupSizeChangedEvent>(p => p.Model.Id == Port.Parent.Id,
                     Redraw),
@@ -107,7 +103,7 @@
     {
         var newPosition = CalculatePosition();
         Port.SetPosition(newPosition.PositionX, newPosition.PositionY);
-        StateHasChanged();
+        InvokeAsync(StateHasChanged);
     }
 
     private (int PositionX, int PositionY) CalculatePosition()
@@ -158,7 +154,7 @@
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
-        Subscriptions.DisposeAll();
+        _subscriptions.DisposeAll();
         await ResizeObserverService.UnobserveAsync(ContainerId);
     }
 

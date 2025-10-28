@@ -48,6 +48,24 @@
         <Compile Update="Ports\Port.Events.cs">
             <DependentUpon>Port.cs</DependentUpon>
         </Compile>
+        <Compile Update="Nodes\Node.Features.cs">
+          <DependentUpon>Node.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Nodes\Node.Events.cs">
+          <DependentUpon>Node.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Links\Link.Events.cs">
+          <DependentUpon>Link.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Groups\GroupFeatures.cs">
+          <DependentUpon>Group.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Groups\Group.Events.cs">
+          <DependentUpon>Group.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Diagrams\Diagram.Events.cs">
+          <DependentUpon>Diagram.cs</DependentUpon>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

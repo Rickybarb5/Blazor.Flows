@@ -1,4 +1,5 @@
 using Blazored.Diagrams.Extensions;
+using Blazored.Diagrams.Nodes;
 
 namespace Blazored.Diagrams.Test.Helpers;
 
@@ -15,5 +16,29 @@ public class HelperTests
 
         //Assert
         Assert.Equal(count, list.Count());
+    }
+    
+    [Fact]
+    public void GetBounds_ShouldReturnCorrectRect()
+    {
+        // Arrange
+        var model = new Node
+        {
+            Width = 100,
+            Height = 50,
+            PositionX = 10,
+            PositionY = 20
+        };
+
+        // Act
+        var rect = model.GetBounds();
+
+        // Assert
+        Assert.Equal(100, rect.Width);
+        Assert.Equal(50, rect.Height);
+        Assert.Equal(10, rect.Top);
+        Assert.Equal(20, rect.Left);
+        Assert.Equal(110, rect.Right);
+        Assert.Equal(70, rect.Bottom);
     }
 }

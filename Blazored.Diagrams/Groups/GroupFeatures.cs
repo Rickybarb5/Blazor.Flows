@@ -51,14 +51,14 @@ public partial class Group
     /// <inheritdoc />
     public virtual void UnselectAll()
     {
-        AllNodes.ForEach(node=>node.IsSelected = false);
-        AllGroups.ForEach(group=>group.IsSelected = false);
+        AllNodes.ForEach(node => node.IsSelected = false);
+        AllGroups.ForEach(group => group.IsSelected = false);
     }
 
     /// <inheritdoc />
     public virtual void SelectAll()
     {
-        AllNodes.ForEach(node=>node.IsSelected = true);
-        AllGroups.ForEach(group=>group.IsSelected = true);
+        AllNodes.ForEach(node => node.IsSelected = true);
+        AllGroups.ForEach(group => group.IsSelected = true);
     }
 }

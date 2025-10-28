@@ -54,13 +54,12 @@ public interface IDiagram :
     [JsonIgnore]
     IReadOnlyList<IPort> AllPorts { get; }
     
-    
     /// <summary>
     /// Gets the selected models in the diagram.
     /// </summary>
     [JsonIgnore]
     public IReadOnlyList<ISelectable> SelectedModels { get; }
-    
+
     /// <summary>
     /// Gets the current active layer.
     /// </summary>
@@ -108,27 +107,27 @@ public interface IDiagram :
     /// <summary>
     /// Event triggered when the pan value changes.
     /// </summary>
-    ITypedEvent<DiagramPanChangedEvent>  OnPanChanged { get; init; }
+    ITypedEvent<DiagramPanChangedEvent> OnPanChanged { get; init; }
 
     /// <summary>
     /// Event triggered when a layer is added.
     /// </summary>
-    ITypedEvent<LayerAddedEvent>  OnLayerAdded { get; init; }
+    ITypedEvent<LayerAddedEvent> OnLayerAdded { get; init; }
 
     /// <summary>
     /// Event triggered when a layer is removed.
     /// </summary>
-    ITypedEvent<LayerRemovedEvent>  OnLayerRemoved  { get; init; }
+    ITypedEvent<LayerRemovedEvent> OnLayerRemoved { get; init; }
 
     /// <summary>
     /// Event triggered when the diagram position changes.
     /// </summary>
-    ITypedEvent<DiagramPositionChangedEvent>  OnPositionChanged { get; init; }
-    
+    ITypedEvent<DiagramPositionChangedEvent> OnPositionChanged { get; init; }
+
     /// <summary>
     /// Event triggered when the layer starts/stops being used.
     /// </summary>
-    ITypedEvent<CurrentLayerChangedEvent> ? OnCurrentLayerChanged { get; init; }
+    ITypedEvent<CurrentLayerChangedEvent> OnCurrentLayerChanged { get; init; }
 
     /// <summary>
     /// Unselects all models in the diagram.

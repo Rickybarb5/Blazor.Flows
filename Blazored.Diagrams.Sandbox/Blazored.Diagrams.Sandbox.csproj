@@ -22,16 +22,6 @@
     <ItemGroup>
       <Folder Include="wwwroot\docs\" />
     </ItemGroup>
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Pages\Examples\DragAndDrop\DragAndDropExample.razor" />
-      <_ContentIncludedByDefault Remove="Components\Documentation\EventCollectionComponent.razor" />
-      <_ContentIncludedByDefault Remove="Components\Documentation\KeyboardEventsDocumentation.razor" />
-      <_ContentIncludedByDefault Remove="Components\Documentation\PointerEventsDocumentation.razor" />
-      <_ContentIncludedByDefault Remove="Components\Documentation\PositionEventsDocumentation.razor" />
-      <_ContentIncludedByDefault Remove="Components\Documentation\SelectionEventsDocumentation.razor" />
-      <_ContentIncludedByDefault Remove="Components\Documentation\SizeEventsDocumentation.razor" />
-      <_ContentIncludedByDefault Remove="Components\Documentation\VisibilityEventsDocumentation.razor" />
-    </ItemGroup>
 
     <Target Name="GenerateEventDocs" AfterTargets="Build">
         <Exec Command="dotnet run --project ../Tools/EventDocGenerator/EventDocGenerator.csproj $(ProjectDir)wwwroot/docs" />

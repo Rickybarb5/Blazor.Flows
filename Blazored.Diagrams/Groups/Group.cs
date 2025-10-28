@@ -70,7 +70,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
             {
                 var oldWidth = _width;
                 _width = value;
-                OnSizeChanged?.Publish(new(this, oldWidth, _height, _width, _height));
+                OnSizeChanged.Publish(new(this, oldWidth, _height, _width, _height));
             }
         }
     }
@@ -85,7 +85,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
             {
                 var oldHeight = _height;
                 _height = value;
-                OnSizeChanged?.Publish(new(this, _width, oldHeight, _width, _height));
+                OnSizeChanged.Publish(new(this, _width, oldHeight, _width, _height));
             }
         }
     }
@@ -101,7 +101,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
             {
                 var oldX = _positionX;
                 _positionX = value;
-                OnPositionChanged?.Publish(new(this, oldX, _positionY, _positionX, _positionY));
+                OnPositionChanged.Publish(new(this, oldX, _positionY, _positionX, _positionY));
             }
         }
     }
@@ -116,7 +116,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
             {
                 var oldY = _positionX;
                 _positionY = value;
-                OnPositionChanged?.Publish(new(this, _positionX, oldY, _positionX, _positionY));
+                OnPositionChanged.Publish(new(this, _positionX, oldY, _positionX, _positionY));
             }
         }
     }
@@ -130,7 +130,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
             if (_isSelected != value)
             {
                 _isSelected = value;
-                OnSelectionChanged?.Publish(new(this));
+                OnSelectionChanged.Publish(new(this));
             }
         }
     }
@@ -145,7 +145,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
             if (_isVisible != value)
             {
                 _isVisible = value;
-                OnVisibilityChanged?.Publish(new(this));
+                OnVisibilityChanged.Publish(new(this));
             }
         }
     }
@@ -161,7 +161,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
             {
                 var oldPadding = _padding;
                 _padding = value;
-                OnPaddingChanged?.Publish(new(this, oldPadding, _padding));
+                OnPaddingChanged.Publish(new(this, oldPadding, _padding));
             }
         }
     }
@@ -226,84 +226,6 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
             .ToList()
             .AsReadOnly();
 
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<GroupSizeChangedEvent> OnSizeChanged { get; init; } = new TypedEvent<GroupSizeChangedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<GroupPositionChangedEvent> OnPositionChanged { get; init; } =
-        new TypedEvent<GroupPositionChangedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<GroupSelectionChangedEvent> OnSelectionChanged { get; init; } =
-        new TypedEvent<GroupSelectionChangedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<GroupVisibilityChangedEvent> OnVisibilityChanged { get; init; } =
-        new TypedEvent<GroupVisibilityChangedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<PortAddedToGroupEvent> OnPortAddedToGroup { get; init; } =
-        new TypedEvent<PortAddedToGroupEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<PortRemovedFromGroupEvent> OnPortRemovedFromGroup { get; init; } =
-        new TypedEvent<PortRemovedFromGroupEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<NodeAddedToGroupEvent> OnNodeAddedToGroup { get; init; } =
-        new TypedEvent<NodeAddedToGroupEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<NodeRemovedFromGroupEvent> OnNodeRemovedFromGroup { get; init; } =
-        new TypedEvent<NodeRemovedFromGroupEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<GroupAddedToGroupEvent> OnGroupAddedToGroup { get; init; } =
-        new TypedEvent<GroupAddedToGroupEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<GroupRemovedFromGroupEvent> OnGroupRemovedFromGroup { get; init; } =
-        new TypedEvent<GroupRemovedFromGroupEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<GroupPaddingChangedEvent> OnPaddingChanged { get; init; } =
-        new TypedEvent<GroupPaddingChangedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<PortAddedEvent> OnPortAdded { get; init; } = new TypedEvent<PortAddedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<PortRemovedEvent> OnPortRemoved { get; init; } = new TypedEvent<PortRemovedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<NodeAddedEvent> OnNodeAdded { get; init; } = new TypedEvent<NodeAddedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<NodeRemovedEvent> OnNodeRemoved { get; init; } = new TypedEvent<NodeRemovedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<GroupAddedEvent> OnGroupAdded { get; init; } = new TypedEvent<GroupAddedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<GroupRemovedEvent> OnGroupRemoved { get; init; } = new TypedEvent<GroupRemovedEvent>();
-
     private void HandleGroupRemoved(ItemRemovedEvent<IGroup> obj)
     {
         OnGroupRemovedFromGroup.Publish(new(this, obj.Item));
@@ -338,7 +260,7 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
     private void HandlePortAdded(ItemAddedEvent<IPort> obj)
     {
         obj.Item.Parent = this;
-        OnPortAddedToGroup?.Publish(new(this, obj.Item));
+        OnPortAddedToGroup.Publish(new(this, obj.Item));
         OnPortAdded.Publish(new(obj.Item));
     }
 

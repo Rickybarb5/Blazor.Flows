@@ -65,7 +65,7 @@ public class DefaultLinkBehaviour : BaseBehaviour
 
     private void HandleSourcePortConnected(LinkSourcePortChangedEvent obj)
     {
-        obj.OldSourcePort.OutgoingLinks.RemoveInternal(obj.Model);
+        obj.OldSourcePort?.OutgoingLinks.RemoveInternal(obj.Model);
         obj.NewSourcePort.OutgoingLinks.AddInternal(obj.Model);
     }
 

@@ -64,7 +64,7 @@ public record LinkTargetPositionChangedEvent(ILink Model, int OldX, int OldY, in
 /// <param name="Model">The <see cref="ILink"/> whose source port changed.</param>
 /// <param name="OldSourcePort">The previous <see cref="IPort"/> the link was connected to.</param>
 /// <param name="NewSourcePort">The new <see cref="IPort"/> the link is now connected to.</param>
-public record LinkSourcePortChangedEvent(ILink Model, IPort OldSourcePort, IPort NewSourcePort) : LinkEvent(Model);
+public record LinkSourcePortChangedEvent(ILink Model, IPort? OldSourcePort, IPort NewSourcePort) : LinkEvent(Model);
 
 /// <summary>
 /// Event triggered when the target port of a link is changed.

@@ -1,5 +1,4 @@
-﻿
-using Blazored.Diagrams.Events;
+﻿using Blazored.Diagrams.Events;
 using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Groups;
 using Blazored.Diagrams.Helpers;
@@ -26,7 +25,7 @@ public partial class Layer : ILayer
     /// </summary>
     public Layer()
     {
-        _nodes.OnItemAdded.Subscribe(HandleNodeAdded); 
+        _nodes.OnItemAdded.Subscribe(HandleNodeAdded);
         _nodes.OnItemRemoved.Subscribe(HandleNodeRemoved);
 
         _groups.OnItemAdded.Subscribe(HandleGroupAdded);
@@ -67,7 +66,7 @@ public partial class Layer : ILayer
         set
         {
             _nodes.ClearInternal();
-            value.ForEach(val=>_nodes.AddInternal(val));
+            value.ForEach(val => _nodes.AddInternal(val));
         }
     }
 
@@ -78,8 +77,7 @@ public partial class Layer : ILayer
         set
         {
             _groups.ClearInternal();
-            
-            value.ForEach(val=>_groups.AddInternal(val));
+            value.ForEach(val => _groups.AddInternal(val));
         }
     }
 
@@ -126,48 +124,13 @@ public partial class Layer : ILayer
         .AsReadOnly();
 
     /// <inheritdoc />
-    public IReadOnlyList<ISelectable> SelectedModels => 
+    public IReadOnlyList<ISelectable> SelectedModels =>
         AllNodes.Cast<ISelectable>()
-        .Concat(AllGroups)
-        .Concat(AllLinks)
-        .Concat(AllPorts)
-        .ToList()
-        .AsReadOnly();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<LayerVisibilityChangedEvent> OnVisibilityChanged { get; init; } = new TypedEvent<LayerVisibilityChangedEvent>();
-    
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<NodeAddedToLayerEvent> OnNodeAddedToLayer { get; init; } = new TypedEvent<NodeAddedToLayerEvent>();
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<NodeRemovedFromLayerEvent> OnNodeRemovedFromLayer { get; init; } = new TypedEvent<NodeRemovedFromLayerEvent>();
-    
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<GroupAddedToLayerEvent> OnGroupAddedToLayer { get; init; } = new TypedEvent<GroupAddedToLayerEvent>();
-    
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<GroupRemovedFromLayerEvent> OnGroupRemovedFromLayer { get; init; } = new TypedEvent<GroupRemovedFromLayerEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<NodeAddedEvent> OnNodeAdded { get; init; } =  new TypedEvent<NodeAddedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<NodeRemovedEvent> OnNodeRemoved { get; init; } =  new TypedEvent<NodeRemovedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<GroupAddedEvent> OnGroupAdded { get; init; } = new TypedEvent<GroupAddedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-public ITypedEvent<GroupRemovedEvent> OnGroupRemoved { get; init; } = new TypedEvent<GroupRemovedEvent>();
+            .Concat(AllGroups)
+            .Concat(AllLinks)
+            .Concat(AllPorts)
+            .ToList()
+            .AsReadOnly();
 
     /// <inheritdoc />
     [JsonIgnore]
@@ -212,7 +175,7 @@ public ITypedEvent<GroupRemovedEvent> OnGroupRemoved { get; init; } = new TypedE
         _nodes.ClearInternal();
         _groups.ForEach(x => x.Dispose());
         _groups.ClearInternal();
-        _nodes.OnItemAdded.Unsubscribe(HandleNodeAdded); 
+        _nodes.OnItemAdded.Unsubscribe(HandleNodeAdded);
         _nodes.OnItemRemoved.Unsubscribe(HandleNodeRemoved);
 
         _groups.OnItemAdded.Unsubscribe(HandleGroupAdded);

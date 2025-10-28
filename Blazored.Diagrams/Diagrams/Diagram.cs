@@ -204,39 +204,6 @@ public partial class Diagram : IDiagram
     public virtual IDiagramOptions Options { get; init; } = new DiagramOptions();
 
     /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<DiagramSizeChangedEvent> OnSizeChanged { get; init; } =
-        new TypedEvent<DiagramSizeChangedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<DiagramZoomChangedEvent> OnZoomChanged { get; init; } =
-        new TypedEvent<DiagramZoomChangedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<DiagramPanChangedEvent> OnPanChanged { get; init; } = new TypedEvent<DiagramPanChangedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<LayerAddedEvent> OnLayerAdded { get; init; } = new TypedEvent<LayerAddedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<LayerRemovedEvent> OnLayerRemoved { get; init; } = new TypedEvent<LayerRemovedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<DiagramPositionChangedEvent> OnPositionChanged { get; init; } =
-        new TypedEvent<DiagramPositionChangedEvent>();
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public ITypedEvent<CurrentLayerChangedEvent> OnCurrentLayerChanged { get; init; } =
-        new TypedEvent<CurrentLayerChangedEvent>();
-
-
-    /// <inheritdoc />
     public void Dispose()
     {
         Layers.ForEach(l => l.Dispose());
@@ -246,15 +213,16 @@ public partial class Diagram : IDiagram
 
     private void EnsureDefaultLayer()
     {
-        if (_layers.All(l => l.Id != Guid.Empty.ToString()))
+        if (_layers.Count != 0)
         {
-            var defaultLayer = new Layer
-            {
-                Id = Guid.Empty.ToString(),
-            };
-            Layers.AddInternal(defaultLayer);
-            _currentLayer = defaultLayer;
+            return;
         }
+        var defaultLayer = new Layer
+        {
+            Id = Guid.Empty.ToString(),
+        };
+        Layers.AddInternal(defaultLayer);
+        _currentLayer = defaultLayer;
     }
 
     private void HandleLayerRemoved(ItemRemovedEvent<ILayer> ev)
