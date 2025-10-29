@@ -11,6 +11,10 @@ public partial class EventAggregator : IEventAggregator
     private IDiagramService _diagramService;
     private long _subscriptionCount;
 
+    /// <summary>
+    /// Instantiates an new <see cref="EventAggregator"/>.
+    /// </summary>
+    /// <param name="diagramService"></param>
     public EventAggregator(IDiagramService diagramService)
     {
         _diagramService = diagramService;

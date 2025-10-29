@@ -114,17 +114,16 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
             }
         }
     }
-
-
+    
     /// <inheritdoc />
-    public int OffSetX
+    public virtual int OffSetX
     {
         get => _offsetX;
         set
         {
             if (value != _offsetX)
             {
-                var oldX = _positionX;
+                var oldX = _offsetX;
                 _offsetX = value;
                 OnPositionChanged.Publish(new(this, oldX, PositionY, PositionX, PositionY));
             }
@@ -132,21 +131,20 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     }
 
     /// <inheritdoc />
-    public int OffsetY
+    public virtual int OffsetY
     {
         get => _offsetY;
         set
         {
-            if (value != _positionY)
+            if (value != _offsetY)
             {
-                var oldY = _positionY;
-                _positionY = value;
+                var oldY = _offsetY;
+                _offsetY = value;
                 OnPositionChanged.Publish(new(this, PositionX, oldY, PositionX, PositionY));
             }
         }
     }
-
-
+    
     /// <inheritdoc />
     public virtual bool IsVisible
     {
@@ -176,7 +174,6 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
         }
     }
 
-
     /// <inheritdoc />
     public virtual PortAlignment Alignment
     {
@@ -191,7 +188,6 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
             }
         }
     }
-
 
     /// <inheritdoc />
     public virtual ObservableList<ILink> OutgoingLinks
@@ -222,7 +218,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
             });
         }
     }
-    
+
     /// <summary>
     ///     Parent of the port.
     /// </summary>
@@ -230,7 +226,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     public virtual IPortContainer Parent
     {
         get => _parent;
-        internal set 
+        internal set
         {
             ArgumentNullException.ThrowIfNull(value, nameof(Parent));
             if (_parent != value)
@@ -266,6 +262,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
         _outgoingLinks.OnItemRemoved.Unsubscribe(HandleOutgoingLinkRemoved);
     }
 
+    /// <inheritdoc />
     public bool IsSelected
     {
         get => _selected;

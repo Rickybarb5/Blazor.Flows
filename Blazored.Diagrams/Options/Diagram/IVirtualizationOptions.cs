@@ -1,5 +1,8 @@
 namespace Blazored.Diagrams.Options.Diagram;
 
+/// <summary>
+/// Defines the virtualization options.
+/// </summary>
 public interface IVirtualizationOptions
 {
     /// <summary>

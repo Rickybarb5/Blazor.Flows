@@ -16,7 +16,6 @@
     background-color: #444;
     color: white;
     border: 1px solid #555;
-    cursor: pointer;
     font-size: 18px;
     line-height: 0;
     transition: background-color 0.1s;
@@ -29,10 +28,12 @@
 .zoom-in-button {
     border-bottom: none;
     border-radius: 4px 4px 0 0;
+    cursor: zoom-in;
 }
 .zoom-out-button {
     border-top: none;
     border-radius: 0 0 4px 4px;
+    cursor: zoom-out;
 }
 
 .zoom-display {

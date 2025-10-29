@@ -3,6 +3,9 @@ using Blazored.Diagrams.Interfaces;
 
 namespace Blazored.Diagrams.Services.Behaviours;
 
+/// <summary>
+/// Abstraction for behaviour management.
+/// </summary>
 public interface IBehaviourContainer : IDisposable
 {
     /// <summary>

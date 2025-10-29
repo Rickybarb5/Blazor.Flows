@@ -29,6 +29,7 @@ public class AddContainer : IAddContainer
     public IAddContainer GroupTo<TGroup>(IGroupContainer parent, TGroup group)
         where TGroup : IGroup
     {
+        //TODO: The inputted parent might not be registered yet!
         parent.Groups.AddInternal(group);
         return this;
     }
@@ -43,6 +44,7 @@ public class AddContainer : IAddContainer
     public IAddContainer NodeTo<TNode>(INodeContainer nodeContainer, TNode node)
         where TNode : INode
     {
+        //TODO: The inputted parent might not be registered yet!
         nodeContainer.Nodes.AddInternal(node);
         return this;
     }
@@ -58,6 +60,7 @@ public class AddContainer : IAddContainer
         where TPort : IPort
     {
         
+        //TODO: The inputted parent might not be registered yet!
         parent.Ports.AddInternal(port);
         return this;
     }
@@ -73,6 +76,7 @@ public class AddContainer : IAddContainer
     public IAddContainer LinkTo<TLink>(ILinkContainer sourcePort, ILinkContainer? targetPort, TLink link)
         where TLink : ILink
     {
+        //TODO: The inputted ports might not be registered yet!
         sourcePort.OutgoingLinks.AddInternal(link);
         targetPort?.IncomingLinks.AddInternal(link);
         return this;

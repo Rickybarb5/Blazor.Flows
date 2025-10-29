@@ -59,6 +59,7 @@ public class ObservableListConverter : JsonConverter
         return list;
     }
 
+    /// <inheritdoc />
     public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
     {
         if (value == null)
@@ -84,7 +85,7 @@ public class ObservableListConverter : JsonConverter
         
         foreach (System.Collections.DictionaryEntry entry in internalDict)
         {
-            writer.WritePropertyName(entry.Key?.ToString() ?? "");
+            writer.WritePropertyName(entry.Key.ToString() ?? "");
             serializer.Serialize(writer, entry.Value); // This will add type info for the values
         }
         

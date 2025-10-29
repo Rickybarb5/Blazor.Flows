@@ -21,8 +21,8 @@ public static class HelperExtensions
         {
             Width = model.Width,
             Height = model.Height,
-            Top = model.PositionX,
-            Left = model.PositionY,
+            Top = model.PositionY,
+            Left = model.PositionX,
             Right = model.PositionX + model.Width,
             Bottom = model.PositionY + model.Height,
         };

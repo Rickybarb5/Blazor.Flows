@@ -16,6 +16,9 @@ public partial class EventAggregator
     /// </summary>
     private readonly Dictionary<object, List<object>> _typedEventSubscriptions = [];
 
+    /// <summary>
+    /// Propagates events for existing/future diagram components.
+    /// </summary>
     public void InitializeEventPropagation()
     {
         // Auto-propagate events from the diagram
@@ -145,7 +148,7 @@ public partial class EventAggregator
     /// </summary>
     /// <param name="source">The object containing ITypedEvent fields</param>
     /// <returns>A disposable that will unsubscribe when disposed</returns>
-    public IDisposable Propagate(object source)
+    private IDisposable Propagate(object source)
     {
         if (source == null)
             throw new ArgumentNullException(nameof(source));
@@ -209,7 +212,7 @@ public partial class EventAggregator
         .Select(m =>
         {
             // Determine the Type of the member
-            Type memberType = m is FieldInfo field ? field.FieldType : 
+            var memberType = m is FieldInfo field ? field.FieldType : 
                               m is PropertyInfo property ? property.PropertyType : null;
             
             return new { Member = m, MemberType = memberType };
@@ -220,7 +223,7 @@ public partial class EventAggregator
 
     foreach (var memberInfo in eventMembers)
     {
-        object eventInstance = null;
+        object? eventInstance = null;
 
         // Retrieve the value of the member (the actual ITypedEvent instance)
         if (memberInfo.Member is FieldInfo field)
@@ -234,23 +237,26 @@ public partial class EventAggregator
 
         if (eventInstance == null) continue;
 
-        var eventType = memberInfo.MemberType.GetGenericArguments()[0];
-        var subscribeMethod = memberInfo.MemberType.GetMethod("Subscribe")!;
-        
-        // Create a delegate that publishes to this aggregator
-        var publishMethod = typeof(EventAggregator)
-            .GetMethod(nameof(PublishFromTypedEvent), BindingFlags.NonPublic | BindingFlags.Instance)!
-            .MakeGenericMethod(eventType);
+        var eventType = memberInfo.MemberType?.GetGenericArguments()[0];
+        var subscribeMethod = memberInfo.MemberType?.GetMethod(nameof(ITypedEvent<IEvent>.Subscribe))!;
 
-        var handlerDelegate = Delegate.CreateDelegate(
-            typeof(Action<>).MakeGenericType(eventType),
-            this,
-            publishMethod);
+        if (eventType is not null)
+        {
+            // Create a delegate that publishes to this aggregator
+            var publishMethod = typeof(EventAggregator)
+                .GetMethod(nameof(PublishFromTypedEvent), BindingFlags.NonPublic | BindingFlags.Instance)!
+                .MakeGenericMethod(eventType);
 
-        subscribeMethod.Invoke(eventInstance, new[] { handlerDelegate });
+            var handlerDelegate = Delegate.CreateDelegate(
+                typeof(Action<>).MakeGenericType(eventType),
+                this,
+                publishMethod);
+
+            subscribeMethod.Invoke(eventInstance, [handlerDelegate]);
         
-        // Store the information needed for unsubscription later
-        handlers.Add(new { Member = memberInfo.Member, Handler = handlerDelegate, Instance = eventInstance });
+            // Store the information needed for unsubscription later
+            handlers.Add(new { Member = memberInfo.Member, Handler = handlerDelegate, Instance = eventInstance });
+        }
     }
 
     return handlers;
@@ -268,7 +274,7 @@ public partial class EventAggregator
 
         foreach (dynamic handlerInfo in handlers)
         {
-            var unsubscribeMethod = handlerInfo.Instance.GetType().GetMethod("Unsubscribe");
+            var unsubscribeMethod = handlerInfo.Instance.GetType().GetMethod(nameof(ITypedEvent<IEvent>.Unsubscribe));
             unsubscribeMethod?.Invoke(handlerInfo.Instance, new[] { handlerInfo.Handler });
         }
 

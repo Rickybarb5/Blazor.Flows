@@ -154,7 +154,6 @@ public interface IPort :
     /// <summary>
     /// Custom function that is used when <see cref="PortAlignment"/> is <see cref="PortAlignment.Custom"/>.
     /// </summary>
-    /// <param name="parent">The bounds of the parent</param>.
-    /// <returns></returns>
+    /// <returns>The calculated X and Y positions.</returns>
     public (int PositionX, int PositionY) CustomPositioning();
 }

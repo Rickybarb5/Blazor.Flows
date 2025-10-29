@@ -19,17 +19,20 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
     private const string MutationError = "Modification must go through the DiagramService to ensure state consistency.";
 
     // --- Events ---
-    internal ITypedEvent<ItemAddedEvent<TModel>> OnItemAdded = new TypedEvent<ItemAddedEvent<TModel>>();
-    internal ITypedEvent<ItemRemovedEvent<TModel>> OnItemRemoved = new TypedEvent<ItemRemovedEvent<TModel>>();
+    internal readonly ITypedEvent<ItemAddedEvent<TModel>> OnItemAdded = new TypedEvent<ItemAddedEvent<TModel>>();
+    internal readonly ITypedEvent<ItemRemovedEvent<TModel>> OnItemRemoved = new TypedEvent<ItemRemovedEvent<TModel>>();
 
-    // --- Public Read-Only Properties ---
+
+    /// <inheritdoc />
     [JsonIgnore]
     public int Count => _internalIDictionary.Count;
 
+    /// <inheritdoc />
     [JsonIgnore]
-    public bool IsReadOnly { get; set; } // Note: Must remain public/implement ICollection<T>.IsReadOnly
+    public bool IsReadOnly { get; set; }
 
-    // --- Indexer (Mutation) ---
+
+    /// <inheritdoc />
     [JsonIgnore]
     public TModel this[int index]
     {
@@ -44,13 +47,8 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
         }
     }
     
-    // --- Internal Property for Serialization ---
     [JsonProperty("Items")]
     internal Dictionary<string, TModel> InternalDictionary => _internalIDictionary;
-
-    // -----------------------------------------------------------------
-    // --- INTERNAL MUTATION METHODS (Used ONLY by DiagramService) ---
-    // -----------------------------------------------------------------
 
     /// <summary>
     /// Adds an item, if it doesn't already exist. (Internal method)
@@ -59,7 +57,7 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
     {
         if (_internalIDictionary.TryAdd(item.Id, item))
         {
-            OnItemAdded?.Publish(new(item));
+            OnItemAdded.Publish(new(item));
         }
     }
 
@@ -78,7 +76,7 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
     {
         if (_internalIDictionary.Remove(item.Id))
         {
-            OnItemRemoved?.Publish(new(item));
+            OnItemRemoved.Publish(new(item));
             return true;
         }
 
@@ -86,13 +84,13 @@ public class ObservableList<TModel> : IList<TModel> where TModel : IId
     }
 
     /// <summary>
-    /// Clears the list. (Internal method)
+    /// Clears the list.
     /// </summary>
     internal void ClearInternal()
     {
         var itemsToRemove = _internalIDictionary.Values.ToList();
         _internalIDictionary.Clear();
-        itemsToRemove.ForEach(x => OnItemRemoved?.Publish(new(x)));
+        itemsToRemove.ForEach(x => OnItemRemoved.Publish(new(x)));
     }
     
     internal void InsertInternal(int index, TModel item)

@@ -88,6 +88,7 @@ public partial class DiagramService
 
 
     /// <inheritdoc />
+    // TODO: This is bugged!
     public void FitToScreen(FitToScreenParameters parameters)
     {
         bool VisiblePredicate(IVisible x) => parameters.IncludeInvisible || x.IsVisible;
@@ -103,18 +104,18 @@ public partial class DiagramService
         // Compute combined bounding box
         var minX = allBounds.Min(b => b.Left);
         var minY = allBounds.Min(b => b.Top);
-        var maxX = allBounds.Max(b => b.Left + b.Width);
-        var maxY = allBounds.Max(b => b.Top + b.Height);
+        var maxX = allBounds.Max(b => b.Right);
+        var maxY = allBounds.Max(b => b.Bottom);
 
-        var totalWidth = maxX - minX;
-        var totalHeight = maxY - minY;
+        var totalWidth = Math.Abs(maxX - minX);
+        var totalHeight = Math.Abs(maxY - minY);
 
         if (totalWidth <= 0 || totalHeight <= 0 || Diagram.Width <= 0 || Diagram.Height <= 0)
             return;
 
         // Add margin
-        var requiredWidth = totalWidth + 2 * parameters.Margin;
-        var requiredHeight = totalHeight + 2 * parameters.Margin;
+        var requiredWidth = totalWidth + parameters.Margin * 2;
+        var requiredHeight = totalHeight + parameters.Margin * 2;
 
         // Compute zoom ratios
         double zoomX = Diagram.Width / requiredWidth;
@@ -122,8 +123,7 @@ public partial class DiagramService
 
         var newZoom = Math.Min(zoomX, zoomY);
         var zoomOptions = Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>();
-        if (zoomOptions != null)
-            newZoom = Math.Min(newZoom, zoomOptions.MaxZoom);
+        newZoom = Math.Min(newZoom, zoomOptions.MaxZoom);
 
         // Compute world center and target pan
         var worldCenterX = minX + totalWidth / 2;
@@ -136,8 +136,6 @@ public partial class DiagramService
         var newPanY = screenCenterY - worldCenterY * newZoom;
 
         Diagram.SetZoom(newZoom);
-        var deltaPanX = newPanX - Diagram.PanX;
-        var deltaPanY = newPanY - Diagram.PanY;
-        Diagram.SetPan((int)(Diagram.PanX + deltaPanX), (int)(Diagram.PanY + deltaPanY));
+        Diagram.SetPan((int)newPanX, (int)newPanY);
     }
 }

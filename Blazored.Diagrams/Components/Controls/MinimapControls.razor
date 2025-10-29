@@ -204,10 +204,10 @@
 
     private void CalculateViewport()
     {
-        _viewportRectX = -Service.Diagram.PanX / (double)Service.Diagram.Zoom;
-        _viewportRectY = -Service.Diagram.PanY / (double)Service.Diagram.Zoom;
-        _viewportRectWidth = Service.Diagram.Width / (double)Service.Diagram.Zoom;
-        _viewportRectHeight = Service.Diagram.Height / (double)Service.Diagram.Zoom;
+        _viewportRectX = -Service.Diagram.PanX / Service.Diagram.Zoom;
+        _viewportRectY = -Service.Diagram.PanY / Service.Diagram.Zoom;
+        _viewportRectWidth = Service.Diagram.Width / Service.Diagram.Zoom;
+        _viewportRectHeight = Service.Diagram.Height / Service.Diagram.Zoom;
     }
 
     private void CalculateViewBox(double maxX, double maxY, double minX, double minY)

@@ -18,12 +18,13 @@ public abstract partial class DefaultLinkComponent
     /// The stroke color that will be used on the SVG path.
     /// </summary>
     protected virtual string Stroke => Link.IsSelected ? SelectedStrokeColor : StrokeColor;
-    
+
     /// <summary>
     ///     Link to be rendered.
     /// </summary>
     [Parameter]
-    public Link Link { get; set; }
+    [EditorRequired]
+    public ILink Link { get; set; } = null!;
 
     /// <summary>
     /// Service cascaded through the <see cref="LinkContainer"/>

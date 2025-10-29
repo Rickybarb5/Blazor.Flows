@@ -31,6 +31,17 @@ public class SerializationService : ISerializationService
         return JsonConvert.DeserializeObject<TDiagram>(json, _settings)!;
     }
 
+    /// <inheritdoc />
+    public IDiagram FromJson(string json)
+    {
+        
+        if (_settings is null)
+        {
+            _settings = CreateSettings();
+        }
+        return JsonConvert.DeserializeObject<IDiagram>(json, _settings)!;
+    }
+
     /// <summary>
     /// Creates the <see cref="JsonSerializerSettings"/> used to serialize and deserialize the diagram.
     /// </summary>
