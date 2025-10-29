@@ -48,7 +48,7 @@ public class MoveBehaviourTests
         var group = new Group { IsSelected = true };
         var layer = new Layer();
         service.Add.Layer(layer);
-        service.Add.AddGroupTo(layer, group);
+        service.Add.GroupTo(layer, group);
 
         var args = new PointerEventArgs
         {
@@ -104,7 +104,7 @@ public class MoveBehaviourTests
         var group = new Group { IsSelected = true };
         var layer = new Layer();
         service.Add.Layer(layer);
-        service.Add.AddGroupTo(layer, group);
+        service.Add.GroupTo(layer, group);
 
         var startArgs = new PointerEventArgs
         {
@@ -137,7 +137,7 @@ public class MoveBehaviourTests
         var layer = new Layer();
         service.Add.Layer(layer);
         service.Add.NodeTo(layer, node);
-        service.Diagram.SetZoom(2.0m); // Set zoom to 200%
+        service.Diagram.SetZoom(2.0); // Set zoom to 200%
 
         var startArgs = new PointerEventArgs
         {

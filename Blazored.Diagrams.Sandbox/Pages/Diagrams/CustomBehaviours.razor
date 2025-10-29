@@ -98,7 +98,7 @@
         Service.Add.Node(node2);
         Service.Add.PortTo(node2, new Port { Alignment = PortAlignment.Left });
 
-        Service.Add.AddLinkTo(node1.Ports.First(), node2.Ports.First(), new LineLink());
+        Service.Add.LinkTo(node1.Ports.First(), node2.Ports.First(), new LineLink());
 
         return base.OnInitializedAsync();
     }

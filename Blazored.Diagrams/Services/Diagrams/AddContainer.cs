@@ -10,14 +10,14 @@ namespace Blazored.Diagrams.Services.Diagrams;
 /// <inheritdoc />
 public class AddContainer : IAddContainer
 {
-    private readonly IDiagramService service;
+    private readonly IDiagramService _service;
     /// <summary>
     /// Instantiates a new <see cref="AddContainer"/>.
     /// </summary>
     /// <param name="service"></param>
     public AddContainer(IDiagramService service)
     {
-        this.service = service;
+        _service = service;
     }
     /// <summary>
     /// Creates a group in another group.
@@ -26,7 +26,7 @@ public class AddContainer : IAddContainer
     /// <param name="group">Group to be added.</param>
     /// <typeparam name="TGroup">Group Type</typeparam>
     /// <returns></returns>
-    public IAddContainer AddGroupTo<TGroup>(IGroupContainer parent, TGroup group)
+    public IAddContainer GroupTo<TGroup>(IGroupContainer parent, TGroup group)
         where TGroup : IGroup
     {
         parent.Groups.AddInternal(group);
@@ -70,7 +70,7 @@ public class AddContainer : IAddContainer
     /// <param name="link">Link that will be added to the container</param>
     /// <typeparam name="TLink">Link Type</typeparam>
     /// <returns></returns>
-    public IAddContainer AddLinkTo<TLink>(ILinkContainer sourcePort, ILinkContainer? targetPort, TLink link)
+    public IAddContainer LinkTo<TLink>(ILinkContainer sourcePort, ILinkContainer? targetPort, TLink link)
         where TLink : ILink
     {
         sourcePort.OutgoingLinks.AddInternal(link);
@@ -87,28 +87,28 @@ public class AddContainer : IAddContainer
     public IAddContainer Layer<TLayer>(TLayer layer)
         where TLayer : ILayer
     {
-        service.Diagram.Layers.AddInternal(layer);
+        _service.Diagram.Layers.AddInternal(layer);
         return this;
     }
 
     /// <inheritdoc />
     public virtual IAddContainer Node(INode node)
     {
-        service.Diagram.CurrentLayer.Nodes.AddInternal(node);
+        _service.Diagram.CurrentLayer.Nodes.AddInternal(node);
         return this;
     }
 
     /// <inheritdoc />
     public virtual IAddContainer Group(IGroup group)
     {
-        service.Diagram.CurrentLayer.Groups.AddInternal(group);
+        _service.Diagram.CurrentLayer.Groups.AddInternal(group);
         return this;
     }
 
     /// <inheritdoc />
-    public virtual IAddContainer AddLayer(ILayer layer)
+    public virtual IAddContainer Layer(ILayer layer)
     {
-        service.Diagram.Layers.AddInternal(layer);
+        _service.Diagram.Layers.AddInternal(layer);
         return this;
     }
 }

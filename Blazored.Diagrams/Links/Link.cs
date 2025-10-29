@@ -23,13 +23,14 @@ public abstract partial class Link : ILink, IHasComponent<DefaultLinkComponent>
     /// <inheritdoc />
     public virtual string Id { get; init; } = Guid.NewGuid().ToString();
 
-    /// <inheritdoc />
-    /// TODO:Check if required feels good.
+    /// <summary>
+    ///     Port where the link originates from.
+    /// </summary>
     [JsonIgnore]
     public virtual IPort SourcePort
     {
         get => _sourcePort;
-        set
+        internal set
         {
             ArgumentNullException.ThrowIfNull(value);
             if (_sourcePort != value)
@@ -42,12 +43,21 @@ public abstract partial class Link : ILink, IHasComponent<DefaultLinkComponent>
         }
     }
 
-    /// <inheritdoc />
+    [JsonIgnore]
+    IPort ILink.SourcePort
+    {
+        get => SourcePort;
+        set => SourcePort = value;
+    }
+
+    /// <summary>
+    ///     End port that the link connects to, if it exists.
+    /// </summary>
     [JsonIgnore]
     public virtual IPort? TargetPort
     {
         get => _targetPort;
-        set
+        internal set 
         {
             if (_targetPort != value)
             {
@@ -57,6 +67,13 @@ public abstract partial class Link : ILink, IHasComponent<DefaultLinkComponent>
                 OnTargetPortChanged.Publish(new(this, oldTargetPort, _targetPort));
             }
         }
+    }
+
+    [JsonIgnore]
+    IPort? ILink.TargetPort
+    {
+        get => TargetPort;
+        set => TargetPort = value; 
     }
 
     /// <inheritdoc />
@@ -151,7 +168,7 @@ public abstract partial class Link : ILink, IHasComponent<DefaultLinkComponent>
         }
     }
 
-    /// Severs the connection between link and ports.
+    /// <inheritdoc />
     public virtual void Dispose()
     {
         _sourcePort?.OutgoingLinks.RemoveInternal(this);

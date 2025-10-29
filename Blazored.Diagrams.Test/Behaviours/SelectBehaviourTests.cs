@@ -190,7 +190,7 @@ public class SelectBehaviourTests
         var layer = new Layer();
         service.Add.Layer(layer);
         service.Add.NodeTo(layer, node);
-        service.Add.AddGroupTo(layer, group);
+        service.Add.GroupTo(layer, group);
         service.Add.PortTo(node, sourcePort);
         service.Add.PortTo(group, targetPort);
 

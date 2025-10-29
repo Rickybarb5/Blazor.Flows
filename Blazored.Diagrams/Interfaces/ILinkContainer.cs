@@ -6,7 +6,7 @@ namespace Blazored.Diagrams.Interfaces;
 /// <summary>
 ///     Describes a model that has link connected to it.
 /// </summary>
-public interface ILinkContainer
+public interface ILinkContainer : IId
 {
     /// <summary>
     ///     List of links that originate from this port.

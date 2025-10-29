@@ -29,7 +29,7 @@ public class ZoomControlTests : TestContext
         cut.Find("button[title='Zoom In']").Click();
 
         // Assert
-        Assert.Equal(1.1m, service.Diagram.Zoom);
+        Assert.Equal(1.1, service.Diagram.Zoom);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class ZoomControlTests : TestContext
         cut.Find("button[title='Zoom Out']").Click();
 
         // Assert
-        Assert.Equal(0.9m, service.Diagram.Zoom);
+        Assert.Equal(0.9, service.Diagram.Zoom);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class ZoomControlTests : TestContext
         cut.Find("div[title='Reset Zoom (100%)']").Click();
 
         // Assert
-        Assert.Equal(1.0m, service.Diagram.Zoom);
+        Assert.Equal(1.0, service.Diagram.Zoom);
     }
 
     [Fact]

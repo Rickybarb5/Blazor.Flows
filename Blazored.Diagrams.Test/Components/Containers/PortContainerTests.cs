@@ -208,7 +208,7 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
         var link = new LineLink { SourcePort = sourcePort };
 
         // Act
-        _service.Add.AddLinkTo(sourcePort, targetPort, link);
+        _service.Add.LinkTo(sourcePort, targetPort, link);
         link.TargetPort = targetPort;
 
         // Assert

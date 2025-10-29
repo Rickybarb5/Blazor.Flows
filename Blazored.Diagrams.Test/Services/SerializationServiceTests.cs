@@ -37,7 +37,7 @@ public class SerializationServiceTests
             .NodeTo(group, groupNode)
             .PortTo(node, nodePort)
             .PortTo(group, groupPort)
-            .AddLinkTo(nodePort, groupPort, link);
+            .LinkTo(nodePort, groupPort, link);
         
         var expected = serializationService.ToJson(diagramService.Diagram);
         

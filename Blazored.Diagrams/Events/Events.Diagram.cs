@@ -48,7 +48,7 @@ public record DiagramSizeChangedEvent(
 /// <param name="Model">The diagram that triggered the event.</param>
 /// <param name="OldZoom">The previous zoom factor (e.g., 1.0 for 100%).</param>
 /// <param name="NewZoom">The new zoom factor.</param>
-public record DiagramZoomChangedEvent(IDiagram Model, decimal OldZoom, decimal NewZoom) : DiagramEvent(Model);
+public record DiagramZoomChangedEvent(IDiagram Model, double OldZoom, double NewZoom) : DiagramEvent(Model);
 
 /// <summary>
 /// Event triggered when the pan changes.

@@ -222,14 +222,15 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
             });
         }
     }
-
-    //TODO:Check if adding required feels good.
-    /// <inheritdoc />
+    
+    /// <summary>
+    ///     Parent of the port.
+    /// </summary>
     [JsonIgnore]
     public virtual IPortContainer Parent
     {
         get => _parent;
-        set
+        internal set 
         {
             ArgumentNullException.ThrowIfNull(value, nameof(Parent));
             if (_parent != value)
@@ -240,6 +241,14 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
                 OnPortParentChanged.Publish(new(this, oldParent, _parent));
             }
         }
+    }
+
+    /// <inheritdoc />
+    [JsonIgnore]
+    IPortContainer IPort.Parent
+    {
+        get => Parent;
+        set => Parent = value;
     }
 
     /// <inheritdoc />

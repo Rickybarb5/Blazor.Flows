@@ -31,8 +31,7 @@ public interface ILink : IId,
     ///     Gets a value indicating if the port is connected to a target port.
     /// </summary>
     public bool IsConnected { get; }
-
-
+    
     /// <summary>
     ///     X coordinate of the target position of the end of the link.
     ///     If connected to a target port, it is the center of that element's position.

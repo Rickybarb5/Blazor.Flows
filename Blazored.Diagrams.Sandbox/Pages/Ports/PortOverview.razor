@@ -236,7 +236,7 @@
 
         // 3. Add a link
         var sourcePort = mainNode.Ports.First(p => p.Alignment == PortAlignment.Right && p.Justification == PortJustification.Center);
-        Service.Add.AddLinkTo(sourcePort, targetPort, new LineLink());
+        Service.Add.LinkTo(sourcePort, targetPort, new LineLink());
 
         // 4. Add a third node to show advanced positioning
         var advancedNode = new Node();

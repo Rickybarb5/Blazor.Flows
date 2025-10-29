@@ -8,11 +8,11 @@ public interface IZoomable
     /// <summary>
     ///     Current zoom value
     /// </summary>
-    public decimal Zoom { get; set; }
+    public double Zoom { get; set; }
 
     /// <summary>
     ///     Sets the zoom to the specified value.
     /// </summary>
     /// <param name="zoom"></param>
-    public void SetZoom(decimal zoom);
+    public void SetZoom(double zoom);
 }

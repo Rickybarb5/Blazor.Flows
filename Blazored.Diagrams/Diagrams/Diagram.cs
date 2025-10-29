@@ -27,7 +27,7 @@ public partial class Diagram : IDiagram
     private int _positionX;
     private int _positionY;
     private int _width;
-    private decimal _zoom = 1;
+    private double _zoom = 1;
 
     /// <summary>
     /// Instantiates a new <see cref="Diagram"/>
@@ -44,7 +44,7 @@ public partial class Diagram : IDiagram
     public virtual string Id { get; init; } = Guid.NewGuid().ToString();
 
     /// <inheritdoc />
-    public virtual decimal Zoom
+    public virtual double Zoom
     {
         get => _zoom;
         set => SetZoom(value);

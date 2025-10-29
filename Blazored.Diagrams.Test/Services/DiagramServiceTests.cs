@@ -19,7 +19,7 @@ public class DiagramServiceTests
         group.SetSize(100, 100);
         node.SetSize(50, 50);
         //Act
-        service.CenterTo(node, group.Width, group.Height, group.PositionX, group.PositionY);
+        service.CenterIn(node, group);
         //Assert
         Assert.NotEqual(0, node.PositionX);
         Assert.NotEqual(0, node.PositionY);

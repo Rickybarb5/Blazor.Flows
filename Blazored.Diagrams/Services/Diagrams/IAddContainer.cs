@@ -18,7 +18,7 @@ public interface IAddContainer
     /// <param name="parent">Container to which the new group will be added to.</param>
     /// <param name="group">Group to be added.</param>
     /// <typeparam name="TGroup">Group Type</typeparam>
-    IAddContainer AddGroupTo<TGroup>(IGroupContainer parent, TGroup group)
+    IAddContainer GroupTo<TGroup>(IGroupContainer parent, TGroup group)
         where TGroup : IGroup;
 
     /// <summary>
@@ -46,7 +46,7 @@ public interface IAddContainer
     /// <param name="targetPort">Target port of the link.</param>
     /// <param name="link">Link that will be added to the container</param>
     /// <typeparam name="TLink">Link Type</typeparam>
-    IAddContainer AddLinkTo<TLink>(ILinkContainer sourcePort, ILinkContainer? targetPort, TLink link)
+    IAddContainer LinkTo<TLink>(ILinkContainer sourcePort, ILinkContainer? targetPort, TLink link)
         where TLink : ILink;
 
     /// <summary>
@@ -73,5 +73,5 @@ public interface IAddContainer
     /// Adds a layer to the diagram.
     /// </summary>
     /// <param name="layer">Layer to be added.</param>
-    IAddContainer AddLayer(ILayer layer);
+    IAddContainer Layer(ILayer layer);
 }

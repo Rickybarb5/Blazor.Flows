@@ -31,9 +31,9 @@ public partial class Diagram
     }
 
     /// <inheritdoc />
-    public virtual void SetZoom(decimal zoom)
+    public virtual void SetZoom(double zoom)
     {
-        if (zoom != _zoom)
+        if (Math.Abs(zoom - _zoom) > 0.001)
         {
             var oldZoom = _zoom;
             _zoom = zoom;

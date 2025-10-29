@@ -23,9 +23,9 @@
                                    LabelPlacement="Placement.Start"/>
                     </div>
 
-                    <MudNumericField T="decimal" Immediate="true" Label="Max zoom value" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.MaxZoom"/>
-                    <MudNumericField T="decimal" Immediate="true" HelperText="Must be bigger than 0" Label="Min zoom value" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.MinZoom"/>
-                    <MudNumericField T="decimal" Immediate="true" Label="Zoom step" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.ZoomStep"/>
+                    <MudNumericField T="double" Immediate="true" Label="Max zoom value" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.MaxZoom"/>
+                    <MudNumericField T="double" Immediate="true" HelperText="Must be bigger than 0" Label="Min zoom value" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.MinZoom"/>
+                    <MudNumericField T="double" Immediate="true" Label="Zoom step" @bind-Value="Service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.ZoomStep"/>
                 </MudStack>
                 <MudDivider Class="my-4"/>
 

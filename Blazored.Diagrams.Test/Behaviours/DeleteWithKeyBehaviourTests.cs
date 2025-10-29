@@ -101,7 +101,7 @@ public class DeleteWithKeyBehaviourTests
         service.Add.PortTo(node, sourcePort);
         service.Add.PortTo(group, targetPort);
         var link = new LineLink();
-        service.Add.AddLinkTo(sourcePort, targetPort, link);
+        service.Add.LinkTo(sourcePort, targetPort, link);
         link.IsSelected = true;
 
         var args = new KeyboardEventArgs { Code = "Backspace" };

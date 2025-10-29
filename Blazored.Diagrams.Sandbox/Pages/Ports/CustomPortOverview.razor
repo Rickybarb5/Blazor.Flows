@@ -82,7 +82,7 @@
         Service.Add.PortTo(node2, customPort);
 
         // 3. Add a link between them
-        Service.Add.AddLinkTo(defaultPort, customPort, new LineLink());
+        Service.Add.LinkTo(defaultPort, customPort, new LineLink());
 
         return base.OnInitializedAsync();
     }

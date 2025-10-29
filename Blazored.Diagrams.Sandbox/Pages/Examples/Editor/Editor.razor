@@ -90,13 +90,17 @@
             <MudPaper Class="d-flex pa-2 elevation-2 rounded-lg">
                 <MudButton OnClick="AddNode" StartIcon="@Icons.Material.Filled.AddBox" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small">Add Node</MudButton>
                 <MudButton OnClick="AddGroup" StartIcon="@Icons.Material.Filled.AddCircle" Variant="Variant.Filled" Color="Color.Tertiary" Size="Size.Small">Add Group</MudButton>
-                <MudButton OnClick="SaveDiagram" StartIcon="@Icons.Material.Filled.Save" Variant="Variant.Filled" Size="Size.Small" Color="Color.Dark">Save</MudButton>
-                <MudButton OnClick="LoadDiagram" StartIcon="@Icons.Material.Filled.FolderOpen" Variant="Variant.Filled" Size="Size.Small" Color="Color.Dark">Load</MudButton>
+                <MudIconButton OnClick="FitToScreen" Icon="@Icons.Material.Filled.FitScreen" Variant="Variant.Filled" Size="Size.Small" Color="Color.Dark"></MudIconButton>
+                <MudIconButton OnClick="SaveDiagram" Icon="@Icons.Material.Filled.Save" Variant="Variant.Filled" Size="Size.Small" Color="Color.Dark"></MudIconButton>
+                <MudIconButton OnClick="LoadDiagram" Icon="@Icons.Material.Filled.FolderOpen" Variant="Variant.Filled" Size="Size.Small" Color="Color.Dark"></MudIconButton>
             </MudPaper>
 
             <!-- DIAGRAM CONTAINER -->
             <MudPaper Class="flex-grow-1 elevation-2 rounded-lg" Style="width:100%;height:100%;">
-                <DiagramContainer DiagramService="DiagramService" />
+                <DiagramContainer DiagramService="DiagramService">
+                    <ZoomControls></ZoomControls>
+                    <MinimapControls></MinimapControls>
+                </DiagramContainer>
             </MudPaper>
         </MudStack>
     </MudItem>
@@ -191,14 +195,14 @@
 
 @code {
     private object? SelectedModel { get; set; }
-    private List<IDisposable> Subscriptions = new();
+    private List<IDisposable> _subscriptions = [];
     [Inject]public IDiagramService DiagramService { get; set; } = null!;
     [Inject]public ISnackbar Snackbar { get; set; } = null!;
     [Inject]public IDialogService DialogService { get; set; } = null!;
 
     protected override void OnInitialized()
     {
-        Subscriptions =
+        _subscriptions =
         [
             DiagramService.Events.SubscribeTo<NodeSelectionChangedEvent>(ev=>HandleModelSelected(ev.Model)),
             DiagramService.Events.SubscribeTo<GroupSelectionChangedEvent>(ev=>HandleModelSelected(ev.Model)),
@@ -293,7 +297,7 @@
 
         if (container is Group group)
         {
-            DiagramService.Add.AddGroupTo(group, newGroup);
+            DiagramService.Add.GroupTo(group, newGroup);
             Snackbar.Add($"Child Group added to Group", Severity.Info);
         }
         else
@@ -308,7 +312,7 @@
     private void AddPortToContainer(IPortContainer container)
     { 
         // Available port alignments to cycle through
-         List<PortAlignment> _portAlignments =
+         List<PortAlignment> portAlignments =
          [
              PortAlignment.Left,
              PortAlignment.Top,
@@ -317,7 +321,7 @@
          ];
 
         // Find the next available side to add a port to
-        var nextAlignment = _portAlignments.FirstOrDefault(alignment =>
+        var nextAlignment = portAlignments.FirstOrDefault(alignment =>
             container.Ports.All(p => p.Alignment != alignment));
 
         if (container.Ports.Count < 4)
@@ -378,7 +382,13 @@
     
     public void Dispose()
     {
-        Subscriptions.DisposeAll();
+        _subscriptions.DisposeAll();
     }
+
+    private void FitToScreen(MouseEventArgs obj)
+    {
+        DiagramService.FitToScreen(new DiagramService.FitToScreenParameters(5, false));
+    }
+
 }
 

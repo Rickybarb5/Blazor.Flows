@@ -1,4 +1,5 @@
 using Blazored.Diagrams.Interfaces;
+using Blazored.Diagrams.Services.Diagrams;
 
 namespace Blazored.Diagrams.Extensions;
 
@@ -50,5 +51,22 @@ public static class HelperExtensions
         {
             action(item);
         }
+    }
+
+    /// <summary>
+    /// Gets the bounds from all components in the diagram.
+    /// </summary>
+    /// <param name="service"></param>
+    /// <returns></returns>
+    public static IEnumerable<Rect> GetAllBounds(this IDiagramService service)
+    {
+       return service.Diagram
+            .AllNodes
+            .Select(x => x.GetBounds())
+            .Concat(service.Diagram.AllGroups
+                .Select(x => x.GetBounds()))
+            .Concat(service.Diagram.AllPorts
+                .Select(x => x.GetBounds()))
+            .ToList();
     }
 }

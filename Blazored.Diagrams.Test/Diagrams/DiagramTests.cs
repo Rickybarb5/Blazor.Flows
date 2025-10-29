@@ -26,7 +26,7 @@ public class DiagramTests
     public void Test_Set_Zoom()
     {
         //Arrange
-        const decimal zoom = 2;
+        const double zoom = 2;
         var diagram = Instance;
 
         //Act

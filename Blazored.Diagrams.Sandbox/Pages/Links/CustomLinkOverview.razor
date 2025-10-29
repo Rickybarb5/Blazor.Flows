@@ -100,12 +100,12 @@
         // Link 1: ExtendedLink (n1 Right -> n3 Left)
         var n1RightPort = n1.Ports.First(p => p.Alignment == PortAlignment.Right);
         var n3LeftPort = n3.Ports.First(p => p.Alignment == PortAlignment.Left);
-        Service.Add.AddLinkTo(n1RightPort, n3LeftPort, extendedLink);
+        Service.Add.LinkTo(n1RightPort, n3LeftPort, extendedLink);
 
         // Link 2: AnimatedLink (n2 Bottom -> n3 Top)
         var n2BottomPort = n2.Ports.First(p => p.Alignment == PortAlignment.Bottom);
         var n3TopPort = n3.Ports.First(p => p.Alignment == PortAlignment.Top);
-        Service.Add.AddLinkTo(n2BottomPort, n3TopPort, animatedLink);
+        Service.Add.LinkTo(n2BottomPort, n3TopPort, animatedLink);
 
         return base.OnInitializedAsync();
     }

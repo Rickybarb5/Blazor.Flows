@@ -12,7 +12,7 @@ public partial class DiagramStyleOptions : IDiagramStyleOptions
     /// Default diagram container style.
     /// </summary>
     [JsonIgnore]
-    public const string DefaultContainerStyle = "width:100%;height:100%;overflow:hidden;";
+    public const string DefaultContainerStyle = "width:100%;height:100%;overflow:hidden;position:relative;";
 
     /// <summary>
     /// Default cell size.

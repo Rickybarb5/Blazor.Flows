@@ -95,9 +95,9 @@
         var orthogonalLink = new OrthogonalLink();
 
         // Add the links.
-        Service.Add.AddLinkTo(n1.Ports.First(), n2.Ports.First(), lineLink);
-        Service.Add.AddLinkTo(n2.Ports.Last(), n3.Ports.First(), curvedLink);
-        Service.Add.AddLinkTo(n3.Ports.Last(), n4.Ports.First(), orthogonalLink);
+        Service.Add.LinkTo(n1.Ports.First(), n2.Ports.First(), lineLink);
+        Service.Add.LinkTo(n2.Ports.Last(), n3.Ports.First(), curvedLink);
+        Service.Add.LinkTo(n3.Ports.Last(), n4.Ports.First(), orthogonalLink);
        
         return base.OnInitializedAsync();
     }

@@ -69,7 +69,7 @@ public class ZoomBehavior : BaseBehaviour
         }
     }
     
-    private void SetZoom(decimal zoom)
+    private void SetZoom(double zoom)
     {
         
         if (zoom > _behaviourOptions.MaxZoom)

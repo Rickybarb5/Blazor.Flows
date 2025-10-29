@@ -6,7 +6,7 @@ namespace Blazored.Diagrams.Interfaces;
 /// <summary>
 ///     Describes a model that contains nodes.
 /// </summary>
-public interface INodeContainer
+public interface INodeContainer: IId
 {
     /// <summary>
     ///     Nodes that belong to the model.

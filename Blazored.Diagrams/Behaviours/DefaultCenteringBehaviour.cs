@@ -89,7 +89,7 @@ public class DefaultCenteringBehaviour : BaseBehaviour
         if (added.PositionX == 0 && added.PositionY == 0)
         {
             var padding = parent is IPadding pad ? pad.Padding : 0; 
-            diagramService.CenterTo(added, parent.Width, parent.Height, parent.PositionX, parent.PositionY, padding);
+            diagramService.CenterIn(added, parent);
         }
     }
     

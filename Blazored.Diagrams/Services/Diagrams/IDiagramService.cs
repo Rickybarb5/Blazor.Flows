@@ -58,30 +58,31 @@ public interface IDiagramService : IDisposable
     /// <returns></returns>
     (int CenterX, int CenterY) GetCenterCoordinates<T>(T model) where T : ISize, IPosition;
 
+
     /// <summary>
     /// Centers a model in another model
     /// </summary>
-    /// <param name="toCenter"></param>
-    /// <param name="containerWidth"></param>
-    /// <param name="containerHeight"></param>
-    /// <param name="containerPositionX"></param>
-    /// <param name="containerPositionY"></param>
-    /// <param name="padding"></param>
-    /// <typeparam name="ToCenter"></typeparam>
-    void CenterTo<ToCenter>(
-        ToCenter toCenter,
-        int containerWidth,
-        int containerHeight,
-        int containerPositionX,
-        int containerPositionY,
-        int padding = 0)
-        where ToCenter : ISize, IPosition;
+    /// <param name="toCenter">Model that will change position.</param>
+    /// <param name="container">Model where the model will be centered to. </param>
+    /// <typeparam name="TModel">Any diagram model that implements <see cref="ISize"/>, <see cref="IPosition"/>.</typeparam>
+    /// <typeparam name="TContainer">Any diagram model that implements <see cref="ISize"/>, <see cref="IPosition"/></typeparam>
+    void CenterIn<TContainer, TModel>(
+        TModel toCenter,
+        TContainer container)
+        where TModel : ISize, IPosition
+        where TContainer : ISize, IPosition;
 
     /// <summary>
-    ///     Changes the position of a model to be in the center of the diagram, accounting for pan and zoom.
+    ///     Changes the position of a model to be in the center of the viewport, accounting for pan and zoom.
     /// </summary>
     /// <param name="toCenter">Model to be centered.</param>
-    /// <typeparam name="ToCenter">Type of the model to be centered.</typeparam>
-    void CenterInViewport<ToCenter>(ToCenter toCenter)
-        where ToCenter : IPosition, ISize;
+    /// <typeparam name="TModel">Type of the model to be centered.</typeparam>
+    public void CenterInViewport<TModel>(TModel toCenter)
+        where TModel : IPosition, ISize;
+
+    /// <summary>
+    /// Changes the pan and zoom to fit all diagram components on screen (if zoom allows it)
+    /// </summary>
+    /// <param name="parameters">Customization options.</param>
+    void FitToScreen(DiagramService.FitToScreenParameters parameters);
 }
