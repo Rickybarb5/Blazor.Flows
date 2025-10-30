@@ -17,7 +17,7 @@ namespace Blazored.Diagrams.Diagrams;
 /// </summary>
 public partial class Diagram : IDiagram
 {
-    private ILayer _currentLayer;
+    private ILayer _currentLayer = null!;
     private int _height;
 
     private ObservableList<ILayer> _layers = [];
@@ -145,7 +145,10 @@ public partial class Diagram : IDiagram
     /// <inheritdoc />
     [JsonIgnore]
     public IReadOnlyList<ISelectable> SelectedModels =>
-        Layers.SelectMany(l => l.SelectedModels).ToList().AsReadOnly();
+        Layers
+            .SelectMany(l => l.SelectedModels)
+            .ToList()
+            .AsReadOnly();
 
     /// <inheritdoc />
     public virtual ILayer CurrentLayer

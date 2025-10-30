@@ -21,22 +21,22 @@ public interface IDiagramStyleOptions
     int CellSize { get; set; }
 
     /// <summary>
-    /// RGB color used for the grid lines. Default: <see cref="DefaultGridLineColor"/>.
+    /// RGB color used for the grid lines. Default: <see cref="DiagramStyleOptions.DefaultGridLineColor"/>.
     /// </summary>
     string GridLineColor { get; set; }
 
     /// <summary>
-    /// Opacity of the grid lines (0–1). Default: <see cref="DefaultGridLineOpacity"/>.
+    /// Opacity of the grid lines (0–1). Default: <see cref="DiagramStyleOptions.DefaultGridLineOpacity"/>.
     /// </summary>
     decimal GridLineOpacity { get; set; }
 
     /// <summary>
-    /// Size of the grid lines in pixels. Default: <see cref="DefaultGridLineThickness"/>.
+    /// Size of the grid lines in pixels. Default: <see cref="DiagramStyleOptions.DefaultGridLineThickness"/>.
     /// </summary>
     int GridLineThickness { get; set; }
 
     /// <summary>
-    /// Gets or sets the grid style. If unset, falls back to <see cref="DefaultGridStyle"/>.
+    /// Gets or sets the grid style. If unset, falls back to <see cref="DiagramStyleOptions.DefaultGridStyle"/>.
     /// </summary>
     string GridStyle { get; set; }
 }

@@ -3,11 +3,9 @@ using System.Text.Json;
 using System.Xml.Linq;
 using EventDocGenerator;
 
-// --- Main Program ---
-
 if (args.Length == 0)
 {
-    Console.Error.WriteLine("❌ Missing output directory argument.");
+    Console.Error.WriteLine("Missing output directory argument.");
     Console.Error.WriteLine("Usage: EventDocGenerator <output-directory>");
     return;
 }
@@ -21,7 +19,7 @@ string xmlPath = Path.ChangeExtension(assembly.Location, ".xml");
 
 if (!File.Exists(xmlPath))
 {
-    Console.Error.WriteLine($"❌ Cannot find XML documentation file at: {xmlPath}");
+    Console.Error.WriteLine($"Cannot find XML documentation file at: {xmlPath}");
     return;
 }
 
@@ -42,7 +40,7 @@ foreach (var group in docsByGroup)
     string groupKey = group.Key;
     if (groupKey == "Other")
     {
-        Console.Error.WriteLine($"⚠️ Found {group.Count()} events with 'Other' grouping:");
+        Console.Error.WriteLine($"Found {group.Count()} events with 'Other' grouping:");
         foreach(var doc in group) Console.Error.WriteLine($"   - {doc.Name}");
         continue;
     }
@@ -58,7 +56,7 @@ foreach (var group in docsByGroup)
     string outputPath = Path.Combine(outputDir, fileName);
     
     File.WriteAllText(outputPath, json);
-    Console.WriteLine($"✅ Generated {docsForGroup.Count} event docs at {outputPath}");
+    Console.WriteLine($"Generated {docsForGroup.Count} event docs at {outputPath}");
     totalEvents += docsForGroup.Count;
 }
 

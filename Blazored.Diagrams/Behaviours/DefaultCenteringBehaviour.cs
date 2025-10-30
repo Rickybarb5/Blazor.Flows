@@ -78,7 +78,7 @@ public class DefaultCenteringBehaviour : BaseBehaviour
     {
         if (model.PositionX == 0 && model.PositionY == 0)
         {
-            diagramService.CenterInViewport(model);
+            diagramService.CenterInViewport(new CenterInViewportParameters<T>(model));
         }
     }
 
@@ -89,7 +89,7 @@ public class DefaultCenteringBehaviour : BaseBehaviour
         if (added.PositionX == 0 && added.PositionY == 0)
         {
             var padding = parent is IPadding pad ? pad.Padding : 0; 
-            diagramService.CenterIn(added, parent);
+            diagramService.CenterIn(new CenterInParameters<TAdded, TParent>(added, parent));
         }
     }
     

@@ -44,6 +44,7 @@ public interface ILayer : IId,
     /// <summary>
     /// Gets the selected models in the layer.
     /// </summary>
+    [JsonIgnore]
     public IReadOnlyList<ISelectable> SelectedModels { get; }
 
     /// <summary>

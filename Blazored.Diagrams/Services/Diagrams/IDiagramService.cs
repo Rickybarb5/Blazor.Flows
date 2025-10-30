@@ -50,31 +50,28 @@ public interface IDiagramService : IDisposable
 
 
     /// <summary>
-    /// Centers a model in another model
+    /// Centers a model in another model.
     /// </summary>
-    /// <param name="toCenter">Model that will change position.</param>
-    /// <param name="container">Model where the model will be centered to. </param>
+    /// <param name="parameters">Parameters to center the model.</param>
     /// <typeparam name="TModel">Any diagram model that implements <see cref="ISize"/>, <see cref="IPosition"/>.</typeparam>
     /// <typeparam name="TContainer">Any diagram model that implements <see cref="ISize"/>, <see cref="IPosition"/></typeparam>
-    void CenterIn<TContainer, TModel>(
-        TModel toCenter,
-        TContainer container)
+    void CenterIn<TContainer, TModel>(CenterInParameters<TContainer,TModel> parameters)
         where TModel : ISize, IPosition
         where TContainer : ISize, IPosition;
 
     /// <summary>
     ///     Changes the position of a model to be in the center of the viewport, accounting for pan and zoom.
     /// </summary>
-    /// <param name="toCenter">Model to be centered.</param>
+    /// <param name="parameters">Parameters to center the model.</param>
     /// <typeparam name="TModel">Type of the model to be centered.</typeparam>
-    public void CenterInViewport<TModel>(TModel toCenter)
+    public void CenterInViewport<TModel>(CenterInViewportParameters<TModel> parameters)
         where TModel : IPosition, ISize;
 
     /// <summary>
     /// Changes the pan and zoom to fit all diagram components on screen (if zoom allows it)
     /// </summary>
     /// <param name="parameters">Customization options.</param>
-    void FitToScreen(DiagramService.FitToScreenParameters parameters);
+    void FitToScreen(FitToScreenParameters parameters);
 
     /// <summary>
     /// Removes a node from the diagram.
@@ -141,7 +138,6 @@ public interface IDiagramService : IDisposable
     /// <param name="sourcePort">Source port of the link.</param>
     /// <param name="targetPort">Target port of the link.</param>
     /// <param name="link">Link that will be added to the container</param>
-    /// <typeparam name="TLink">Link Type</typeparam>
     /// <returns></returns>
     IDiagramService AddLinkTo(ILinkContainer sourcePort, ILinkContainer? targetPort, ILink link);
 
@@ -189,7 +185,7 @@ public interface IDiagramService : IDisposable
     void LoadAndUse(string json);
 
     /// <summary>
-    /// Loads a JSON and returns the a <see cref="IDiagram"/> object;
+    /// Loads a JSON and returns a diagram object;
     /// </summary>
     /// <param name="json">The Json string.</param>
     /// <typeparam name="TDiagram">The Diagram type.</typeparam>
@@ -198,9 +194,16 @@ public interface IDiagramService : IDisposable
         where TDiagram : IDiagram;
 
     /// <summary>
-    /// Loads a JSON and returns the a <see cref="IDiagram"/> object;
+    /// Loads a JSON and returns the  <see cref="IDiagram"/> object;
     /// </summary>
     /// <param name="json">The Json string.</param>
     /// <returns></returns>
     IDiagram Load(string json);
+
+    /// <summary>
+    /// Zooms into an object
+    /// </summary>
+    /// <param name="parameters">Parameters to zoom the model.</param>
+    void ZoomToModel<TModel>(ZoomToModelParameters<TModel> parameters)
+        where TModel : IPosition, ISize;
 }

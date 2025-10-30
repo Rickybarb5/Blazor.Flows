@@ -4,7 +4,6 @@ using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Helpers;
 using Blazored.Diagrams.Ports;
 using Blazored.Diagrams.Services.Registry;
-using Newtonsoft.Json;
 
 namespace Blazored.Diagrams.Nodes;
 

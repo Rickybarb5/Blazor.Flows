@@ -35,13 +35,13 @@ public class ComponentRegistry : IComponentRegistry
         }
     }
     
-    private static Type? GetClosestHasComponentInterface(Type type)
+    private static Type? GetClosestHasComponentInterface(Type? type)
     {
         while (type != null && type != typeof(object))
         {
             // Only interfaces introduced on this type, not inherited
             var declaredInterfaces = type.GetInterfaces()
-                .Except(type.BaseType?.GetInterfaces() ?? Array.Empty<Type>());
+                .Except(type.BaseType?.GetInterfaces() ?? []);
 
             var match = declaredInterfaces
                 .FirstOrDefault(i => i.IsGenericType &&

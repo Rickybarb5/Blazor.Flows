@@ -234,37 +234,6 @@ public class PortTests
         Assert.Equal(1, eventCount);
     }
 
-    //TODO:MOVE to portdefaultbehaviourTests
-    // [Theory]
-    // [InlineData(PortAlignment.Top, PortJustification.Start, -50, -50)]
-    // [InlineData(PortAlignment.Top, PortJustification.Center, 0, -50)]
-    // [InlineData(PortAlignment.Top, PortJustification.End, 50, -50)]
-    // [InlineData(PortAlignment.Left, PortJustification.Start, -50, -50)]
-    // [InlineData(PortAlignment.Left, PortJustification.Center, -50, 0)]
-    // [InlineData(PortAlignment.Left, PortJustification.End, -50, 50)]
-    // [InlineData(PortAlignment.Bottom, PortJustification.Start, -50, 50)]
-    // [InlineData(PortAlignment.Bottom, PortJustification.Center, 0, 50)]
-    // [InlineData(PortAlignment.Bottom, PortJustification.End, 50, 50)]
-    // [InlineData(PortAlignment.Right, PortJustification.Start, 50, -50)]
-    // [InlineData(PortAlignment.Right, PortJustification.Center, 50, 0)]
-    // [InlineData(PortAlignment.Right, PortJustification.End, 50, 50)]
-    // public void Test_Position_Calculation(PortAlignment alignment, PortJustification justification, int expectedX,
-    //     int expectedY)
-    // {
-    //     var node = new Node();
-    //     node.SetSize(100, 100);
-    //     var port = Instance;
-    //     port.SetSize(100, 100);
-    //     port.Justification = justification;
-    //     port.Alignment = alignment;
-    //     node.Ports.Add(port);
-    //
-    //     var (positionX, positionY) = port.CalculatePosition();
-    //
-    //     Assert.Equal(expectedX, positionX);
-    //     Assert.Equal(expectedY, positionY);
-    // }
-
     [Fact]
     public void CanConnectTo_Default_Behaviour_Does_Not_Connect_To_Target_Port()
     {

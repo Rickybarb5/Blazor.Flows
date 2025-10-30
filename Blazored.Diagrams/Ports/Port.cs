@@ -1,5 +1,4 @@
 ﻿using Blazored.Diagrams.Components.Models;
-using Blazored.Diagrams.Events;
 using Blazored.Diagrams.Extensions;
 using Blazored.Diagrams.Helpers;
 using Blazored.Diagrams.Interfaces;
@@ -22,7 +21,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     private PortJustification _justification = PortJustification.Center;
     private int _offsetX;
     private int _offsetY;
-    private IPortContainer _parent;
+    private IPortContainer _parent = null!;
     private int _positionX;
     private int _positionY;
     private bool _selected;

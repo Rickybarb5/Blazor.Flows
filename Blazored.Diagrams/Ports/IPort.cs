@@ -126,8 +126,7 @@ public interface IPort :
     /// Indicates if link creation is possible from this port.
     /// </summary>
     bool CanCreateLink();
-
-
+    
     /// <summary>
     ///     Indicates if this port can connect to another port.
     /// </summary>

@@ -24,17 +24,17 @@ public partial class DiagramService : IDiagramService
     }
 
     /// <inheritdoc />
-    public IEventAggregator Events { get; set; } = null!;
+    public IEventAggregator Events { get; set; }
 
     /// <inheritdoc />
-    public IBehaviourContainer Behaviours { get; set; } = null!;
+    public IBehaviourContainer Behaviours { get; set; }
 
 
     /// <inheritdoc />
-    public IOptionsContainer Options { get; set; } = null!;
+    public IOptionsContainer Options { get; set; }
 
     /// <inheritdoc />
-    public IDiagram Diagram { get; private set; } = null!;
+    public IDiagram Diagram { get; private set; }
 
     /// <inheritdoc />
     public void UseDiagram(IDiagram diagram)
@@ -46,7 +46,6 @@ public partial class DiagramService : IDiagramService
         Diagram = diagram;
         // We don't reset the entire event service
         // This way, custom behaviours keep working!
-        //TODO: Maybe create another function with the rewire. This whole thing should reset the diagram.
         ((EventAggregator)Events).RewireSubscriptions();
         Behaviours = new BehaviourContainer(this);
         Options = new OptionsContainer(this);

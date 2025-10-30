@@ -1,5 +1,4 @@
 ﻿using Blazored.Diagrams.Components.Models;
-using Blazored.Diagrams.Events;
 using Blazored.Diagrams.Ports;
 using Blazored.Diagrams.Services.Registry;
 using Newtonsoft.Json;
@@ -13,7 +12,7 @@ public abstract partial class Link : ILink, IHasComponent<DefaultLinkComponent>
 {
     private bool _isSelected;
     private bool _isVisible = true;
-    private IPort _sourcePort;
+    private IPort _sourcePort = null!;
     private IPort? _targetPort;
     private int _targetPositionX;
     private int _targetPositionY;

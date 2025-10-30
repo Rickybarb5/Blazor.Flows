@@ -1,5 +1,4 @@
 @page "/calculator-example"
-@using Blazored.Diagrams.Events
 @using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.Behaviours
 @using Blazored.Diagrams.Sandbox.Pages.Examples.CalculatorExample.Nodes
 
@@ -33,13 +32,4 @@
         var node = new Nodes.OperatorNode();
         Service.AddNode(node);
     }
-    
-    private void OnDiagramLoaded(Diagram obj)
-    {
-        //Todo:Add diagram to service
-        // _diagram = obj;
-        Service.Events.Publish(new DiagramRedrawEvent(Service.Diagram));
-        StateHasChanged();
-    }
-
 }

@@ -16,49 +16,35 @@ public partial class DiagramService
         return (model.PositionX + model.Width / 2, model.PositionY + model.Height / 2);
     }
 
-    /// <summary>
-    /// Centers a model in another model
-    /// </summary>
-    /// <param name="toCenter">Model that will change position.</param>
-    /// <param name="container">Model where the model will be centered to. </param>
-    /// <typeparam name="TModel">Any diagram model that implements <see cref="ISize"/>, <see cref="IPosition"/>.</typeparam>
-    /// <typeparam name="TContainer">Any diagram model that implements <see cref="ISize"/>, <see cref="IPosition"/></typeparam>
-    public void CenterIn<TContainer, TModel>(
-        TModel toCenter,
-        TContainer container)
+
+    /// <inheritdoc />
+    public virtual void CenterIn<TContainer, TModel>(CenterInParameters<TContainer, TModel> parameters)
         where TModel : ISize, IPosition
         where TContainer : ISize, IPosition
     {
-        var padding = container is IPadding p ? p.Padding : 0;
-        // --- 1. Calculate the inner content area (excluding padding) ---
-        // The inner content's top-left corner starts after the padding.
-        var innerPositionX = container.PositionX + padding;
-        var innerPositionY = container.PositionY + padding;
+        var padding = parameters.Container is IPadding p ? p.Padding : 0;
+        
+        var innerPositionX = parameters.Container.PositionX + padding;
+        var innerPositionY = parameters.Container.PositionY + padding;
 
-        // The inner content's width/height is the total minus padding on both sides.
-        var innerWidth = container.Width - (padding * 2);
-        var innerHeight = container.Height - (padding * 2);
+        
+        var innerWidth = parameters.Container.Width - (padding * 2);
+        var innerHeight = parameters.Container.Height - (padding * 2);
 
-        // --- 2. Calculate the center of the inner content area ---
+        
         var targetCenterX = innerPositionX + innerWidth / 2;
         var targetCenterY = innerPositionY + innerHeight / 2;
 
-        // --- 3. Calculate the new position for 'toCenter' to align its center with the target center ---
-        // This correctly accounts for the size of the object being centered.
-        var newPositionX = targetCenterX - toCenter.Width / 2;
-        var newPositionY = targetCenterY - toCenter.Height / 2;
-
-        // --- 4. Set the new position ---
-        // NO padding subtraction is needed here, as it was accounted for in Step 1 & 2.
-        toCenter.SetPosition(newPositionX, newPositionY);
+        
+        var newPositionX = targetCenterX - parameters.Container.Width / 2;
+        var newPositionY = targetCenterY - parameters.Container.Height / 2;
+        
+        parameters.Model.SetPosition(newPositionX, newPositionY);
     }
 
-    /// <summary>
-    ///     Changes the position of a model to be in the center of the diagram, accounting for pan and zoom.
-    /// </summary>
-    /// <param name="toCenter">Model to be centered.</param>
-    /// <typeparam name="TModel">Type of the model to be centered.</typeparam>
-    public void CenterInViewport<TModel>(TModel toCenter)
+
+    /// <inheritdoc />
+    public virtual void CenterInViewport<TModel>(CenterInViewportParameters<TModel> parameters)
         where TModel : IPosition, ISize
     {
         // Diagram might not be rendered on screen yet.
@@ -67,22 +53,40 @@ public partial class DiagramService
             return;
         }
 
-        // Calculate the center of the viewport.
         var viewportCenterX = (Diagram.Width / 2 - Diagram.PanX) / Diagram.Zoom;
         var viewportCenterY = (Diagram.Height / 2 - Diagram.PanY) / Diagram.Zoom;
 
-        // Calculate the new position for the toCenter element to center it within the viewport
-        var newPositionX = (int)(viewportCenterX - toCenter.Width / 2);
-        var newPositionY = (int)(viewportCenterY - toCenter.Height / 2);
+        var newPositionX = (int)(viewportCenterX - parameters.Model.Width / 2);
+        var newPositionY = (int)(viewportCenterY - parameters.Model.Height / 2);
 
-        // Set the new position of the toCenter element
-        toCenter.SetPosition(newPositionX, newPositionY);
+        parameters.Model.SetPosition(newPositionX, newPositionY);
     }
+    
+    /// <inheritdoc />
+    public virtual void ZoomToModel<TModel>(ZoomToModelParameters<TModel> parameters)
+        where TModel : IPosition, ISize
+    {
+        if (Diagram.Width <= 0 || Diagram.Height <= 0 || parameters.Model.Width <= 0 || parameters.Model.Height <= 0)
+            return;
+
+        var worldCenterX = parameters.Model.PositionX + parameters.Model.Width / 2;
+        var worldCenterY = parameters.Model.PositionY + parameters.Model.Height / 2;
+
+        var screenCenterX = Diagram.Width / 2.0;
+        var screenCenterY = Diagram.Height / 2.0;
+
+        var newPanX = screenCenterX  - worldCenterX;
+        var newPanY = screenCenterY  - worldCenterY;
+
+        Diagram.SetZoom(1);
+        Diagram.SetPan((int)newPanX, (int)newPanY);
+    }
+
 
 
     /// <inheritdoc />
     // TODO: This is bugged!
-    public void FitToScreen(FitToScreenParameters parameters)
+    public virtual void FitToScreen(FitToScreenParameters parameters)
     {
         bool VisiblePredicate(IVisible x) => parameters.IncludeInvisible || x.IsVisible;
 
@@ -132,11 +136,4 @@ public partial class DiagramService
         Diagram.SetZoom(newZoom);
         Diagram.SetPan((int)newPanX, (int)newPanY);
     }
-
-    /// <summary>
-    /// Collection of options to use on the <see cref="DiagramService.FitToScreen"/> method.
-    /// </summary>
-    /// <param name="Margin">Margin in pixels between the models and the edge of the diagram container.</param>
-    /// <param name="IncludeInvisible">If true, invisible components will also be taken into account.</param>
-    public record FitToScreenParameters(int Margin, bool IncludeInvisible);
 }

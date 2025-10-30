@@ -33,7 +33,7 @@ public partial class DrawLinkBehaviourOptions : BaseBehaviourOptions
             {
                 throw new ArgumentException($"{nameof(LinkType)} must implement the ILink interface.");
             }
-            TypeName = value.FullName;
+            TypeName = value.FullName ?? throw new InvalidOperationException($"It was not possible to get type name for {value}");
         }
     }
 

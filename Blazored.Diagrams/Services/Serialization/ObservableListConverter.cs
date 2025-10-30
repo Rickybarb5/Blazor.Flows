@@ -46,7 +46,7 @@ public class ObservableListConverter : JsonConverter
             if (reader.TokenType == JsonToken.PropertyName)
             {
                 var key = reader.Value?.ToString();
-                reader.Read(); // Move to the value
+                reader.Read(); 
                 var value = serializer.Deserialize(reader, itemType);
                 
                 if (key != null && value != null)

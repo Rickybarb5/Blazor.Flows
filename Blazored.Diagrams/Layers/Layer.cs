@@ -124,6 +124,7 @@ public partial class Layer : ILayer
         .AsReadOnly();
 
     /// <inheritdoc />
+    [JsonIgnore]
     public IReadOnlyList<ISelectable> SelectedModels =>
         AllNodes.Cast<ISelectable>()
             .Concat(AllGroups)

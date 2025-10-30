@@ -140,9 +140,9 @@
     /// Implemented this way due to an open blazor issue where wheel event cannot be stopped from propagating.
     /// https://github.com/dotnet/aspnetcore/issues/17358
     /// </summary>
-    /// <param name="args"></param>
+    /// <param name="args"><see cref="WheelEventArgs"/>.</param>
     [JSInvokable]
-    public void OnZoom(WheelEventData args)
+    public void OnZoom(WheelEventArgs args)
     {
         _diagramService.Events.Publish(new DiagramWheelEvent(_diagramService.Diagram, args));
         StateHasChanged();
@@ -152,39 +152,4 @@
     {
         StateHasChanged();
     }
-    
-    /// <summary>
-    /// Container class for the wheel data.
-    /// </summary>
-    public class WheelEventData
-    {
-        public double DeltaX { get; set; }
-        public double DeltaY { get; set; }
-        public double ClientX { get; set; }
-        public double ClientY { get; set; }
-        public bool CtrlKey { get; set; }
-        public bool ShiftKey { get; set; }
-        public bool AltKey { get; set; }
-
-
-        /// <summary>
-        /// Implicit operator to convert WheelEventData to WheelEventArgs.
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public static implicit operator WheelEventArgs(WheelEventData data)
-        {
-            return new WheelEventArgs
-            {
-                DeltaX = data.DeltaX,
-                DeltaY = data.DeltaY,
-                ClientX = data.ClientX,
-                ClientY = data.ClientY,
-                CtrlKey = data.CtrlKey,
-                ShiftKey = data.ShiftKey,
-                AltKey = data.AltKey
-            };
-        }
-    }
-
 }

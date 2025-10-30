@@ -36,7 +36,7 @@
                                 <MudText Typo="Typo.body1">
                                     To listen for any event globally (e.g., when any node is removed), you use <code >SubscribeTo&lt;TEvent&gt;()</code>. This method returns an <code >IDisposable</code> object, which **must be disposed of** when your component is removed from the DOM.
                                 </MudText>
-                                <CodeHighlighter Language="cshtml" Code="
+                                <CodeHighlighter Language="csharp" Code="
 public partial class MyComponent : IDisposable
 {
     [Inject] public IDiagramService DiagramService { get; set; }
