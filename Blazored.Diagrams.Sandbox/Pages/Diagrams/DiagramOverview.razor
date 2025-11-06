@@ -1,100 +1,105 @@
 @page "/diagram-container-component"
-@using MudBlazor.Utilities
- 
-<MudContainer MaxWidth="MaxWidth.False" Style="height:100%; padding-top: 20px;">
-    <MudGrid Style="height:100%">
 
-        <MudItem xs="12" sm="12" md="6" Style="height:100%">
-            <MudPaper Class="pa-4 mud-height-full overflow-y-auto" Elevation="4">
-                <MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-6">
-                    The diagram
-                </MudText>
+<MudGrid Spacing="2" Justify="Justify.Center" Style="height:100%; width: 100%; margin: 0;">
 
-                <MudExpansionPanels MultiExpansion="true">
+    <!-- LEFT PANEL: Documentation -->
+    <MudItem xs="12" sm="4" Style="height: 100%; overflow-y: auto;">
+        <MudPaper Class="pa-4 mud-height-full">
+            <MudText Typo="Typo.h5" Color="Color.Primary" GutterBottom="true">DiagramContainer Component</MudText>
 
-                    <MudExpansionPanel Text="@($"{nameof(DiagramContainer)} Component")" Expanded="true">
-                        <CodeHighlighter Code="@diagramContainerCode" Language="cshtml"></CodeHighlighter>
-                        <MudText Typo="Typo.body1" Class="mt-4">
-                            The <b>@($"{nameof(DiagramContainer)}")</b> component takes up all of the available space of the parent component and it's responsible for drawing the diagram elements to the webpage.
-                            It requires a <b>@($"{nameof(IDiagramService)}")</b> implementation as a parameter.
-                        </MudText>
-                    </MudExpansionPanel>
+            <MudExpansionPanels MultiExpansion="false">
 
-                    <MudExpansionPanel Text="@($"{nameof(DiagramService)}")" Expanded="true">
-                        <MudText Typo="Typo.body1" GutterBottom="true">
-                            The <b>@($"{nameof(DiagramService)}")</b> class is the best way of interacting with the diagram. With it you can:
-                        </MudText>
-                        <MudList Dense="true" T="object">
-                            <MudListItem Icon="@Icons.Material.Filled.Add">Add/Remove Layers, Nodes, Groups, Ports and Links.</MudListItem>
-                            <MudListItem Icon="@Icons.Material.Filled.Settings">Register, enable and disable behaviours.</MudListItem>
-                            <MudListItem Icon="@Icons.Material.Filled.Event">Subscribe and unsubscribe from events.</MudListItem>
-                            <MudListItem Icon="@Icons.Material.Filled.Edit">Edit diagram options.</MudListItem>
-                            <MudListItem Icon="@Icons.Material.Filled.Save">Save and load a diagram.</MudListItem>
-                        </MudList>
-                    </MudExpansionPanel>
+                <!-- Panel 1: What is DiagramContainer? -->
+                <MudExpansionPanel Text="What is DiagramContainer?" Expanded="true">
+                    <MudText Typo="Typo.body1" Class="mb-2">
+                        The <code>DiagramContainer</code> is the main, top-level Blazor component that acts as the "canvas" for your diagram.
+                    </MudText>
+                    <MudText Typo="Typo.body2" Class="mb-2">
+                        It is responsible for rendering all the layers, which in turn render the nodes, groups, links, and ports. It also establishes the coordinate system for pan and zoom.
+                    </MudText>
+                    <MudText Typo="Typo.body1" Class="mb-2">
+                        To use the container, inject <code>IDiagramService</code> into your page and pass it as a parameter. The container takes up all of it's parent space so make sure to specify it correctly.
+                    </MudText>
+                    <CodeHighlighter Language="cshtml" Code="@UsageCode"/>
+                </MudExpansionPanel>
 
-                    <MudExpansionPanel Text="Diagram Options" Expanded="true">
-                        <MudText GutterBottom="true" Typo="Typo.body1">
-                            Through the diagram service, you can access the Diagram Options object. This will allow you to customize how the diagram looks and works.
-                        </MudText>
-                        <MudDivider Class="my-4"/>
+                <!-- Panel 2: Core Responsibilities -->
+                <MudExpansionPanel Text="Core Responsibilities" Expanded="true">
+                    <MudText Typo="Typo.h6" GutterBottom="true">1. Requires IDiagramService</MudText>
+                    <MudText Typo="Typo.body2" Class="mb-2">
+                        It requires a mandatory <code>DiagramService</code> parameter. This service instance holds the diagram model and all related logic.
+                    </MudText>
 
-                        <MudText Typo="Typo.subtitle1" GutterBottom="true">Style Options</MudText>
-                        <MudText Typo="Typo.body2" Class="mud-text-secondary mb-3">
-                            Allows you to override diagram container style and the grid style.
-                        </MudText>
-                        <MudStack Spacing="3">
-                            <MudTextField Immediate="true" Lines="2" Label="Diagram container style" @bind-Value="Service.Diagram.Options.Style.ContainerStyle"/>
-                            <MudTextField Immediate="true" Lines="2" Label="Diagram grid style" @bind-Value="Service.Options.Styling.GridStyle"/>
-                            <MudNumericField T="int" Immediate="true" Label="Grid cell size (pixels)" @bind-Value="Service.Options.Styling.CellSize"/>
-                            <MudNumericField T="int" Immediate="true" Label="Grid line thickness (pixels)" @bind-Value="Service.Options.Styling.GridLineThickness"/>
+                    <MudText Typo="Typo.h6" GutterBottom="true" Class="mt-3">2. Cascades the Service</MudText>
+                    <MudText Typo="Typo.body2" Class="mb-2">
+                        It automatically provides this <code>IDiagramService</code> instance as a <code>[CascadingParameter]</code> to all of its children. This is how custom components (like nodes, ports, or controls) get access to the diagram's state and events.
+                    </MudText>
 
-                            <MudColorPicker Label="Grid line color (RGB)" ColorPickerMode="ColorPickerMode.RGB" ShowAlpha="false" ShowModeSwitch="false"
-                                            Text="@Service.Options.Styling.GridLineColor" Editable="false"
-                                            TextChanged="OnTextChanged"/>
+                    <MudText Typo="Typo.h6" GutterBottom="true" Class="mt-3">3. Captures DOM Events</MudText>
+                    <MudText Typo="Typo.body2" Class="mb-2">
+                        It captures all raw pointer events (mousedown, mouseup, mousemove, wheel), click events, and key events from the user. It then publishes these as strongly-typed events (e.g., <code>DiagramPointerDownEvent</code>) via the <code>IDiagramService.Events</code> aggregator for behaviors to consume.
+                    </MudText>
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        </MudPaper>
+    </MudItem>
 
-                            <MudNumericField T="decimal" Immediate="true" Label="Grid cell opacity (0 - 1)" Max="1" Min="0" Step="0.1m" @bind-Value="Service.Options.Styling.GridLineOpacity"/>
+    <!-- RIGHT PANEL: Diagram with Controls -->
+    <MudItem xs="12" sm="8" Style="height: 100%;">
+        <MudPaper Class="mud-height-full" Elevation="4" Style="position: relative;">
+            <!-- 
+                The DiagramContainer is the parent.
+                The ZoomControls is the ChildContent, rendered on top.
+            -->
+            <DiagramContainer DiagramService="Service">
+                <ZoomControls/>
+            </DiagramContainer>
+        </MudPaper>
+    </MudItem>
 
-                            <MudSwitch @bind-Value="@Service.Options.Styling.GridEnabled"
-                                       Color="Color.Primary"
-                                       Label="Show/Hide Grid"
-                                       LabelPlacement="Placement.Start"/>
-                        </MudStack>
-                    </MudExpansionPanel>
-
-                </MudExpansionPanels>
-            </MudPaper>
-        </MudItem>
-
-        <MudItem xs="12" sm="12" md="6" Style="height:100%">
-            <MudPaper Class="mud-height-full" Elevation="4">
-                <DiagramShowcase Service="Service"></DiagramShowcase>
-            </MudPaper>
-        </MudItem>
-
-    </MudGrid>
-</MudContainer>
+</MudGrid>
 
 @code {
-
-    readonly string diagramContainerCode =
-        @"<div style=""display:flex;flex-direction:row;justify-content:center;width:100%; height:100%"">
-<DiagramContainer DiagramService=""Service""></DiagramContainer>
-</div>
-@code
-{
-    [Inject]
-    IDiagramService Service {get;set;}
-}
-";
-
     [Inject] public IDiagramService Service { get; set; } = null!;
 
-    private void OnTextChanged(string hex)
+// --- Diagram Initialization ---
+    protected override Task OnInitializedAsync()
     {
-        var color = new MudColor(hex);
-// Converts the hex color to an RGB string for the Diagram library
-        Service.Options.Styling.GridLineColor = $"{color.R},{color.G},{color.B}";
+// Add a few nodes for context
+        var node1 = new Node();
+        node1.SetPosition(50, 50);
+        Service.AddNode(node1);
+
+        var node2 = new Node();
+        node2.SetPosition(250, 150);
+        Service.AddNode(node2);
+
+        return base.OnInitializedAsync();
     }
+
+// --- Code Snippets ---
+
+    private const string UsageCode =
+        @"<!-- In YourPage.razor -->
+@page ""/my-diagram""
+@inject IDiagramService MyDiagramService
+
+<div style=""height: 80vh; width: 100%;"">
+    <DiagramContainer DiagramService=""MyDiagramService"" />
+</div>
+
+@code {
+    [Inject]
+    public IDiagramService MyDiagramService { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        // Add models to the service
+        var node = new Node();
+        node.SetPosition(10, 10);
+        MyDiagramService.Add.Node(node);
+    }
+}";
+
 
 }

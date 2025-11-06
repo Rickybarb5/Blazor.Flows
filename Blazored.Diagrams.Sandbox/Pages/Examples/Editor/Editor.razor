@@ -123,7 +123,7 @@
         </MudStack>
     </MudItem>
 
-    <!-- RIGHT PANEL: Layers Overview (Contents/Hierarchy) - REBUILT AS REQUESTED -->
+    <!-- RIGHT PANEL: Layers Overview (Contents/Hierarchy) -->
     <MudItem xs="12" sm="2" Class="py-0 h-full">
         <MudCard Class="h-full elevation-2 d-flex flex-column" Style="overflow-y: hidden;">
             <MudCardHeader>
@@ -164,7 +164,6 @@
                     {
                         var layerIndex = DiagramService.Diagram.Layers.IndexOf(layer);
                         <MudExpansionPanel Text="@($"Layer {layerIndex + 1} ({(layer.IsVisible ? "Visible" : "Hidden")})")"
-                                           Icon="@Icons.Material.Filled.Layers"
                                            Expanded="@(layer == DiagramService.Diagram.CurrentLayer)"
                                            Class="border border-solid border-gray-300 rounded-lg my-1">
                             <!-- VISIBILITY TOGGLE -->
@@ -173,36 +172,26 @@
                                        Label="Layer Visible"
                                        Class="ml-4"/>
 
-                            <!-- Nested Panel for Groups -->
-                            <MudExpansionPanel Text="Groups" Icon="@Icons.Material.Filled.GroupWork" Dense="true" Class="my-1">
                                 @foreach (var group in layer.AllGroups)
                                 {
                                     <MudListItem T="object" Icon="@Icons.Material.Filled.GroupWork" OnClick="@(() => SelectModel(group))" Class="text-sm">
                                         Group: @(group.Id)
                                     </MudListItem>
                                 }
-                            </MudExpansionPanel>
 
-                            <!-- Nested Panel for Nodes -->
-                            <MudExpansionPanel Text="Nodes" Icon="@Icons.Material.Filled.Square" Expanded="true" Dense="true" Class="my-1">
                                 @foreach (var node in layer.AllNodes)
                                 {
                                     <MudListItem T="object" Icon="@Icons.Material.Filled.Square" OnClick="@(() => SelectModel(node))" Class="text-sm">
                                         Node: @(node.Id)
                                     </MudListItem>
                                 }
-                            </MudExpansionPanel>
-
-                            <!-- Nested Panel for Links -->
-                            <MudExpansionPanel Text="Links" Icon="@Icons.Material.Filled.Timeline" Dense="true" Class="my-1">
+                            
                                 @foreach (var link in layer.AllLinks)
                                 {
                                     <MudListItem T="object" Icon="@Icons.Material.Filled.Segment" OnClick="@(() => SelectModel(link))" Class="text-sm">
                                         Link: @(link.SourcePort.Parent.Id) -> @(link.TargetPort?.Parent.Id ?? "Floating")
                                     </MudListItem>
                                 }
-                            </MudExpansionPanel>
-
                         </MudExpansionPanel>
                     }
                     <MudExpansionPanel Text="Controls">
@@ -253,6 +242,7 @@
 
         model.IsSelected = true;
         SelectedModel = model;
+        ZoomToModel(new MouseEventArgs());
     }
 
     private void DeleteModel()
