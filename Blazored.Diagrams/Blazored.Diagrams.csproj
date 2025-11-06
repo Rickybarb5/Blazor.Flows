@@ -6,6 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
     <PropertyGroup>
+        <Version>0.0.1</Version>
+        <PackageVersion>0.0.1</PackageVersion>
+    </PropertyGroup>
+    <PropertyGroup>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
