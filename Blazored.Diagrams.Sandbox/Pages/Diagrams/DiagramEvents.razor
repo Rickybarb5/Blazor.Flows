@@ -348,7 +348,7 @@ private void HandleNameChange(CustomNameChanged message)
 
         foreach (var name in groupNames)
         {
-            var path = $"docs/events.{name.ToLower()}.json";
+            var path = $"docs/Events/events.{name.ToLower()}.json";
             try
             {
                 var eventDocs = await Http.GetFromJsonAsync<List<EventDoc>>(path, options);

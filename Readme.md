@@ -9,9 +9,6 @@
 
 <br />
 <div align="center">
-  <a href="https://github.com/Rickybarb5/Blazored.Diagrams">
-    <img src="images/logo.png" alt="Blazored.Diagrams Logo" width="80" height="80">
-  </a>
 
 <h3 align="center">Blazored.Diagrams</h3>
 
@@ -54,7 +51,7 @@ It provides a strong C# API, accessible via the `IDiagramService`, for managing 
 
 ### Built With
 
-* [![Blazor][Blazor.img]][Blazor-url]
+[![Blazor][Blazor.img]][Blazor-url]
 
 ---
 
@@ -66,11 +63,16 @@ Follow these simple steps to integrate **Blazored.Diagrams** into your Blazor pr
 
 1.  **Install the NuGet Package**
     Add the core package to your Blazor project:
-    ```sh
+    ```console 
     dotnet add package Blazored.Diagrams
     ```
+2. **Register Scripts**
+   In your `index.html` or `_Host.cs`, add the script tag:
+    ```html
+    <script src="_content/Blazored.Diagrams/Blazored.Diagrams.js"></script>
+    ```
 
-2.  **Register Services**
+3. **Register Services**
     In your `Program.cs` or `Startup.cs`, register the required services:
     ```csharp
     builder.Services.AddBlazoredDiagrams();

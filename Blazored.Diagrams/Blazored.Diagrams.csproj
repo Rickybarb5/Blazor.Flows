@@ -6,8 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
     <PropertyGroup>
-        <Version>0.0.1</Version>
-        <PackageVersion>0.0.1</PackageVersion>
+        <PackageId>Blazored.Diagrams</PackageId>
+        <Version>0.0.2</Version>
+        <PackageVersion>0.0.2</PackageVersion>
     </PropertyGroup>
     <PropertyGroup>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -104,6 +105,11 @@
       <UpToDateCheckInput Remove="Components\Renderers\GroupRenderer.razor" />
       <UpToDateCheckInput Remove="Components\Renderers\NodeRenderer.razor" />
       <UpToDateCheckInput Remove="Components\Renderers\PortRenderer.razor" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\Readme.md">
+        <Link>Readme.md</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
