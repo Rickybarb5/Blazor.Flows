@@ -99,7 +99,9 @@ The library is designed with a set of core features to support professional diag
 
 ## Roadmap
 
-- TBD
+- Add Z-index to diagram models
+- Move to front/back feature
+- Use element positioning for custom port position.
 
 See the [open issues](https://github.com/Rickybarb5/Blazor.Flows/issues) for a full list of proposed features (and known issues).
 
