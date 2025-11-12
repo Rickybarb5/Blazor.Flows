@@ -3,7 +3,4 @@
 /// <summary>
 ///     Base interface for a behaviour.
 /// </summary>
-public interface IBehaviour : IDisposable
-{
-    
-}
+public interface IBehaviour : IDisposable;

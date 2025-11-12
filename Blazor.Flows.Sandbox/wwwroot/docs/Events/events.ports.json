@@ -373,12 +373,22 @@
   },
   {
     "Name": "PortZIndexChanged",
-    "Summary": "Event triggered when <see cref=\"!:IPort.ZIndex\" /> changes;",
+    "Summary": "Event triggered when <see cref=\"P:Blazor.Flows.Interfaces.IDepth.ZIndex\" /> changes;",
     "Parameters": [
       {
         "Name": "Model",
         "TypeName": "IPort",
         "Documentation": "The <see cref=\"T:Blazor.Flows.Ports.IPort\" /> that triggered the event."
+      },
+      {
+        "Name": "OldZIndex",
+        "TypeName": "Int32",
+        "Documentation": "Old Z-Index value."
+      },
+      {
+        "Name": "NewZindex",
+        "TypeName": "Int32",
+        "Documentation": "New Z-Index value."
       }
     ]
   }

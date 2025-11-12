@@ -147,7 +147,7 @@ public interface IGroup :
     public ITypedEvent<GroupRemovedEvent> OnGroupRemoved { get; init; }
         
     /// <summary>
-    /// Event triggered when the <see cref="IGroup.ZIndex"/> changes.
+    /// Event triggered when the <see cref="IDepth.ZIndex"/> changes.
     /// </summary>
     [JsonIgnore]
     ITypedEvent<GroupZIndexChangedEvent> OnZIndexChanged { get; init; }

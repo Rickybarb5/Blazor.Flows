@@ -1,3 +1,4 @@
+using Blazor.Flows.Interfaces;
 using Blazor.Flows.Nodes;
 using Blazor.Flows.Ports;
 using Microsoft.AspNetCore.Components.Web;
@@ -138,7 +139,9 @@ public record NodeDoubleClickedEvent(INode Model, MouseEventArgs Args) : ModelIn
 public record NodeRedrawEvent(INode Model) : NodeEvent(Model);
 
 /// <summary>
-/// Event triggered when <see cref="INode.ZIndex"/> changes;
+/// Event triggered when <see cref="IDepth.ZIndex"/> changes;
 /// </summary>
 /// <param name="Model">The <see cref="INode"/> that triggered the event.</param>
-public record NodeZIndexChanged(INode Model): NodeEvent(Model);
+/// <param name="OldZIndex">Old Z-Index value.</param>
+/// <param name="NewZindex">New Z-Index value.</param>
+public record NodeZIndexChanged(INode Model, int OldZIndex, int NewZindex): NodeEvent(Model);

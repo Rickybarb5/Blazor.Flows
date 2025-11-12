@@ -138,7 +138,7 @@ public interface IPort :
     public ITypedEvent<PortSelectionChangedEvent> OnSelectionChanged { get; init; }
     
     /// <summary>
-    /// Event triggered when the <see cref="IPort.ZIndex"/> changes.
+    /// Event triggered when the <see cref="IDepth.ZIndex"/> changes.
     /// </summary>
     [JsonIgnore]
     ITypedEvent<PortZIndexChanged> OnZIndexChanged { get; init; }

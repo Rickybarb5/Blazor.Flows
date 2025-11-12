@@ -75,4 +75,6 @@ public record GroupRemovedFromLayerEvent(ILayer Model, IGroup RemovedGroup) : La
 ///  Event triggered when the ZIndex of a Layer changes.
 /// </summary>
 /// <param name="Model">The <see cref="ILayer"/> whose ZIndex was changed.</param>
-public record LayerZIndexChanged(ILayer Model) : LayerEvent(Model);
+/// <param name="OldZIndex">Old Z-Index value.</param>
+/// <param name="NewZindex">New Z-Index value.</param>
+public record LayerZIndexChanged(ILayer Model, int OldZIndex, int NewZindex) : LayerEvent(Model);

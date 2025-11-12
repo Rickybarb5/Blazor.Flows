@@ -288,12 +288,22 @@
   },
   {
     "Name": "LinkZIndexChangedEvent",
-    "Summary": "Event triggered when <see cref=\"!:ILink.ZIndex\" /> changes;",
+    "Summary": "Event triggered when <see cref=\"P:Blazor.Flows.Interfaces.IDepth.ZIndex\" /> changes;",
     "Parameters": [
       {
         "Name": "Model",
         "TypeName": "ILink",
         "Documentation": "The <see cref=\"T:Blazor.Flows.Links.ILink\" /> that triggered the event."
+      },
+      {
+        "Name": "OldZIndex",
+        "TypeName": "Int32",
+        "Documentation": "Old Z-Index value."
+      },
+      {
+        "Name": "NewZindex",
+        "TypeName": "Int32",
+        "Documentation": "New Z-Index value."
       }
     ]
   }

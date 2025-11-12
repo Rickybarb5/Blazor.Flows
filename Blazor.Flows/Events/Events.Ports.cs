@@ -180,7 +180,9 @@ public record PortRedrawEvent(IPort Model) : PortEvent(Model);
 public record PortSelectionChangedEvent(IPort Model) : PortEvent(Model);
 
 /// <summary>
-/// Event triggered when <see cref="IPort.ZIndex"/> changes;
+/// Event triggered when <see cref="IDepth.ZIndex"/> changes;
 /// </summary>
 /// <param name="Model">The <see cref="IPort"/> that triggered the event.</param>
-public record PortZIndexChanged(IPort Model): PortEvent(Model);
+/// <param name="OldZIndex">Old Z-Index value.</param>
+/// <param name="NewZindex">New Z-Index value.</param>
+public record PortZIndexChanged(IPort Model, int OldZIndex, int NewZindex): PortEvent(Model);

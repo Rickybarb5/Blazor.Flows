@@ -64,7 +64,7 @@ public interface INode :
     public ITypedEvent<PortRemovedFromNodeEvent> OnPortRemovedFromNode { get; init; }
     
     /// <summary>
-    /// Event triggered when the <see cref="INode.ZIndex"/> changes.
+    /// Event triggered when the <see cref="IDepth.ZIndex"/> changes.
     /// </summary>
     [JsonIgnore]
     ITypedEvent<NodeZIndexChanged> OnZIndexChanged { get; init; }

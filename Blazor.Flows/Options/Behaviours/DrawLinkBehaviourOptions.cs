@@ -11,7 +11,8 @@ namespace Blazor.Flows.Options.Behaviours;
 public partial class DrawLinkBehaviourOptions : BaseBehaviourOptions
 {
     [JsonInclude]
-    private string TypeName = typeof(CurvedLink).FullName;
+    // ReSharper disable once InconsistentNaming
+    private string TypeName = typeof(CurvedLink).FullName!;
     
     /// <summary>
     ///     Type of link that the behaviour will create.

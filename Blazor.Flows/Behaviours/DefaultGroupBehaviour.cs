@@ -160,8 +160,6 @@ public class DefaultGroupBehaviour : BaseBehaviour
         
         var newPositionX = minX - group.Padding;
         var newPositionY = minY - group.Padding;
-        
-        // Size: The distance between Max and Min, adjusted by Padding
         var newWidth = maxX - minX + group.Padding * 2;
         var newHeight = maxY - minY + group.Padding * 2;
 
@@ -169,10 +167,6 @@ public class DefaultGroupBehaviour : BaseBehaviour
         group.SetPosition(newPositionX, newPositionY);
         group.SetSize(newWidth, newHeight);
         SubscribeToRecursiveEvents();
-
-        // Redraw ports manually, as we are not triggering group events
-        // group.Ports.ForEach(p => _service.Events.Publish(new PortRedrawEvent(p)));
-        // _service.Events.Publish(new GroupRedrawEvent(group));
     }
 
     /// <inheritdoc />

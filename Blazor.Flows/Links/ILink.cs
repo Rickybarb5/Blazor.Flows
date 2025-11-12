@@ -89,7 +89,7 @@ public interface ILink : IId,
     ITypedEvent<LinkVisibilityChangedEvent> OnVisibilityChanged { get; init; }
     
     /// <summary>
-    /// Event triggered when the <see cref="ILink.ZIndex"/> changes.
+    /// Event triggered when the <see cref="IDepth.ZIndex"/> changes.
     /// </summary>
     [JsonIgnore]
     ITypedEvent<LinkZIndexChangedEvent> OnZIndexChanged { get; init; }

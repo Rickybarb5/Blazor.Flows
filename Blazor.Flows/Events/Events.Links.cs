@@ -1,3 +1,4 @@
+using Blazor.Flows.Interfaces;
 using Blazor.Flows.Links;
 using Blazor.Flows.Ports;
 using Microsoft.AspNetCore.Components.Web;
@@ -138,7 +139,9 @@ public record LinkRedrawEvent(ILink Model) : LinkEvent(Model);
 
 
 /// <summary>
-/// Event triggered when <see cref="ILink.ZIndex"/> changes;
+/// Event triggered when <see cref="IDepth.ZIndex"/> changes;
 /// </summary>
 /// <param name="Model">The <see cref="ILink"/> that triggered the event.</param>
-public record LinkZIndexChangedEvent(ILink Model): LinkEvent(Model);
+/// <param name="OldZIndex">Old Z-Index value.</param>
+/// <param name="NewZindex">New Z-Index value.</param>
+public record LinkZIndexChangedEvent(ILink Model, int OldZIndex, int NewZindex): LinkEvent(Model);

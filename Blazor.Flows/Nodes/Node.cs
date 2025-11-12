@@ -131,8 +131,9 @@ public partial class Node : INode, IHasComponent<DefaultNodeComponent>
         {
             if (_zIndex != value)
             {
+                var oldIndex = _zIndex;
                 _zIndex = value;
-                OnZIndexChanged.Publish(new (this));
+                OnZIndexChanged.Publish(new (this, oldIndex, _zIndex));
             }
         } 
     }

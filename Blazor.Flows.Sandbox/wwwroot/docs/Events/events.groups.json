@@ -299,12 +299,22 @@
   },
   {
     "Name": "GroupZIndexChangedEvent",
-    "Summary": "Event triggered when <see cref=\"!:IGroup.ZIndex\" /> changes;",
+    "Summary": "Event triggered when <see cref=\"P:Blazor.Flows.Interfaces.IDepth.ZIndex\" /> changes;",
     "Parameters": [
       {
         "Name": "Model",
         "TypeName": "IGroup",
         "Documentation": "The group that triggered the event."
+      },
+      {
+        "Name": "OldZIndex",
+        "TypeName": "Int32",
+        "Documentation": "Old Z-Index value."
+      },
+      {
+        "Name": "NewZindex",
+        "TypeName": "Int32",
+        "Documentation": "New Z-Index value."
       }
     ]
   },

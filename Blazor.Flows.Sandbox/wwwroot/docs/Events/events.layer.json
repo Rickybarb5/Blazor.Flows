@@ -99,6 +99,16 @@
         "Name": "Model",
         "TypeName": "ILayer",
         "Documentation": "The <see cref=\"T:Blazor.Flows.Layers.ILayer\" /> whose ZIndex was changed."
+      },
+      {
+        "Name": "OldZIndex",
+        "TypeName": "Int32",
+        "Documentation": "Old Z-Index value."
+      },
+      {
+        "Name": "NewZindex",
+        "TypeName": "Int32",
+        "Documentation": "New Z-Index value."
       }
     ]
   },

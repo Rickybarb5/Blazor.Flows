@@ -1,4 +1,5 @@
 using Blazor.Flows.Groups;
+using Blazor.Flows.Interfaces;
 using Blazor.Flows.Nodes;
 using Blazor.Flows.Ports;
 using Microsoft.AspNetCore.Components.Web;
@@ -172,7 +173,9 @@ public record GroupAddedToGroupEvent(IGroup ParentModel, IGroup AddedGroup) : Gr
 public record GroupRemovedFromGroupEvent(IGroup ParentModel, IGroup RemovedGroup) : GroupEvent(ParentModel);
 
 /// <summary>
-/// Event triggered when <see cref="IGroup.ZIndex"/> changes;
+/// Event triggered when <see cref="IDepth.ZIndex"/> changes;
 /// </summary>
 /// <param name="Model">The group that triggered the event.</param>
-public record GroupZIndexChangedEvent(IGroup Model): GroupEvent(Model);
+/// <param name="OldZIndex">Old Z-Index value.</param>
+/// <param name="NewZindex">New Z-Index value.</param>
+public record GroupZIndexChangedEvent(IGroup Model, int OldZIndex, int NewZindex): GroupEvent(Model);

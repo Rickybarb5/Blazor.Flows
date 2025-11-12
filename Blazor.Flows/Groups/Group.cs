@@ -304,8 +304,9 @@ public partial class Group : IGroup, IHasComponent<DefaultGroupComponent>
         {
             if (_zIndex != value)
             {
+                var oldIndex = _zIndex;
                 _zIndex = value;
-                OnZIndexChanged.Publish(new (this));
+                OnZIndexChanged.Publish(new (this, oldIndex, _zIndex));
             }
         } 
     }

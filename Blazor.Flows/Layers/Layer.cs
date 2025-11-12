@@ -96,7 +96,7 @@ public partial class Layer : ILayer
             }
         }
     }
-    
+
     /// <inheritdoc />
     public int ZIndex
     {
@@ -105,10 +105,11 @@ public partial class Layer : ILayer
         {
             if (_zIndex != value)
             {
+                var oldIndex = _zIndex;
                 _zIndex = value;
-                OnZIndexChanged.Publish(new (this));
+                OnZIndexChanged.Publish(new(this, oldIndex, _zIndex));
             }
-        } 
+        }
     }
 
 

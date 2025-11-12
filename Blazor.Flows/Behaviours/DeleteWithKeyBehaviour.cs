@@ -13,8 +13,7 @@ public class DeleteWithKeyBehaviour : BaseBehaviour
 {
     private readonly DeleteWithKeyBehaviourOptions _behaviourOptions;
     private readonly IDiagramService _service;
-
-
+    
     /// <summary>
     /// Instantiates a new <see cref="DeleteWithKeyBehaviour"/>.
     /// </summary>

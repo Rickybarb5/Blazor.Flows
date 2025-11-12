@@ -95,13 +95,13 @@ public class RedrawBehaviour : BaseBehaviour
         RedrawFullDiagram(obj.NewDiagram);
     }
 
-    private void RedrawFullDiagram(IDiagram Model)
+    private void RedrawFullDiagram(IDiagram model)
     {
-        Model.Layers.ForEach(l => _service.Events.Publish(new LayerRedrawEvent(l)));
-        Model.AllNodes.ForEach(n => _service.Events.Publish(new NodeRedrawEvent(n)));
-        Model.AllGroups.ForEach(g => _service.Events.Publish(new GroupRedrawEvent(g)));
-        Model.AllPorts.ForEach(p => _service.Events.Publish(new PortRedrawEvent(p)));
-        Model.AllLinks.ForEach(l => _service.Events.Publish(new LinkRedrawEvent(l)));
+        model.Layers.ForEach(l => _service.Events.Publish(new LayerRedrawEvent(l)));
+        model.AllNodes.ForEach(n => _service.Events.Publish(new NodeRedrawEvent(n)));
+        model.AllGroups.ForEach(g => _service.Events.Publish(new GroupRedrawEvent(g)));
+        model.AllPorts.ForEach(p => _service.Events.Publish(new PortRedrawEvent(p)));
+        model.AllLinks.ForEach(l => _service.Events.Publish(new LinkRedrawEvent(l)));
     }
 
     private void NotifyRedraw(INode obj)
