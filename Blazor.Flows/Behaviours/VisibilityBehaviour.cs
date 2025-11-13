@@ -63,25 +63,53 @@ public class VisibilityBehaviour : BaseBehaviour
     /// <param name="group"></param>
     private void HandleVisibilityChanged(IGroup group)
     {
-        group.AllNodes.ForEach(HandleVisibilityChanged);
-        group.AllGroups.ForEach(HandleVisibilityChanged);
-        group.AllPorts.ForEach(HandleVisibilityChanged);
+        group.AllNodes.ForEach(x=>
+        {
+            x.IsVisible = group.IsVisible;
+            HandleVisibilityChanged(x);
+        });
+        group.AllGroups.ForEach(x=>
+        {
+            x.IsVisible = group.IsVisible;
+            HandleVisibilityChanged(x);
+        });
+        group.AllPorts.ForEach(x=>
+        {
+            x.IsVisible = group.IsVisible;
+            HandleVisibilityChanged(x);
+        });
     }
 
     private void HandleVisibilityChanged(ILayer layer)
     {
-        layer.Nodes.ForEach(HandleVisibilityChanged);
-        layer.Groups.ForEach(HandleVisibilityChanged);
+        layer.Nodes.ForEach(x=>
+        {
+            x.IsVisible = layer.IsVisible;
+            HandleVisibilityChanged(x);
+        });
+        layer.Groups.ForEach(x=>
+        {
+            x.IsVisible = layer.IsVisible;
+            HandleVisibilityChanged(x);
+        });
     }
 
     private void HandleVisibilityChanged(INode node)
     {
-        node.Ports.ForEach(HandleVisibilityChanged);
+        
+        node.Ports.ForEach(x=>
+        {
+            x.IsVisible = node.IsVisible;
+            HandleVisibilityChanged(x);
+        });
     }
 
     private void HandleVisibilityChanged(IPort port)
     {
-        port.OutgoingLinks.ForEach(l => l.IsVisible = port.IsVisible);
+        port.OutgoingLinks.ForEach(x=>
+        {
+            x.IsVisible = port.IsVisible;
+        });
     }
     
     /// <inheritdoc />
