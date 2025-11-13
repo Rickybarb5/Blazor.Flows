@@ -24,7 +24,9 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
     {
         // Arrange
         var port = new Port { IsVisible = false };
-        _service.AddPortTo(new Node(), port);
+        var node = new Node();
+        _service.AddNode(node)
+            .AddPortTo(node, port);
         var cut = CreateComponent(port);
 
         //Assert
@@ -36,7 +38,9 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
     {
         // Arrange
         var port = new Port { PositionX = 100, PositionY = 200, IsVisible = true };
-        _service.AddPortTo(new Node(), port);
+        var node = new Node();
+        _service.AddNode(node)
+            .AddPortTo(node, port);
         var cut = CreateComponent(port);
 
         //Act
@@ -53,7 +57,9 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
         var eventTriggered = false;
         _service.Events.SubscribeTo<PortPointerDownEvent>(_ => { eventTriggered = true; });
         var port = new Port { PositionX = 0, PositionY = 0, IsVisible = true };
-        _service.AddPortTo(new Node(), port);
+        var node = new Node();
+        _service.AddNode(node)
+            .AddPortTo(node, port);
         var cut = CreateComponent(port);
 
         // Act
@@ -70,7 +76,9 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
         var eventTriggered = false;
         _service.Events.SubscribeTo<PortPointerUpEvent>(_ => { eventTriggered = true; });
         var port = new Port { PositionX = 0, PositionY = 0, IsVisible = true };
-        _service.AddPortTo(new Node(), port);
+        var node = new Node();
+        _service.AddNode(node)
+            .AddPortTo(node, port);
         var cut = CreateComponent(port);
 
         // Act
@@ -87,7 +95,9 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
         var eventTriggered = false;
         _service.Events.SubscribeTo<PortPointerEnterEvent>(_ => { eventTriggered = true; });
         var port = new Port { PositionX = 0, PositionY = 0, IsVisible = true };
-        _service.AddPortTo(new Node(), port);
+        var node = new Node();
+        _service.AddNode(node)
+            .AddPortTo(node, port);
         var cut = CreateComponent(port);
 
         // Act
@@ -104,7 +114,9 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
         var eventTriggered = false;
         _service.Events.SubscribeTo<PortPointerLeaveEvent>(_ => { eventTriggered = true; });
         var port = new Port { PositionX = 0, PositionY = 0, IsVisible = true };
-        _service.AddPortTo(new Node(), port);
+        var node = new Node();
+        _service.AddNode(node)
+            .AddPortTo(node, port);
         var cut = CreateComponent(port);
 
         // Act
@@ -121,7 +133,9 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
         var eventTriggered = false;
         _service.Events.SubscribeTo<PortPointerMoveEvent>(_ => { eventTriggered = true; });
         var port = new Port { PositionX = 0, PositionY = 0, IsVisible = true };
-        _service.AddPortTo(new Node(), port);
+        var node = new Node();
+        _service.AddNode(node)
+            .AddPortTo(node, port);
         var cut = CreateComponent(port);
 
         // Act
@@ -138,7 +152,9 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
         var eventTriggered = false;
         _service.Events.SubscribeTo<PortWheelEvent>(_ => { eventTriggered = true; });
         var port = new Port { PositionX = 0, PositionY = 0, IsVisible = true };
-        _service.AddPortTo(new Node(), port);
+        var node = new Node();
+        _service.AddNode(node)
+            .AddPortTo(node, port);
         var cut = CreateComponent(port);
 
         // Act
@@ -155,7 +171,9 @@ public class PortContainerTests : ContainerTestBase<PortContainer>
         var eventTriggered = false;
         _service.Events.SubscribeTo<PortClickedEvent>(_ => { eventTriggered = true; });
         var port = new Port { PositionX = 0, PositionY = 0, IsVisible = true };
-        _service.AddPortTo(new Node(), port);
+        var node = new Node();
+        _service.AddNode(node)
+            .AddPortTo(node, port);
         var cut = CreateComponent(port);
 
         // Act

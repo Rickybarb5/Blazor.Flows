@@ -132,8 +132,9 @@ public class DrawLinkBehaviorTests
         sourcePort.Setup(x => x.Parent).Returns(sourceNode);
         sourcePort.Setup(x => x.IncomingLinks).Returns([]);
         sourcePort.Setup(x => x.OutgoingLinks).Returns([]);
-        service.AddPortTo(sourceNode, sourcePort.Object);
-        service.AddNode(sourceNode);
+        
+        service.AddNode(sourceNode)
+            .AddPortTo(sourceNode, sourcePort.Object);
 
         DrawLinkCancelledEvent? capturedEvent = null;
         service.Events.SubscribeTo<DrawLinkCancelledEvent>(e => capturedEvent = e);

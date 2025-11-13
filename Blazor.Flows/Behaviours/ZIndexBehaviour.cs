@@ -14,7 +14,7 @@ namespace Blazor.Flows.Behaviours;
 public class ZIndexBehaviour : BaseBehaviour
 {
     private readonly IDiagramService _service;
-    private readonly ZIndexBehaviourOptions _options;
+    private readonly ZIndexBehaviourOptions _behaviourOptions;
 
     /// <summary>
     /// Instantiates a new <see cref="ZIndexBehaviour"/>.
@@ -23,9 +23,9 @@ public class ZIndexBehaviour : BaseBehaviour
     public ZIndexBehaviour(IDiagramService service)
     {
         _service = service;
-        _options = _service.Behaviours.GetBehaviourOptions<ZIndexBehaviourOptions>();
-        _options.OnEnabledChanged.Subscribe(OnEnabledChanged);
-        OnEnabledChanged(_options.IsEnabled);
+        _behaviourOptions = _service.Behaviours.GetBehaviourOptions<ZIndexBehaviourOptions>();
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
+        OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
     
     private void OnEnabledChanged(BehaviourEnabledEvent ev)
@@ -69,8 +69,8 @@ public class ZIndexBehaviour : BaseBehaviour
     {
         return model switch
         {
-            IGroup group => group.ZIndex / _options.NestingMultiplier,
-            INode node => (node.ZIndex - _options.NodeOffset) / _options.NestingMultiplier,
+            IGroup group => group.ZIndex / _behaviourOptions.NestingMultiplier,
+            INode node => (node.ZIndex - _behaviourOptions.NodeOffset) / _behaviourOptions.NestingMultiplier,
             _ => 0
         };
     }
@@ -80,7 +80,7 @@ public class ZIndexBehaviour : BaseBehaviour
         var group = e.AddedGroup;
         if (group.ZIndex == 0)
         {
-            group.ZIndex = e.Model.ZIndex * _options.NestingMultiplier + _options.GroupOffset;
+            group.ZIndex = e.Model.ZIndex * _behaviourOptions.NestingMultiplier + _behaviourOptions.GroupOffset;
         }
 
         _service.Events.Publish(new LayerRedrawEvent(e.Model));
@@ -91,7 +91,7 @@ public class ZIndexBehaviour : BaseBehaviour
         var node = e.Node;
         if (node.ZIndex == 0)
         {
-            node.ZIndex = e.Model.ZIndex * _options.NestingMultiplier + _options.NodeOffset;
+            node.ZIndex = e.Model.ZIndex * _behaviourOptions.NestingMultiplier + _behaviourOptions.NodeOffset;
         }
     }
 
@@ -105,7 +105,7 @@ public class ZIndexBehaviour : BaseBehaviour
             var parentNestingLevel = GetParentNestingLevel(parentGroup);
             var newNestingLevel = parentNestingLevel + 1;
 
-            newGroup.ZIndex = newNestingLevel * _options.NestingMultiplier + _options.GroupOffset;
+            newGroup.ZIndex = newNestingLevel * _behaviourOptions.NestingMultiplier + _behaviourOptions.GroupOffset;
         }
     }
 
@@ -119,7 +119,7 @@ public class ZIndexBehaviour : BaseBehaviour
             var parentNestingLevel = GetParentNestingLevel(parentGroup);
             var newNestingLevel = parentNestingLevel + 1;
 
-            newNode.ZIndex = newNestingLevel * _options.NestingMultiplier + _options.NodeOffset;
+            newNode.ZIndex = newNestingLevel * _behaviourOptions.NestingMultiplier + _behaviourOptions.NodeOffset;
         }
     }
 
@@ -134,7 +134,7 @@ public class ZIndexBehaviour : BaseBehaviour
             var parentNestingLevel = GetParentNestingLevel(parentGroup);
             var newNestingLevel = parentNestingLevel + 1;
 
-            newPort.ZIndex = newNestingLevel * _options.NestingMultiplier + _options.PortOffset;
+            newPort.ZIndex = newNestingLevel * _behaviourOptions.NestingMultiplier + _behaviourOptions.PortOffset;
         }
     }
 
@@ -149,7 +149,7 @@ public class ZIndexBehaviour : BaseBehaviour
             // Ports share the same base ZIndex level as their parent node.
             var nodeNestingLevel = GetParentNestingLevel(parentNode);
 
-            newPort.ZIndex = nodeNestingLevel * _options.NestingMultiplier + _options.PortOffset;
+            newPort.ZIndex = nodeNestingLevel * _behaviourOptions.NestingMultiplier + _behaviourOptions.PortOffset;
         }
     }
 
@@ -176,5 +176,12 @@ public class ZIndexBehaviour : BaseBehaviour
         var maxPortZIndex = Math.Max(sourceZIndex, targetZIndex);
 
         link.ZIndex = maxPortZIndex - 1;
+    }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
     }
 }

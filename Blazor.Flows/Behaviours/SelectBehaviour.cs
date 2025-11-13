@@ -84,4 +84,11 @@ public class SelectBehaviour : BaseBehaviour
             _service.Events.SubscribeTo<DiagramPointerDownEvent>(e => HandleBackgroundClick(e.Model, e.Args)),
         ];
     }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
+    }
 }

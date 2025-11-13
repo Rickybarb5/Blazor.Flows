@@ -18,7 +18,7 @@ public class ZoomBehaviorTests
     {
         // Arrange
         using var service = CreateService();
-        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.IsEnabled = true;
+        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>().IsEnabled = true;
         var initialZoom = service.Diagram.Zoom;
 
         var args = new WheelEventArgs
@@ -38,7 +38,7 @@ public class ZoomBehaviorTests
     {
         // Arrange
         using var service = CreateService();
-        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.IsEnabled = true;
+        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>().IsEnabled = true;
         var initialZoom = service.Diagram.Zoom;
 
         var args = new WheelEventArgs
@@ -58,7 +58,7 @@ public class ZoomBehaviorTests
     {
         // Arrange
         using var service = CreateService();
-        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.IsEnabled = false;
+        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>().IsEnabled = false;
         var initialZoom = service.Diagram.Zoom;
 
         var args = new WheelEventArgs
@@ -78,7 +78,7 @@ public class ZoomBehaviorTests
     {
         // Arrange
         using var service = CreateService();
-        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.IsEnabled = true;
+        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>().IsEnabled = true;
         var initialZoom = service.Diagram.Zoom;
 
         var args = new WheelEventArgs
@@ -98,7 +98,7 @@ public class ZoomBehaviorTests
     {
         // Arrange
         using var service = CreateService();
-        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.IsEnabled = false;
+        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>().IsEnabled = false;
         var initialZoom = service.Diagram.Zoom;
 
         var args = new WheelEventArgs
@@ -118,8 +118,8 @@ public class ZoomBehaviorTests
     {
         // Arrange
         using var service = CreateService();
-        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.IsEnabled = false;
-        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!.IsEnabled = true;
+        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>().IsEnabled = false;
+        service.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>().IsEnabled = true;
         var initialZoom = service.Diagram.Zoom;
 
         var args = new WheelEventArgs

@@ -57,4 +57,11 @@ public class DeleteWithKeyBehaviour : BaseBehaviour
         _service.Diagram.AllLinks.Where(x => x.IsSelected).ForEach(link => _service.RemoveLink(link));
         _service.Diagram.AllNodes.Where(x => x.IsSelected).ForEach(node => _service.RemoveNode(node));
     }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
+    }
 }

@@ -3,7 +3,7 @@ using Blazor.Flows.Behaviours;
 namespace Blazor.Flows.Options.Behaviours;
 
 /// <summary>
-///  Options for <see cref="DefaultPortBehaviour"/>
+///  Options for <see cref="PortBehaviour"/>
 /// </summary>
 
 public class DefaultPortBehaviourOptions : BaseBehaviourOptions

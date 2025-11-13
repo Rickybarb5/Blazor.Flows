@@ -64,11 +64,11 @@ public partial class DiagramService : IDiagramService
 
     private void InitializeBehaviours()
     {
-        Behaviours.RegisterBehaviour(new DefaultCenteringBehaviour(this));
-        Behaviours.RegisterBehaviour(new DefaultGroupBehaviour(this));
-        Behaviours.RegisterBehaviour(new DefaultLayerBehaviour(this));
-        Behaviours.RegisterBehaviour(new DefaultLinkBehaviour(this));
-        Behaviours.RegisterBehaviour(new DefaultPortBehaviour(this));
+        Behaviours.RegisterBehaviour(new CenteringBehaviour(this));
+        Behaviours.RegisterBehaviour(new GroupBehaviour(this));
+        Behaviours.RegisterBehaviour(new LayerBehaviour(this));
+        Behaviours.RegisterBehaviour(new LinkBehaviour(this));
+        Behaviours.RegisterBehaviour(new PortBehaviour(this));
         Behaviours.RegisterBehaviour(new DeleteBehaviour(this));
         Behaviours.RegisterBehaviour(new DeleteWithKeyBehaviour(this));
         Behaviours.RegisterBehaviour(new DrawLinkBehavior(this));
@@ -79,14 +79,15 @@ public partial class DiagramService : IDiagramService
         Behaviours.RegisterBehaviour(new SelectBehaviour(this));
         Behaviours.RegisterBehaviour(new EventLoggingBehavior(this));
         Behaviours.RegisterBehaviour(new ZIndexBehaviour(this));
+        Behaviours.RegisterBehaviour(new VisibilityBehaviour(this));
     }
 
     private void InitializeOptions()
     {
         Diagram.Options.BehaviourOptions =
         [
-            new DefaultCenteringBehaviourOptions(),
-            new DefaultGroupBehaviourOptions(),
+            new CenteringBehaviourOptions(),
+            new GroupPositionBehaviourOptions(),
             new DefaultLayerBehaviourOptions(),
             new DefaultLinkBehaviourOptions(),
             new DefaultPortBehaviourOptions(),
@@ -100,6 +101,7 @@ public partial class DiagramService : IDiagramService
             new ZoomBehaviourOptions(),
             new LoggingBehaviourOptions(),
             new ZIndexBehaviourOptions(),
+            new VisibilityBehaviourOptions(),
         ];
     }
     

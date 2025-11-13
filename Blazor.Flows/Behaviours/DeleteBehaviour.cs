@@ -82,4 +82,11 @@ public class DeleteBehaviour : BaseBehaviour
     {
         port.Dispose();
     }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
+    }
 }

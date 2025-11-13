@@ -9,15 +9,15 @@ namespace Blazor.Flows.Behaviours;
 /// <summary>
 ///     Standard link behaviour.
 /// </summary>
-public class DefaultLinkBehaviour : BaseBehaviour
+public class LinkBehaviour : BaseBehaviour
 {
     private readonly IDiagramService _service;
     private readonly DefaultLinkBehaviourOptions _behaviourOptions;
 
     /// <summary>
-    /// Instantiates a new <see cref="DefaultLinkBehaviour"/>
+    /// Instantiates a new <see cref="LinkBehaviour"/>
     /// </summary>
-    public DefaultLinkBehaviour(IDiagramService service)
+    public LinkBehaviour(IDiagramService service)
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<DefaultLinkBehaviourOptions>()!;
@@ -96,5 +96,12 @@ public class DefaultLinkBehaviour : BaseBehaviour
             var centerCoordinates = _service.GetCenterCoordinates(l.SourcePort);
             l.SetTargetPosition(centerCoordinates.CenterX, centerCoordinates.CenterY);
         });
+    }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
     }
 }

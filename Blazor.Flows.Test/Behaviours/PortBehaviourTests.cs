@@ -8,7 +8,7 @@ using Blazor.Flows.Services.Diagrams;
 
 namespace Blazor.Flows.Test.Behaviours;
 
-public class DefaultPortBehaviourTests
+public class PortBehaviourTests
 {
     private IDiagramService CreateService()
     {
@@ -57,10 +57,10 @@ public class DefaultPortBehaviourTests
         var targetNode = new Node();
         var sourcePort = new Port();
         var targetPort = new Port();
-        service.AddPortTo(sourceNode, sourcePort);
-        service.AddPortTo(targetNode, targetPort);
         service.AddNode(sourceNode);
         service.AddNode(targetNode);
+        service.AddPortTo(sourceNode, sourcePort);
+        service.AddPortTo(targetNode, targetPort);
         var link = new LineLink();
 
         // Act
@@ -80,10 +80,10 @@ public class DefaultPortBehaviourTests
         var targetNode = new Node();
         var sourcePort = new Port();
         var targetPort = new Port();
-        service.AddPortTo(sourceNode, sourcePort);
-        service.AddPortTo(targetNode, targetPort);
         service.AddNode(sourceNode);
         service.AddNode(targetNode);
+        service.AddPortTo(sourceNode, sourcePort);
+        service.AddPortTo(targetNode, targetPort);
 
         var link = new LineLink();
         service.AddLinkTo(sourcePort, targetPort, link);
@@ -104,10 +104,10 @@ public class DefaultPortBehaviourTests
         var targetNode = new Node();
         var sourcePort = new Port();
         var targetPort = new Port();
-        service.AddPortTo(sourceNode, sourcePort);
-        service.AddPortTo(targetNode, targetPort);
         service.AddNode(sourceNode);
         service.AddNode(targetNode);
+        service.AddPortTo(sourceNode, sourcePort);
+        service.AddPortTo(targetNode, targetPort);
 
         var link = new LineLink();
         service.AddLinkTo(sourcePort, targetPort, link);
@@ -124,7 +124,7 @@ public class DefaultPortBehaviourTests
     {
         // Arrange
         using var service = CreateService();
-        service.Behaviours.GetBehaviourOptions<DefaultPortBehaviourOptions>()!.IsEnabled = false;
+        service.Behaviours.GetBehaviourOptions<DefaultPortBehaviourOptions>().IsEnabled = false;
 
         var node = new Node { Width = 100, Height = 100 };
         var port = new Port { Width = 10, Height = 10 };

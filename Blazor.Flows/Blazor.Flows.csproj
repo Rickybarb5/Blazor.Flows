@@ -7,8 +7,8 @@
     </PropertyGroup>
     <PropertyGroup>
         <PackageId>Blazor.Flows</PackageId>
-        <Version>0.0.3</Version>
-        <PackageVersion>0.0.3</PackageVersion>
+        <Version>0.1.0</Version>
+        <PackageVersion>0.1.0</PackageVersion>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>Readme-nuget.md</PackageReadmeFile>
     </PropertyGroup>
@@ -102,6 +102,9 @@
         </Compile>
         <Compile Update="Layers\Layer.Events.cs">
           <DependentUpon>Layer.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Options\Behaviours\OrthogonalLinkOptions.cs">
+          <DependentUpon>DrawLinkBehaviourOptions.cs</DependentUpon>
         </Compile>
     </ItemGroup>
     <ItemGroup>

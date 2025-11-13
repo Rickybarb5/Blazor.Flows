@@ -112,4 +112,11 @@ public class MoveBehaviour : BaseBehaviour
         _lastPointerX = e.ClientX;
         _lastPointerY = e.ClientY;
     }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
+    }
 }

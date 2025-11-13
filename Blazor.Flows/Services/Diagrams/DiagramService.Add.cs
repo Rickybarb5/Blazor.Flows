@@ -14,14 +14,14 @@ public partial class DiagramService
     {
         switch (parent)
         {
+            case IGroup groupParent when groupParent.Id == group.Id || groupParent.AllGroups.Any(g => g.Id == group.Id):
+                throw new InvalidOperationException("Cannot add group to itself.");
             // Add parent group if not in diagram.
             case IGroup groupParent when Diagram.AllGroups.All(n => n.Id != groupParent.Id):
-                AddGroup(groupParent);
-                break;
+                throw new InvalidOperationException($"Group {groupParent.Id} hasn't been added to the diagram yet.");
             // Add layer if not in diagram.
             case ILayer layerParent when Diagram.Layers.All(n => n.Id != layerParent.Id):
-                AddLayer(layerParent);
-                break;
+                throw new InvalidOperationException($"Layer {layerParent.Id} hasn't been added to the diagram yet.");
         }
 
         parent.Groups.AddInternal(group);
@@ -36,12 +36,10 @@ public partial class DiagramService
         {
             // Add parent group if not in diagram
             case IGroup groupParent when Diagram.AllGroups.All(n => n.Id != groupParent.Id):
-                AddGroup(groupParent);
-                break;
+                throw new InvalidOperationException($"Group {groupParent.Id} hasn't been added to the diagram yet.");
             // Add parent layer if not in diagram
             case ILayer layerParent when Diagram.Layers.All(n => n.Id != layerParent.Id):
-                AddLayer(layerParent);
-                break;
+                throw new InvalidOperationException($"Layer {layerParent.Id} hasn't been added to the diagram yet.");
         }
 
         parent.Nodes.AddInternal(node);
@@ -55,11 +53,11 @@ public partial class DiagramService
         {
             // Add parent group if not in diagram
             case IGroup groupParent when Diagram.AllGroups.All(n => n.Id != groupParent.Id):
-                AddGroup(groupParent);
+                throw new InvalidOperationException($"Group {groupParent.Id} hasn't been added to the diagram yet.");
                 break;
             // Add parent node if not in diagram
             case INode nodeParent when Diagram.AllNodes.All(n => n.Id != nodeParent.Id):
-                AddNode(nodeParent);
+                throw new InvalidOperationException($"Node {nodeParent.Id} hasn't been added to the diagram yet.");
                 break;
         }
 
@@ -88,21 +86,31 @@ public partial class DiagramService
     /// <inheritdoc />
     public virtual IDiagramService AddNode(INode node)
     {
-        Diagram.CurrentLayer.Nodes.AddInternal(node);
+        if (Diagram.AllNodes.All(x => x.Id != node.Id))
+        {
+            Diagram.CurrentLayer.Nodes.AddInternal(node);
+        }
         return this;
     }
 
     /// <inheritdoc />
     public virtual IDiagramService AddGroup(IGroup group)
     {
-        Diagram.CurrentLayer.Groups.AddInternal(group);
+        if (Diagram.AllGroups.All(x => x.Id != group.Id))
+        {
+            Diagram.CurrentLayer.Groups.AddInternal(group);
+        }
+       
         return this;
     }
 
     /// <inheritdoc />
     public virtual IDiagramService AddLayer(ILayer layer)
     {
-        Diagram.Layers.AddInternal(layer);
+        if (Diagram.Layers.All(x => x.Id != layer.Id))
+        {
+            Diagram.Layers.AddInternal(layer);
+        }
         return this;
     }
 }

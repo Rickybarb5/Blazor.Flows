@@ -69,12 +69,12 @@ public class DeleteWithKeyBehaviourTests
         var group1 = new Group { IsSelected = true };
         var group2 = new Group { IsSelected = false };
 
+        service.AddGroup(group1);
+        service.AddGroup(group2);
         service.AddPortTo(group1, sourcePort);
         service.AddPortTo(group2, targetPort);
 
         var link1 = new LineLink { IsSelected = true, SourcePort = sourcePort, TargetPort = targetPort };
-        service.AddGroup(group1);
-        service.AddGroup(group2);
 
         var args = new KeyboardEventArgs { Code = "Delete" };
 

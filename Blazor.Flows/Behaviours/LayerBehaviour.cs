@@ -7,16 +7,16 @@ namespace Blazor.Flows.Behaviours;
 /// <summary>
 /// Handles the default behaviour of a layer
 /// </summary>
-public class DefaultLayerBehaviour : BaseBehaviour
+public class LayerBehaviour : BaseBehaviour
 {
     private readonly IDiagramService _service;
     private readonly DefaultLayerBehaviourOptions _behaviourOptions;
 
     /// <summary>
-    /// Instantiates a new <see cref="DefaultLayerBehaviour"/>
+    /// Instantiates a new <see cref="LayerBehaviour"/>
     /// </summary>
     /// <param name="service"></param>
-    public DefaultLayerBehaviour(IDiagramService service)
+    public LayerBehaviour(IDiagramService service)
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<DefaultLayerBehaviourOptions>()!;
@@ -88,5 +88,12 @@ public class DefaultLayerBehaviour : BaseBehaviour
         {
             _service.Diagram.CurrentLayer = _service.Diagram.Layers[0];
         }
+    }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
     }
 }

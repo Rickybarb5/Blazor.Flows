@@ -96,4 +96,11 @@ public class PanBehaviour : BaseBehaviour
             _service.Events.Publish(new PanEndEvent(ev.Model, ev.Model.PanX, ev.Model.PanY));
         }
     }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
+    }
 }

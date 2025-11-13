@@ -132,4 +132,11 @@ public class EventLoggingBehavior : BaseBehaviour
 
         return false;
     }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
+    }
 }

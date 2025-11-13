@@ -11,13 +11,13 @@ public class ZIndexBehaviourOptions : BaseBehaviourOptions
     /// The offset added to the Z-Index calculation for <c>Group</c> elements.
     /// Groups typically have the lowest Z-Index within a nesting level (default: 0).
     /// </summary>
-    public int GroupOffset { get; set; } = 0;
+    public int GroupOffset { get; set; } = 20;
 
     /// <summary>
     /// The offset added to the Z-Index calculation for <c>Node</c> elements.
     /// Nodes are rendered above Groups within a nesting level (default: 20).
     /// </summary>
-    public int NodeOffset { get; set; } = 20;
+    public int NodeOffset { get; set; } = 0;
 
     /// <summary>
     /// The offset added to the Z-Index calculation for <c>Port</c> elements.

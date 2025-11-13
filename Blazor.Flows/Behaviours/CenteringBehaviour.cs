@@ -7,22 +7,23 @@ namespace Blazor.Flows.Behaviours;
 
 /// <summary>
 /// This behaviour centers a model in the viewport if it's position is 0,0.
-/// It also centers models within other models if the position is 0,0
+/// It also centers models within other models if the position is 0,0.
 /// </summary>
-public class DefaultCenteringBehaviour : BaseBehaviour
+public class CenteringBehaviour : BaseBehaviour
 {
-    private readonly IDiagramService diagramService;
+    private readonly IDiagramService _diagramService;
+    CenteringBehaviourOptions _behaviourOptions;
 
     /// <summary>
-    /// Instantieates a new <see cref="DefaultCenteringBehaviour"/>
+    /// Instantiates a new <see cref="CenteringBehaviour"/>
     /// </summary>
-    /// <param name="service"></param>
-    public DefaultCenteringBehaviour(IDiagramService service)
+    /// <param name="service"><see cref="IDiagramService"/>.</param>
+    public CenteringBehaviour(IDiagramService service)
     {
-        diagramService = service;
-        var options = service.Behaviours.GetBehaviourOptions<DefaultCenteringBehaviourOptions>();
-        options.OnEnabledChanged.Subscribe(OnEnabledChanged);
-        OnEnabledChanged(options.IsEnabled);
+        _diagramService = service;
+        _behaviourOptions = service.Behaviours.GetBehaviourOptions<CenteringBehaviourOptions>();
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
+        OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
     
     private void OnEnabledChanged(BehaviourEnabledEvent ev)
@@ -46,10 +47,10 @@ public class DefaultCenteringBehaviour : BaseBehaviour
     {
         Subscriptions =
         [
-            diagramService.Events.SubscribeTo<NodeAddedEvent>(Handle),
-            diagramService.Events.SubscribeTo<GroupAddedEvent>(Handle),
-            diagramService.Events.SubscribeTo<NodeAddedToGroupEvent>(Handle),
-            diagramService.Events.SubscribeTo<GroupAddedToGroupEvent>(Handle),
+            _diagramService.Events.SubscribeTo<NodeAddedEvent>(Handle),
+            _diagramService.Events.SubscribeTo<GroupAddedEvent>(Handle),
+            _diagramService.Events.SubscribeTo<NodeAddedToGroupEvent>(Handle),
+            _diagramService.Events.SubscribeTo<GroupAddedToGroupEvent>(Handle),
         ];
     }
 
@@ -78,7 +79,7 @@ public class DefaultCenteringBehaviour : BaseBehaviour
     {
         if (model.PositionX == 0 && model.PositionY == 0)
         {
-            diagramService.CenterInViewport(new CenterInViewportParameters<T>(model));
+            _diagramService.CenterInViewport(new CenterInViewportParameters<T>(model));
         }
     }
 
@@ -89,8 +90,14 @@ public class DefaultCenteringBehaviour : BaseBehaviour
         if (added.PositionX == 0 && added.PositionY == 0)
         {
             var padding = parent is IPadding pad ? pad.Padding : 0; 
-            diagramService.CenterIn(new CenterInParameters<TAdded, TParent>(added, parent));
+            _diagramService.CenterIn(new CenterInParameters<TAdded, TParent>(added, parent));
         }
     }
     
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
+    }
 }

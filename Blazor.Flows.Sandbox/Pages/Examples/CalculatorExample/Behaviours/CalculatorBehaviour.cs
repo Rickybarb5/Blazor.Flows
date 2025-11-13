@@ -20,9 +20,16 @@ public class CalculatorBehaviour : BaseBehaviour
             _diagramService.Events.SubscribeTo<NumberNodeChangedEvent>(HandleNumberChange),
             _diagramService.Events.SubscribeTo<OperatorNodeEvents.OperatorChangedEvent>(HandleOperatorChange),
             _diagramService.Events.SubscribeTo<OperatorNodeEvents.OperationResultChangedEvent>(HandleResultChange),
+            _diagramService.Events.SubscribeTo<IncomingLinkRemovedEvent>(HandleResultChange),
         ];
     }
-    
+
+    private void HandleResultChange(IncomingLinkRemovedEvent obj)
+    {
+        if(obj.Model.Parent is OperatorNodeEvents n)
+            n.Calculate();
+    }
+
     private void HandleResultChange(OperatorNodeEvents.OperationResultChangedEvent ev)
     {
         if (ev.Node.OutputPort.Target is { } target)

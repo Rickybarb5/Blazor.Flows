@@ -21,7 +21,7 @@ public class ZoomBehavior : BaseBehaviour
     public ZoomBehavior(IDiagramService diagramService)
     {
         _diagramService = diagramService;
-        _behaviourOptions = _diagramService.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>()!;
+        _behaviourOptions = _diagramService.Behaviours.GetBehaviourOptions<ZoomBehaviourOptions>();
         _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
         OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
@@ -82,5 +82,12 @@ public class ZoomBehavior : BaseBehaviour
         }
 
         _diagramService.Diagram.Zoom = zoom;
+    }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
     }
 }

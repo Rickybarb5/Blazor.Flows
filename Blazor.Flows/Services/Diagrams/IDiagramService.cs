@@ -47,8 +47,7 @@ public interface IDiagramService : IDisposable
     /// <param name="model"></param>
     /// <returns></returns>
     (int CenterX, int CenterY) GetCenterCoordinates<T>(T model) where T : ISize, IPosition;
-
-
+    
     /// <summary>
     /// Centers a model in another model.
     /// </summary>
@@ -102,7 +101,7 @@ public interface IDiagramService : IDisposable
     IDiagramService RemovePort(IPort port);
 
     /// <summary>
-    /// Removes a link
+    /// Removes a link.
     /// </summary>
     /// <param name="linkToRemove"></param>
     /// <returns></returns>
@@ -113,22 +112,25 @@ public interface IDiagramService : IDisposable
     /// </summary>
     /// <param name="parent">Container to which the new group will be added to.</param>
     /// <param name="group">Group to be added.</param>
+    /// <exception cref="InvalidOperationException">Throws exception if <paramref name="parent"/> hasn't been added to the diagram.</exception>
     /// <returns></returns>
     IDiagramService AddGroupTo(IGroupContainer parent, IGroup group);
 
     /// <summary>
-    /// Adds a node to a node container.
+    /// Adds a node to a container.
     /// </summary>
-    /// <param name="nodeContainer">Group to which the node will be added to.</param>
+    /// <param name="parent">Group to which the node will be added to.</param>
     /// <param name="node">Node to be added to the container.</param>
+    /// <exception cref="InvalidOperationException">Throws exception if <paramref name="parent"/> hasn't been added to the diagram.</exception>
     /// <returns></returns>
-    IDiagramService AddNodeTo(INodeContainer nodeContainer, INode node);
+    IDiagramService AddNodeTo(INodeContainer parent, INode node);
 
     /// <summary>
-    /// Creates a port.
+    /// Adds a port to a container.
     /// </summary>
     /// <param name="parent">Model to which the port will be added to.</param>
     /// <param name="port">Port that will be added.</param>
+    /// <exception cref="InvalidOperationException">Throws exception if <paramref name="parent"/> hasn't been added to the diagram.</exception>
     /// <returns></returns> 
     IDiagramService AddPortTo(IPortContainer parent, IPort port);
 

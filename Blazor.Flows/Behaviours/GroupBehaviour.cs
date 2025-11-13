@@ -8,25 +8,26 @@ using Blazor.Flows.Services.Diagrams;
 namespace Blazor.Flows.Behaviours;
 
 /// <summary>
-/// Default behaviour of all groups
+/// Handles size and position for groups depending on its children.
 /// </summary>
-public class DefaultGroupBehaviour : BaseBehaviour
+public class GroupBehaviour : BaseBehaviour
 {
     private readonly IDiagramService _service;
     private IDisposable _sizeEventSubscription = null!;
     private IDisposable _childMovementEventSubscription = null!;
     private IDisposable _positionEventSubscription = null!;
+    GroupPositionBehaviourOptions _behaviourOptions;
 
     /// <summary>
-    /// Instantiates a new <see cref="DefaultGroupBehaviour"/>
+    /// Instantiates a new <see cref="GroupBehaviour"/>
     /// </summary>
     /// <param name="service"></param>
-    public DefaultGroupBehaviour(IDiagramService service)
+    public GroupBehaviour(IDiagramService service)
     {
         _service = service;
-        var behaviourOptions = _service.Behaviours.GetBehaviourOptions<DefaultGroupBehaviourOptions>();
-        behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
-        OnEnabledChanged(behaviourOptions.IsEnabled);
+        _behaviourOptions = _service.Behaviours.GetBehaviourOptions<GroupPositionBehaviourOptions>();
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
+        OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
     private void OnEnabledChanged(BehaviourEnabledEvent ev)
@@ -50,8 +51,6 @@ public class DefaultGroupBehaviour : BaseBehaviour
     {
         Subscriptions =
         [
-            _service.Events.SubscribeTo<GroupAddedToGroupEvent>(HandleGroupAddedToGroupEvent),
-
             // Resize and positioning
             _service.Events.SubscribeTo<NodeSizeChangedEvent>(e => ResizeFromNode(e.Model)),
             _service.Events.SubscribeTo<NodePositionChangedEvent>(e => ResizeFromNode(e.Model)),
@@ -65,7 +64,6 @@ public class DefaultGroupBehaviour : BaseBehaviour
         ];
         SubscribeToRecursiveEvents();
     }
-
     /// <summary>
     /// This behaviour manages all group positions and size.
     /// This means that the events will become recursive.
@@ -73,7 +71,8 @@ public class DefaultGroupBehaviour : BaseBehaviour
     /// </summary>
     private void SubscribeToRecursiveEvents()
     {
-        _childMovementEventSubscription = _service.Events.SubscribeTo<GroupPositionChangedEvent>(OnGroupPositionChanged);
+        _childMovementEventSubscription =
+            _service.Events.SubscribeTo<GroupPositionChangedEvent>(OnGroupPositionChanged);
         _positionEventSubscription =
             _service.Events.SubscribeTo<GroupPositionChangedEvent>(e => ResizeFromGroup(e.Model));
         _sizeEventSubscription = _service.Events.SubscribeTo<GroupSizeChangedEvent>(e => ResizeFromGroup(e.Model));
@@ -103,14 +102,6 @@ public class DefaultGroupBehaviour : BaseBehaviour
         _service.Diagram.AllGroups
             .Where(x => x.AllGroups.Contains(group))
             .ForEach(Resize);
-    }
-
-
-    private static void HandleGroupAddedToGroupEvent(GroupAddedToGroupEvent obj)
-    {
-        // A group cannot be added to itself
-        if (obj.ParentModel.Id == obj.AddedGroup.Id && obj.ParentModel.AllGroups.Any(g => g.Id == obj.AddedGroup.Id))
-            throw new InvalidOperationException("Cannot add group to itself.");
     }
 
     /// <summary>
@@ -148,7 +139,7 @@ public class DefaultGroupBehaviour : BaseBehaviour
     {
         if (group.AllNodes.Count == 0 && group.AllGroups.Count == 0) return;
 
-        var allBounds = 
+        var allBounds =
             group.AllNodes.Select(n => n.GetBounds())
                 .Concat(group.AllGroups.Select(g => g.GetBounds()))
                 .ToList();
@@ -157,22 +148,24 @@ public class DefaultGroupBehaviour : BaseBehaviour
         var minY = (int)allBounds.Min(b => b.Top);
         var maxX = (int)allBounds.Max(b => b.Right);
         var maxY = (int)allBounds.Max(b => b.Bottom);
-        
+
         var newPositionX = minX - group.Padding;
         var newPositionY = minY - group.Padding;
         var newWidth = maxX - minX + group.Padding * 2;
         var newHeight = maxY - minY + group.Padding * 2;
 
+        // Unsubscribe from events temporarily to prevent stack overflow.
         UnsubscribeFromRecursiveEvents();
         group.SetPosition(newPositionX, newPositionY);
         group.SetSize(newWidth, newHeight);
         SubscribeToRecursiveEvents();
     }
-
+    
     /// <inheritdoc />
     public override void Dispose()
     {
         base.Dispose();
         UnsubscribeFromRecursiveEvents();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
     }
 }

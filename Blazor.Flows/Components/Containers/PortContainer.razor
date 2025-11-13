@@ -62,6 +62,7 @@
             _subscriptions =
             [
                 DiagramService.Events.SubscribeWhere<PortRedrawEvent>(p => p.Model.Id == Port.Id, Redraw),
+                DiagramService.Events.SubscribeWhere<PortVisibilityChangedEvent>(p => p.Model.Id == Port.Id, OnVisibilityChanged),
             ];
 
             await ResizeObserverService.ObserveAsync(ContainerId, OnSizeChanged);
@@ -70,6 +71,20 @@
         }
 
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    // Resize observer changes the size when the port disappears, but not when it reappears.
+    private void OnVisibilityChanged(PortVisibilityChangedEvent obj)
+    {
+        InvokeAsync(async () =>
+        {
+            if (obj.Model.IsVisible)
+            {
+                await Task.Yield();
+                var bounds = await Js.GetBoundingClientRect(_componentRef);
+                Port.SetSize((int)bounds.Width, (int)bounds.Height);
+            }
+        });
     }
 
     private void OnSizeChanged(ResizeObserverEntry obj)

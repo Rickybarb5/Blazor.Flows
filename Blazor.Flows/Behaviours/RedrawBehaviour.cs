@@ -17,6 +17,7 @@ namespace Blazor.Flows.Behaviours;
 public class RedrawBehaviour : BaseBehaviour
 {
     private readonly IDiagramService _service;
+    RedrawBehaviourOptions _behaviourOptions;
 
     /// <summary>
     /// Instantiates a new RedrawBehaviour{T}
@@ -25,9 +26,9 @@ public class RedrawBehaviour : BaseBehaviour
     public RedrawBehaviour(IDiagramService service)
     {
         _service = service;
-        var options = _service.Behaviours.GetBehaviourOptions<RedrawBehaviourOptions>();
-        options.OnEnabledChanged.Subscribe(OnEnabledChanged);
-        OnEnabledChanged(options.IsEnabled);
+        _behaviourOptions = _service.Behaviours.GetBehaviourOptions<RedrawBehaviourOptions>();
+        _behaviourOptions.OnEnabledChanged.Subscribe(OnEnabledChanged);
+        OnEnabledChanged(_behaviourOptions.IsEnabled);
     }
 
     private void OnEnabledChanged(BehaviourEnabledEvent ev)
@@ -127,5 +128,12 @@ public class RedrawBehaviour : BaseBehaviour
     private void PublishEvent<TEvent>(TEvent @event) where TEvent : IEvent
     {
         _service.Events.Publish(@event);
+    }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
     }
 }

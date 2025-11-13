@@ -10,16 +10,16 @@ namespace Blazor.Flows.Behaviours;
 /// <summary>
 /// Default behaviour of all ports.
 /// </summary>
-public class DefaultPortBehaviour : BaseBehaviour
+public class PortBehaviour : BaseBehaviour
 {
     private readonly DefaultPortBehaviourOptions _behaviourOptions;
     private readonly IDiagramService _service;
 
     /// <summary>
-    /// Instantiates a new <see cref="DefaultPortBehaviour"/>
+    /// Instantiates a new <see cref="PortBehaviour"/>.
     /// </summary>
     /// <param name="service"></param>
-    public DefaultPortBehaviour(IDiagramService service)
+    public PortBehaviour(IDiagramService service)
     {
         _service = service;
         _behaviourOptions = _service.Behaviours.GetBehaviourOptions<DefaultPortBehaviourOptions>()!;
@@ -151,5 +151,12 @@ public class DefaultPortBehaviour : BaseBehaviour
     private void RefreshPositionCoordinates(IPortContainer container)
     {
         container.Ports.ForEach(RefreshPositionCoordinates);
+    }
+
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
     }
 }

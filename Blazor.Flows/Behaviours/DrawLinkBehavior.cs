@@ -227,4 +227,11 @@ public class DrawLinkBehavior : BaseBehaviour
             .Where(x => x.TargetPort is null)
             .ForEach(l => l.Dispose());
     }
+    
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _behaviourOptions.OnEnabledChanged.Unsubscribe(OnEnabledChanged);
+    }
 }

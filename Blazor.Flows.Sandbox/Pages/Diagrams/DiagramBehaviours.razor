@@ -114,7 +114,7 @@
 
         <MudItem xs="12" sm="12" md="8" Style="height:100%">
             <MudPaper Class="mud-height-full" Elevation="2">
-                <DiagramShowcase Service="Service"></DiagramShowcase>
+                <DiagramContainer DiagramService="Service" ></DiagramContainer>
             </MudPaper>
         </MudItem>
 
@@ -123,4 +123,43 @@
 
 @code {
     [Inject] public IDiagramService Service { get; set; } = null!;
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var node1 = new Node();
+            node1.SetPosition(100, 100);
+            var port1 = new Port();
+            port1.Alignment = PortAlignment.Right;
+            var node2 = new Node();
+            var port2 = new Port();
+            port2.Alignment = PortAlignment.Left;
+            node2.SetPosition(400, 100);
+            Service.AddPortTo(node1, port1);
+            Service.AddPortTo(node2, port2);
+
+            var group = new Group();
+            var groupPort = new Port();
+            groupPort.Alignment = PortAlignment.Left;
+
+            var node1Port = new Port();
+            node1Port.Alignment = PortAlignment.Right;
+            var groupNode1 = new Node();
+            groupNode1.SetPosition(700, 700);
+
+            var node2Port = new Port();
+            node2Port.Alignment = PortAlignment.Left;
+            var groupNode2 = new Node();
+            groupNode2.SetPosition(900, 900);
+            Service.AddNodeTo(group, groupNode1);
+            Service.AddNodeTo(group, groupNode1);
+            Service.AddNodeTo(group, groupNode2);
+            Service.AddPortTo(group, groupPort);
+            Service.AddPortTo(groupNode1, node1Port);
+            Service.AddPortTo(groupNode2, node2Port);
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
 }

@@ -5,7 +5,7 @@ using Blazor.Flows.Services.Diagrams;
 
 namespace Blazor.Flows.Test.Behaviours;
 
-public class DefaultLayerBehaviourTests
+public class LayerBehaviourTests
 {
     private IDiagramService CreateService()
     {
