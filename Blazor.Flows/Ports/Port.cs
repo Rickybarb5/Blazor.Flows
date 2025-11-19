@@ -88,7 +88,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     /// <inheritdoc />
     public virtual int PositionX
     {
-        get => _positionX + OffSetX;
+        get => _positionX + _offsetX;
         set
         {
             if (value != _positionX)
@@ -103,7 +103,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
     /// <inheritdoc />
     public virtual int PositionY
     {
-        get => _positionY + OffsetY;
+        get => _positionY + _offsetY;
         set
         {
             if (value != _positionY)
@@ -114,9 +114,9 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
             }
         }
     }
-    
+
     /// <inheritdoc />
-    public virtual int OffSetX
+    public virtual int OffsetX
     {
         get => _offsetX;
         set
@@ -144,7 +144,7 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
             }
         }
     }
-    
+
     /// <inheritdoc />
     public virtual bool IsVisible
     {
@@ -275,8 +275,8 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
             }
         }
     }
-    
-    
+
+
     /// <inheritdoc />
     public int ZIndex
     {
@@ -287,8 +287,8 @@ public partial class Port : IPort, IHasComponent<DefaultPortComponent>
             {
                 var oldIndex = _zIndex;
                 _zIndex = value;
-                OnZIndexChanged.Publish(new (this, oldIndex, _zIndex));
+                OnZIndexChanged.Publish(new(this, oldIndex, _zIndex));
             }
-        } 
+        }
     }
 }

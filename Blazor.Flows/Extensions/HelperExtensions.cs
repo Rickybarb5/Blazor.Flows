@@ -1,4 +1,9 @@
+using Blazor.Flows.Groups;
 using Blazor.Flows.Interfaces;
+using Blazor.Flows.Layers;
+using Blazor.Flows.Links;
+using Blazor.Flows.Nodes;
+using Blazor.Flows.Ports;
 using Blazor.Flows.Services.Diagrams;
 
 namespace Blazor.Flows.Extensions;
@@ -68,5 +73,23 @@ public static class HelperExtensions
             .Concat(service.Diagram.AllPorts
                 .Select(x => x.GetBounds()))
             .ToList();
+    }
+
+    /// <summary>
+    /// Gets the container id.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public static string GetContainerId(this IId obj)
+    {
+        return obj switch
+        {
+            IGroup => $"group-container-{obj.Id}",
+            INode => $"node-container-{obj.Id}",
+            IPort => $"port-container-{obj.Id}",
+            ILink => $"link-container-{obj.Id}",
+            ILayer => $"layer-container-{obj.Id}",
+            _ => $"diagram-container-{obj.Id}"
+        };
     }
 }

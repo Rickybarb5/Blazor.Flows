@@ -19,10 +19,9 @@
 }
 
 @code {
-    
-    [Inject]
-    IComponentRegistry ComponentRegistry { get; init; } = null!;
-    
+
+    [Inject] IComponentRegistry ComponentRegistry { get; init; } = null!;
+
     /// <summary>
     ///     Cascading diagram from <see cref="DiagramContainer"/>
     /// </summary>
@@ -47,7 +46,7 @@
     /// <summary>
     /// ID of the group container
     /// </summary>
-    public string ContainerId => $"group-container-{Group.Id}";
+    public string ContainerId => Group.GetContainerId();
 
     void IDisposable.Dispose()
     {
@@ -67,4 +66,5 @@
 
         return base.OnAfterRenderAsync(firstRender);
     }
+
 }

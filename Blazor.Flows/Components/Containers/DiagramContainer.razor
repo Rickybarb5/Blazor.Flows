@@ -65,7 +65,7 @@
     /// <summary>
     /// ID of the diagram container
     /// </summary>
-    public string ContainerId => $"diagram-container-{DiagramService.Diagram.Id}";
+    public string ContainerId => DiagramService.Diagram.GetContainerId();
 
     /// <inheritdoc />
     protected override Task OnInitializedAsync()

@@ -141,7 +141,7 @@ public interface IDiagramService : IDisposable
     /// <param name="targetPort">Target port of the link.</param>
     /// <param name="link">Link that will be added to the container</param>
     /// <returns></returns>
-    IDiagramService AddLinkTo(ILinkContainer sourcePort, ILinkContainer? targetPort, ILink link);
+    IDiagramService AddLinkTo(IPort sourcePort, IPort targetPort, ILink link);
 
     /// <summary>
     /// Adds a node to the diagram.

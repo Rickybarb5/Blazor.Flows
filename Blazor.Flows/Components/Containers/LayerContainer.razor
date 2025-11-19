@@ -47,9 +47,10 @@
     /// <summary>
     /// ID of the layer container
     /// </summary>
-    public string ContainerId => $"layer-container-{Layer.Id}";
+    public string ContainerId => Layer.GetContainerId();
 
     private List<IDisposable> _subscriptions = [];
+
     /// <inheritdoc />
     protected override Task OnAfterRenderAsync(bool firstRender)
     {

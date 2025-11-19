@@ -4,7 +4,7 @@
 @implements IAsyncDisposable
 @if (Link is { IsVisible: true, SourcePort: not null })
 {
-    <CascadingValue Value=@(this) TValue="LinkContainer" >
+    <CascadingValue Value=@(this) TValue="LinkContainer">
         <div style="@ContainerStyle" id="@(ContainerId)" @ref="_componentRef">
             <DynamicComponent Type=@(ComponentRegistry.GetComponentType(Link.GetType())) Parameters=@Parameters></DynamicComponent>
         </div>
@@ -42,14 +42,12 @@
     /// <summary>
     /// ID of the link container
     /// </summary>
-    public string ContainerId => $"link-container-{Link.Id}";
-
+    public string ContainerId => Link.GetContainerId();
 
     /// <summary>
     /// Current container style.
     /// </summary>
     public string ContainerStyle => $"position:absolute;left:{PositionX}px;top:{PositionY}px;width:{Width}px;height:{Height}px;pointer-events:none;z-index:{Link.ZIndex}";
-
 
     /// <summary>
     /// X coordinate of the target position.
@@ -72,9 +70,9 @@
     /// </summary>
     public int PositionY => Math.Min(DiagramService.GetCenterCoordinates(Link.SourcePort).CenterY, TargetY);
 
-    private int Width => Math.Clamp(Math.Abs(DiagramService.GetCenterCoordinates(Link.SourcePort).CenterX - TargetX),1,int.MaxValue);
+    private int Width => Math.Clamp(Math.Abs(DiagramService.GetCenterCoordinates(Link.SourcePort).CenterX - TargetX), 1, int.MaxValue);
 
-    private int Height => Math.Clamp(Math.Abs(DiagramService.GetCenterCoordinates(Link.SourcePort).CenterY - TargetY),1,int.MaxValue);
+    private int Height => Math.Clamp(Math.Abs(DiagramService.GetCenterCoordinates(Link.SourcePort).CenterY - TargetY), 1, int.MaxValue);
 
     /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -83,8 +81,8 @@
         {
             _subscriptions =
             [
-                    DiagramService.Events
-                            .SubscribeWhere<LinkRedrawEvent>(p => p.Model.Id == Link.Id, Redraw),
+                DiagramService.Events
+                    .SubscribeWhere<LinkRedrawEvent>(p => p.Model.Id == Link.Id, Redraw),
             ];
             await ResizeObserverService.ObserveAsync(ContainerId, OnSizeChanged);
             var size = await Js.GetBoundingClientRect(_componentRef);

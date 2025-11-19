@@ -16,12 +16,14 @@ public partial class DiagramService
         {
             case IGroup groupParent when groupParent.Id == group.Id || groupParent.AllGroups.Any(g => g.Id == group.Id):
                 throw new InvalidOperationException("Cannot add group to itself.");
-            // Add parent group if not in diagram.
+            
             case IGroup groupParent when Diagram.AllGroups.All(n => n.Id != groupParent.Id):
-                throw new InvalidOperationException($"Group {groupParent.Id} hasn't been added to the diagram yet.");
-            // Add layer if not in diagram.
+                AddGroup(groupParent);
+                break;
+            
             case ILayer layerParent when Diagram.Layers.All(n => n.Id != layerParent.Id):
-                throw new InvalidOperationException($"Layer {layerParent.Id} hasn't been added to the diagram yet.");
+                AddLayer(layerParent);
+                break;
         }
 
         parent.Groups.AddInternal(group);
@@ -34,12 +36,13 @@ public partial class DiagramService
     {
         switch (parent)
         {
-            // Add parent group if not in diagram
             case IGroup groupParent when Diagram.AllGroups.All(n => n.Id != groupParent.Id):
-                throw new InvalidOperationException($"Group {groupParent.Id} hasn't been added to the diagram yet.");
-            // Add parent layer if not in diagram
+                AddGroup(groupParent);
+                break;
+            
             case ILayer layerParent when Diagram.Layers.All(n => n.Id != layerParent.Id):
-                throw new InvalidOperationException($"Layer {layerParent.Id} hasn't been added to the diagram yet.");
+                AddLayer(layerParent);
+                break;
         }
 
         parent.Nodes.AddInternal(node);
@@ -51,13 +54,12 @@ public partial class DiagramService
     {
         switch (parent)
         {
-            // Add parent group if not in diagram
             case IGroup groupParent when Diagram.AllGroups.All(n => n.Id != groupParent.Id):
-                throw new InvalidOperationException($"Group {groupParent.Id} hasn't been added to the diagram yet.");
+                AddGroup(groupParent);
                 break;
-            // Add parent node if not in diagram
+            
             case INode nodeParent when Diagram.AllNodes.All(n => n.Id != nodeParent.Id):
-                throw new InvalidOperationException($"Node {nodeParent.Id} hasn't been added to the diagram yet.");
+                AddNode(nodeParent);
                 break;
         }
 
@@ -66,20 +68,34 @@ public partial class DiagramService
     }
 
     /// <inheritdoc />
-    public IDiagramService AddLinkTo(ILinkContainer sourcePort, ILinkContainer? targetPort, ILink link)
+    public IDiagramService AddLinkTo(IPort sourcePort, IPort targetPort, ILink link)
     {
-        if (sourcePort is IPort sp && Diagram.AllPorts.All(n => n.Id != sp.Id))
+        if (!sourcePort.CanCreateLink() && !sourcePort.CanConnectTo(targetPort))
         {
-            AddPortTo(sp.Parent, sp);
+            return this;
+        }
+        if (Diagram.AllPorts.All(n => n.Id != sourcePort.Id))
+        {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (sourcePort.Parent is null)
+            {
+                throw new InvalidOperationException($"Source port does not have a parent.");
+            }
+            AddPortTo(sourcePort.Parent, sourcePort);
         }
 
-        if (targetPort is IPort tp && Diagram.AllPorts.All(n => n.Id != tp.Id))
+        if (Diagram.AllPorts.All(n => n.Id != targetPort.Id))
         {
-            AddPortTo(tp.Parent, tp);
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (targetPort.Parent is null)
+            {
+                throw new InvalidOperationException($"Target port does not have a parent.");
+            }
+            AddPortTo(targetPort.Parent, targetPort);
         }
 
         sourcePort.OutgoingLinks.AddInternal(link);
-        targetPort?.IncomingLinks.AddInternal(link);
+        targetPort.IncomingLinks.AddInternal(link);
         return this;
     }
 
@@ -100,7 +116,6 @@ public partial class DiagramService
         {
             Diagram.CurrentLayer.Groups.AddInternal(group);
         }
-       
         return this;
     }
 

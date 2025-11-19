@@ -41,9 +41,10 @@ public partial class Port
     }
 
     /// <inheritdoc />
-    public virtual bool CanConnectTo(IPort targetPort)
+    public virtual bool CanConnectTo(IPort? targetPort)
     {
         var canConnect =
+            targetPort is not null &&
             Id != targetPort.Id &&
             Parent.Id != targetPort.Parent.Id;
         return canConnect;
@@ -61,13 +62,6 @@ public partial class Port
     {
         _width = width;
         _height = height;
-    }
-
-    /// <inheritdoc />
-    /// <returns> <see cref="PositionX"/> and <see cref="PositionY"/>.</returns>
-    public virtual (int PositionX, int PositionY) CustomPositioning()
-    {
-        return (PositionX, PositionY);
     }
 
     private void HandleOutgoingLinkRemoved(ItemRemovedEvent<ILink> obj)

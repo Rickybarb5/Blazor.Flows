@@ -1,5 +1,6 @@
 ﻿using Blazor.Flows.Events;
 using Blazor.Flows.Extensions;
+using Blazor.Flows.Interfaces;
 using Blazor.Flows.Links;
 using Blazor.Flows.Options.Behaviours;
 using Blazor.Flows.Ports;
@@ -76,26 +77,20 @@ public class DrawLinkBehavior : BaseBehaviour
         _initialClickX = 0;
         _initialClickY = 0;
         ClearUnboundedLinks();
-        if (!_behaviourOptions.IsEnabled || !e.Model.CanCreateLink()) return;
+        if (!e.Model.CanCreateLink()) return;
         _isCreatingLink = true;
         _sourcePort = e.Model;
         _initialClickX = (int)e.Args.ClientX;
         _initialClickY = (int)e.Args.ClientY;
 
-        Link = AddLink(_sourcePort, null, _behaviourOptions.LinkType);
+        Link = AddLink(_sourcePort, _behaviourOptions.LinkType);
         _service.Events.Publish(new DrawLinkStartEvent(Link));
         var startCoordinates = _service.GetCenterCoordinates(_sourcePort);
         Link.SetTargetPosition(startCoordinates.CenterX, startCoordinates.CenterY);
     }
 
-    private ILink AddLink(IPort sourcePort, IPort? targetPort, Type linkType)
+    private static ILink AddLink(ILinkContainer sourcePort, Type linkType)
     {
-        // Ensure the provided type implements ILink
-        if (!typeof(ILink).IsAssignableFrom(linkType))
-        {
-            throw new ArgumentException($"The type {linkType.Name} must implement {nameof(ILink)}.",
-                nameof(linkType));
-        }
 
         // Create an instance of linkType using reflection
         var link = (ILink?)Activator.CreateInstance(linkType);
@@ -104,47 +99,8 @@ public class DrawLinkBehavior : BaseBehaviour
             throw new InvalidOperationException($"Link couldn't be created with component type: {linkType.Name}");
         }
 
-        if (targetPort is not null)
-        {
-            CanLinkBeCreated(sourcePort, targetPort);
-        }
-
         sourcePort.OutgoingLinks.AddInternal(link);
-        targetPort?.IncomingLinks.AddInternal(link);
         return link;
-    }
-
-    /// <summary>
-    /// Checks if a link can be created between two ports.
-    /// </summary>
-    /// <param name="sourcePort"></param>
-    /// <param name="targetPort"></param>
-    /// <exception cref="InvalidOperationException"></exception>
-    private void CanLinkBeCreated(IPort sourcePort, IPort targetPort)
-    {
-        if (_service.Diagram.AllPorts.FirstOrDefault(x => x.Id == sourcePort.Id) is null)
-        {
-            throw new InvalidOperationException(
-                "Source port does not belong to the diagram");
-        }
-
-        if (_service.Diagram.AllPorts.FirstOrDefault(x => x.Id == targetPort.Id) is null)
-        {
-            throw new InvalidOperationException(
-                "Target port does not belong to the diagram.");
-        }
-
-        if (!sourcePort.CanCreateLink())
-        {
-            throw new InvalidOperationException(
-                $"Source port does not allow link creation. Check{nameof(IPort.CanCreateLink)} on {sourcePort.GetType().Name}.");
-        }
-
-        if (!sourcePort.CanConnectTo(targetPort))
-        {
-            throw new InvalidOperationException(
-                $"Source port cannot connect to Target Port. Check{nameof(IPort.CanConnectTo)} on {sourcePort.GetType().Name}.");
-        }
     }
 
     /// <summary>
@@ -186,7 +142,7 @@ public class DrawLinkBehavior : BaseBehaviour
     /// <param name="e"></param>
     private void OnDiagramPointerUp(DiagramPointerUpEvent? e)
     {
-        if (CanLinkToTarget())
+        if (IsConnectionPossible())
         {
             _targetPort!.IncomingLinks.AddInternal(Link!);
             _service.Events.Publish(new DrawLinkCreatedEvent(Link!));
@@ -215,10 +171,13 @@ public class DrawLinkBehavior : BaseBehaviour
         _initialClickY = 0;
     }
 
-    private bool CanLinkToTarget()
+    private bool IsConnectionPossible()
     {
-        return _targetPort is not null && _sourcePort is not null && Link is not null &&
-               _sourcePort.CanConnectTo(_targetPort) && _targetPort.CanConnectTo(_sourcePort);
+        return _targetPort is not null &&
+               _sourcePort is not null &&
+               Link is not null &&
+               _sourcePort.CanConnectTo(_targetPort) &&
+               _targetPort.CanConnectTo(_sourcePort);
     }
 
     private void ClearUnboundedLinks()

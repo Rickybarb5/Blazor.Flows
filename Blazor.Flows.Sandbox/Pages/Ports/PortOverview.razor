@@ -1,4 +1,6 @@
 @page "/port-overview"
+@using Blazor.Flows.Events
+@using Blazor.Flows.Behaviours
 
 <MudGrid Spacing="2" Justify="Justify.Center" Style="height:100%; width: 100%; margin: 0;">
 
@@ -26,16 +28,11 @@
                 </MudExpansionPanel>
 
                 <!-- Panel 2: Port Positioning -->
-                <MudExpansionPanel Text="Port Positioning" Expanded="false">
+                <MudExpansionPanel Text="Port Positioning" >
                     <MudText Typo="Typo.body1" Class="mb-2">
                         A port's position is almost always calculated automatically based on its parent node/group. This
                         logic is controlled by two key enums:
                     </MudText>
-                    <MudAlert Severity="Severity.Info" Class="mb-3">
-                        The exact positioning logic is defined inside the <code>PortContainer.razor</code> component's
-                        <code>CalculatePosition()</code> method.
-                    </MudAlert>
-
                     <MudText Typo="Typo.h6" GutterBottom="true">1. PortAlignment</MudText>
                     <MudText Typo="Typo.body2" Class="mb-2">
                         The enum <code>PortAlignment.cs</code> determines which <strong>edge</strong> of the parent the
@@ -47,38 +44,32 @@
                         The enum <code>PortJustification.cs</code> determines <strong>where along that edge</strong> the
                         port will be placed.
                     </MudText>
+                    <MudText Typo="Typo.body1" Class="mb-2">
+                        You can finely adjust a port's position from its calculated alignment using the
+                        **OffSetX** and **OffSetY** properties.
+                    </MudText>
+
+                    <MudText Typo="Typo.body2" Class="mb-2">
+                        These properties define a pixel offset from the default position determined by
+                        <span class="mud-code">PortAlignment</span> and <span class="mud-code">PortJustification</span>.
+                    </MudText>
+                    <CodeHighlighter Language="csharp" Code="@OffsetCode"/>
+                    <MudText Typo="Typo.body2" Class="mt-2">
+                        **Example:** An offset of <span class="mud-code">OffSetX = 20</span> on a
+                        **Top**-aligned port will shift it 20 pixels to the right.
+                    </MudText>
+                    <MudAlert Severity="Severity.Info" Class="mb-3">
+                        The exact positioning logic is defined inside the <code>@($"{nameof(PortBehaviour)}.cs")</code> class.
+                    </MudAlert>
                     <MudText Typo="Typo.body2" Class="mt-2">
                         <strong>Note:</strong> <code>Start</code> and <code>End</code> are relative. For a
                         <strong>Left</strong> (vertical) edge, <code>Start</code> is the Top. For a <strong>Top</strong>
                         (horizontal) edge, <code>Start</code> is the Left.
                     </MudText>
                 </MudExpansionPanel>
-
-                <!-- Panel 3: Advanced Positioning (NEW) -->
-                <MudExpansionPanel Text="Advanced Positioning" Expanded="false">
-                    <MudText Typo="Typo.body1" Class="mb-2">
-                        For full control, you can bypass the alignment system or apply fine-grained offsets.
-                    </MudText>
-
-                    <MudText Typo="Typo.h6" GutterBottom="true" Class="mt-3">1. Custom Positioning</MudText>
-                    <MudText Typo="Typo.body2" Class="mb-2">
-                        Set <code>Alignment = PortAlignment.Custom</code> and override the
-                        <code>CustomPositioning()</code> method in a custom port class. This gives you absolute position
-                        control relative to the parent.
-                    </MudText>
-                    <CodeHighlighter Language="csharp" Code="@CustomPositioningCode"/>
-
-                    <MudText Typo="Typo.h6" GutterBottom="true" Class="mt-3">2. Position Offsets</MudText>
-                    <MudText Typo="Typo.body2" Class="mb-2">
-                        Use the <code>OffSetX</code> and <code>OffsetY</code> properties (from <code>Port.cs</code>).
-                        These values are added *after* the <code>PortAlignment</code> and <code>PortJustification</code>
-                        are calculated, allowing you to "nudge" a port from its default spot.
-                    </MudText>
-                    <CodeHighlighter Language="csharp" Code="@OffsetCode"/>
-                </MudExpansionPanel>
-
-                <!-- Panel 4: Port Logic Overrides -->
-                <MudExpansionPanel Text="Port Logic Overrides" Expanded="false">
+                
+                <!-- Panel 3: Port Logic Overrides -->
+                <MudExpansionPanel Text="Port Logic Overrides" >
                     <MudText Typo="Typo.body1" Class="mb-2">
                         You can control linking behavior by overriding methods from <code>Port.Features.cs</code> in a
                         custom port model.
@@ -86,8 +77,8 @@
 
                     <MudText Typo="Typo.h6" GutterBottom="true" Class="mt-3">1. CanCreateLink()</MudText>
                     <MudText Typo="Typo.body2" Class="mb-2">
-                        This method determines if a user can start dragging a new link from this port. By default, it
-                        returns <code>true</code>.
+                        This method determines if a user can create a new link from this port. By default, it
+                        returns <code>true</code>. Below is an example of a port that can only have one outgoing link.
                     </MudText>
                     <CodeHighlighter Language="csharp" Code="@CanCreateLinkCode"/>
 
@@ -101,17 +92,42 @@
                     </MudText>
                     <CodeHighlighter Language="csharp" Code="@CanConnectToCode"/>
                 </MudExpansionPanel>
-
-
-                <!-- Panel 5: How to Add Ports -->
-                <MudExpansionPanel Text="How to Add Ports" Expanded="false">
+                
+                <!-- Panel 4: How to Add Ports -->
+                <MudExpansionPanel Text="How to Add Ports" >
                     <MudText Typo="Typo.body1" Class="mb-2">
                         You can easily add ports to any <code>IPortContainer</code> using the
                         <code>DiagramService</code>.
                     </MudText>
                     <CodeHighlighter Language="csharp" Code="@AddPortCode"/>
                 </MudExpansionPanel>
+                <MudExpansionPanel Text="Live Demo">
+                    @if (SelectedNode is not null)
+                    {
+                        <MudSelect T="PortAlignment" Label="Alignment" @bind-Value="SelectedNode.Ports.First().Alignment" Class="mb-3" Immediate="true">
+                            @foreach (PortAlignment alignment in Enum.GetValues(typeof(PortAlignment)))
+                            {
+                                <MudSelectItem Value="alignment">@alignment.ToString()</MudSelectItem>
+                            }
+                        </MudSelect>
 
+                        <MudSelect T="PortJustification" Label="Justification" @bind-Value="SelectedNode.Ports.First().Justification" Class="mb-3" Immediate="true">
+                            @foreach (PortJustification justification in Enum.GetValues(typeof(PortJustification)))
+                            {
+                                <MudSelectItem Value="justification">@justification.ToString()</MudSelectItem>
+                            }
+                        </MudSelect>
+
+                        <MudNumericField T="int" Label="Offset X" @bind-Value="SelectedNode.Ports.First().OffsetX" Immediate="true" Step="1" Class="mb-3"/>
+                        <MudNumericField T="int" Label="Offset Y" @bind-Value="SelectedNode.Ports.First().OffsetY" Immediate="true" Step="1"/>
+                    }
+                    else
+                    {
+                        <MudAlert Severity="Severity.Info">Select a node to edit its port.</MudAlert>
+                    }
+                   
+
+                </MudExpansionPanel>
             </MudExpansionPanels>
         </MudPaper>
     </MudItem>
@@ -126,7 +142,10 @@
 </MudGrid>
 
 @code {
-    [Inject] public IDiagramService Service { get; set; } = null!;
+   [Inject] public IDiagramService Service { get; set; } = null!;
+    
+    // Live Demo Properties
+    private INode? SelectedNode { get; set; }
 
     private const string AddPortCode =
         @"// 1. Create a node
@@ -137,21 +156,19 @@
         // 2. Define a port
         var port = new Port 
         { 
-            Alignment = PortAlignment.Right, 
+         Alignment = PortAlignment.Right, 
             Justification = PortJustification.Center 
         };
         
         // 3. Add the port to the node
-        Service.AddPortTo(node, port);";
-
+        Service.AddPortTo(node, port);"; 
     private const string CanCreateLinkCode =
         @"// Example: Only allow 1 outgoing link
         public override bool CanCreateLink()
         {
             // HasOutGoingLinks is a property from Port.cs
             return !this.HasOutGoingLinks;
-        }";
-
+        }"; 
     private const string CanConnectToCode =
         @"// Example: Only allow connections from CustomPort
         public override bool CanConnectTo(IPort port)
@@ -159,33 +176,11 @@
             // 1. Run the base logic (prevents self-connection)
             bool baseCanConnect = base.CanConnectTo(port);
             if (!baseCanConnect)
-                return false;
+               [cite_start]return false; // [cite: 35]
                 
             // 2. Add custom logic: only accept CustomPort
             return port is CustomPort;
-        }";
-
-    private const string CustomPositioningCode =
-        @"// 1. Define a custom port class
-        public class CustomPositionPort : Port
-        {
-            // 2. Override CustomPositioning
-            public override (int PositionX, int PositionY) CustomPositioning()
-            {
-                // Position port 25% down and 25% across the parent
-                var x = Parent.PositionX + (Parent.Width / 4);
-                var y = Parent.PositionY + (Parent.Height / 4);
-                return (x, y);
-            }
-        }
-        
-        // 3. Use it in your diagram
-        var customPort = new CustomPositionPort 
-        { 
-            Alignment = PortAlignment.Custom 
-        };
-        Service.AddPortTo(myNode, customPort);";
-
+        [cite_start]}"; 
     private const string OffsetCode =
         @"// Get a port (e.g., Top Center)
         var port = new Port 
@@ -195,61 +190,40 @@
         };
         
         // Nudge it 20px to the right
-        port.OffSetX = 20;
+        [cite_start]port.OffSetX = 20; // [cite: 40]
         
-        Service.AddPortTo(myNode, port);";
-
-
-    // --- Diagram Initialization ---
-
+        [cite_start]Service.AddPortTo(myNode, port);"; // [cite: 41]
+        
     protected override Task OnInitializedAsync()
     {
-        // 1. Create a large central node to host the ports
-        var mainNode = new Node();
-        mainNode.SetPosition(150, 100);
-        mainNode.SetSize(400, 300);
-        Service.AddNode(mainNode);
-
-        // --- Add ports for every alignment/justification combo ---
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Left, Justification = PortJustification.Start });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Left, Justification = PortJustification.Center });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Left, Justification = PortJustification.End });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Right, Justification = PortJustification.Start });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Right, Justification = PortJustification.Center });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Right, Justification = PortJustification.End });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Top, Justification = PortJustification.Start });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Top, Justification = PortJustification.Center });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Top, Justification = PortJustification.End });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Bottom, Justification = PortJustification.Start });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Bottom, Justification = PortJustification.Center });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.Bottom, Justification = PortJustification.End });
-        Service.AddPortTo(mainNode, new Port { Alignment = PortAlignment.CenterParent });
-
-
-        // 2. Create a second node to link to
-        var targetNode = new Node();
-        targetNode.SetPosition(650, 225);
-        Service.AddNode(targetNode);
-
-        var targetPort = new Port { Alignment = PortAlignment.Left, Justification = PortJustification.Center };
-        Service.AddPortTo(targetNode, targetPort);
-
-        // 3. Add a link
-        var sourcePort = mainNode.Ports.First(p => p.Alignment == PortAlignment.Right && p.Justification == PortJustification.Center);
-        Service.AddLinkTo(sourcePort, targetPort, new LineLink());
-
-        // 4. Add a third node to show advanced positioning
-        var advancedNode = new Node();
-        advancedNode.SetPosition(150, 450);
-        advancedNode.SetSize(400, 150);
-        Service.AddNode(advancedNode);
-
-        // 4a. Add a custom positioned port
-        var customPort = new CustomPositionPort { Alignment = PortAlignment.Custom };
-        Service.AddPortTo(advancedNode, customPort);
+        var node1 = new Node();
+        node1.SetPosition(50, 50);
+        Service.AddNode(node1);
+        Service.AddPortTo(node1, new Port { Alignment = PortAlignment.Right, Justification = PortJustification.Center });
+        
+        var node2 = new Node();
+        node2.SetPosition(300, 50);
+        Service.AddNode(node2);
+        Service.AddPortTo(node2, new Port { Alignment = PortAlignment.Left, Justification = PortJustification.Center });
+        Service.AddLinkTo(node1.Ports.First(), node2.Ports.First(), new CurvedLink());
+        Service.Events.SubscribeTo<NodeSelectionChangedEvent>(OnNodeSelected);
 
         return base.OnInitializedAsync();
     }
-
+    
+    private void OnNodeSelected(NodeSelectionChangedEvent e)
+    {
+        if (e.Model.IsSelected)
+        {
+            SelectedNode = e.Model;
+        }
+        else
+        {
+            SelectedNode = null;
+        }
+        StateHasChanged(); 
+       
+    }
+    
 }
 

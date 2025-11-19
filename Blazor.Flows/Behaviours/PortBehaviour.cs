@@ -55,11 +55,10 @@ public class PortBehaviour : BaseBehaviour
             _service.Events.SubscribeTo<OutgoingLinkRemovedEvent>(HandleOutgoingLinkRemoved),
 
             //Parent management
-            _service.Events.SubscribeTo<PortAddedToNodeEvent>(e=>AddParentToPort(e.Model, e.Port)),
-            _service.Events.SubscribeTo<PortAddedToGroupEvent>(e=>AddParentToPort(e.Model, e.Port)),
-            
+            _service.Events.SubscribeTo<PortAddedToNodeEvent>(e => AddParentToPort(e.Model, e.Port)),
+            _service.Events.SubscribeTo<PortAddedToGroupEvent>(e => AddParentToPort(e.Model, e.Port)),
+
             //Position management
-            _service.Events.SubscribeTo<PortRedrawEvent>(e => RefreshPositionCoordinates(e.Model)),
             _service.Events.SubscribeTo<PortSizeChangedEvent>(e => RefreshPositionCoordinates(e.Model)),
             _service.Events.SubscribeTo<PortJustificationChangedEvent>(e => RefreshPositionCoordinates(e.Model)),
             _service.Events.SubscribeTo<PortAlignmentChangedEvent>(e => RefreshPositionCoordinates(e.Model)),
@@ -142,12 +141,11 @@ public class PortBehaviour : BaseBehaviour
             (PortAlignment.CenterParent, _) => (
                 port.Parent.PositionX + port.Parent.Width / 2 - port.Width / 2,
                 port.Parent.PositionY + port.Parent.Height / 2 - port.Height / 2),
-            (PortAlignment.Custom, _) => port.CustomPositioning(),
             _ => (port.PositionX, port.PositionY)
         };
         return (x, y);
     }
-    
+
     private void RefreshPositionCoordinates(IPortContainer container)
     {
         container.Ports.ForEach(RefreshPositionCoordinates);

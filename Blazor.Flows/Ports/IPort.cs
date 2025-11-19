@@ -20,7 +20,7 @@ public interface IPort :
     /// <summary>
     /// Offset of the port position on the X axis in pixels.
     /// </summary>
-    int OffSetX { get; set; }
+    int OffsetX { get; set; }
 
     /// <summary>
     /// Offset of the port position on the Y axis in pixels.
@@ -153,7 +153,7 @@ public interface IPort :
     /// </summary>
     /// <param name="targetPort">Port to evaluate if connection is possible</param>
     /// <returns>True if the link can connect to the input port, false otherwise.</returns>
-    bool CanConnectTo(IPort targetPort);
+    bool CanConnectTo(IPort? targetPort);
 
     /// <summary>
     ///     Sets the X and Y coordinates on the screen.
@@ -170,10 +170,4 @@ public interface IPort :
     /// <param name="width"></param>
     /// <param name="height"></param>
     void SetSizeInternal(int width, int height);
-
-    /// <summary>
-    /// Custom function that is used when <see cref="PortAlignment"/> is <see cref="PortAlignment.Custom"/>.
-    /// </summary>
-    /// <returns>The calculated X and Y positions.</returns>
-    public (int PositionX, int PositionY) CustomPositioning();
 }

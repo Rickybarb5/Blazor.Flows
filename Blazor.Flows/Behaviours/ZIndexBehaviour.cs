@@ -170,8 +170,7 @@ public class ZIndexBehaviour : BaseBehaviour
 
         // Use the target port's ZIndex if available. 
         // if Target is null (e.g., drawing a new link) -> highest ZIndex
-        var targetZIndex = link.TargetPort?.ZIndex ?? 99999;
-        Console.WriteLine($"Target:{targetZIndex}");
+        var targetZIndex = link.TargetPort?.ZIndex ?? int.MaxValue;
 
         var maxPortZIndex = Math.Max(sourceZIndex, targetZIndex);
 

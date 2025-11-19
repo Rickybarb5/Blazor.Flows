@@ -1,10 +1,5 @@
 using Blazor.Flows.Events;
-using Blazor.Flows.Groups;
-using Blazor.Flows.Layers;
-using Blazor.Flows.Links;
-using Blazor.Flows.Nodes;
 using Blazor.Flows.Options.Behaviours;
-using Blazor.Flows.Ports;
 using Blazor.Flows.Services.Diagrams;
 
 namespace Blazor.Flows.Behaviours;
@@ -21,11 +16,11 @@ public class DeleteBehaviour : BaseBehaviour
     {
         Subscriptions =
         [
-            _service.Events.SubscribeTo<NodeRemovedEvent>(e => CleanupNodeDependencies(e.Model)),
-            _service.Events.SubscribeTo<LayerRemovedEvent>(e => CleanupLayerDependencies(e.Model)),
-            _service.Events.SubscribeTo<GroupRemovedEvent>(e => CleanupGroupDependencies(e.Model)),
-            _service.Events.SubscribeTo<PortRemovedEvent>(e => CleanupPortDependencies(e.Model)),
-            _service.Events.SubscribeTo<LinkRemovedEvent>(e => CleanupLinkDependencies(e.Model)),
+            _service.Events.SubscribeTo<NodeRemovedEvent>(e => CleanupDependencies(e.Model)),
+            _service.Events.SubscribeTo<LayerRemovedEvent>(e => CleanupDependencies(e.Model)),
+            _service.Events.SubscribeTo<GroupRemovedEvent>(e => CleanupDependencies(e.Model)),
+            _service.Events.SubscribeTo<PortRemovedEvent>(e => CleanupDependencies(e.Model)),
+            _service.Events.SubscribeTo<LinkRemovedEvent>(e => CleanupDependencies(e.Model)),
         ];
     }
 
@@ -58,31 +53,11 @@ public class DeleteBehaviour : BaseBehaviour
         }
     }
 
-    private void CleanupLayerDependencies(ILayer obj)
+    private void CleanupDependencies(IDisposable obj)
     {
         obj.Dispose();
     }
 
-    private void CleanupLinkDependencies(ILink obj)
-    {
-        obj.Dispose();
-    }
-
-    private void CleanupGroupDependencies(IGroup obj)
-    {
-        obj.Dispose();
-    }
-
-    private void CleanupNodeDependencies(INode obj)
-    {
-        obj.Dispose();
-    }
-
-    private void CleanupPortDependencies(IPort port)
-    {
-        port.Dispose();
-    }
-    
     /// <inheritdoc />
     public override void Dispose()
     {

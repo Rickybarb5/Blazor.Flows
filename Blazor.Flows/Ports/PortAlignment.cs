@@ -28,11 +28,6 @@ public enum PortAlignment
     Bottom,
 
     /// <summary>
-    ///     Uses  <see cref="IPosition.PositionX" /> and <see cref="IPosition.PositionY" /> for the position. />
-    /// </summary>
-    Custom,
-
-    /// <summary>
     /// Centers the port in the middle of the parent
     /// </summary>
     CenterParent
